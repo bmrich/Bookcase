@@ -4,31 +4,33 @@ import com.rich.bryan.dao.NewBookDao;
 import com.rich.bryan.entity.*;
 import com.rich.bryan.dto.DtoAuthor;
 import com.rich.bryan.dto.SearchResult;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class NewBookDaoImpl implements NewBookDao {
 
-    @PersistenceContext
-    private EntityManager em;
+    @Autowired
+    private SessionFactory sessionFactory;
 
     @Override
     public void newBook(SearchResult sr, String username) {
+        Session session = sessionFactory.getCurrentSession();
 
         List<Author> authorEntities = new ArrayList<>();
         List<DtoAuthor> dtoAuthorList = sr.getDtoAuthorList();
         for (DtoAuthor a: dtoAuthorList) {
-            Query query = em.createQuery("from Author a where a.firstName = :fname and a.lastName = :lname").
+            Query query = session.createQuery("from Author a where a.firstName = :fname and a.lastName = :lname").
                     setParameter("fname", a.getfName()).
                     setParameter("lname", a.getlName());
             Author author = null;
-            List<Author> authors = query.getResultList();
+            List<Author> authors = query.list();
             if (authors.isEmpty()) {
                 author = new Author(a.getfName(), a.getlName());
             } else {
@@ -37,9 +39,9 @@ public class NewBookDaoImpl implements NewBookDao {
             authorEntities.add(author);
         }
 
-        Query pubQuery = em.createQuery("from Publisher p where p.publisher = :pub").
+        Query pubQuery = session.createQuery("from Publisher p where p.publisher = :pub").
                 setParameter("pub", sr.getPublisher());
-        List<Publisher> publishers = pubQuery.getResultList();
+        List<Publisher> publishers = pubQuery.list();
         Publisher publisher = null;
         if (publishers.isEmpty()){
             publisher = new Publisher(sr.getPublisher());
@@ -60,11 +62,13 @@ public class NewBookDaoImpl implements NewBookDao {
         booksUsers.setUser(user);
         booksUsers.setBook(book);
 
-        em.persist(booksUsers);
+        session.persist(booksUsers);
     }
 
     @Override
     public void newBook(Long id, String username) {
+        Session session = sessionFactory.getCurrentSession();
+
         Book book = new Book();
         book.setId(id);
 
@@ -75,6 +79,6 @@ public class NewBookDaoImpl implements NewBookDao {
         booksUsers.setBook(book);
         booksUsers.setUser(user);
 
-        em.merge(booksUsers);
+        session.merge(booksUsers);
     }
 }

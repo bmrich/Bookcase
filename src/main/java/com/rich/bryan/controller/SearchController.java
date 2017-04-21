@@ -1,8 +1,7 @@
 package com.rich.bryan.controller;
 
-import com.rich.bryan.dao.Impl.DaoService;
-import com.rich.bryan.dao.ShelvesDao;
 import com.rich.bryan.dto.Query;
+import com.rich.bryan.services.BookService;
 import com.rich.bryan.services.GetSearchResults;
 import com.rich.bryan.services.ShelvesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,7 @@ public class SearchController {
     private GetSearchResults getSearchResults;
 
     @Autowired
-    private DaoService daoService;
+    private BookService bookService;
 
     @Autowired
     private ShelvesService shelvesService;
@@ -36,6 +35,7 @@ public class SearchController {
 
     @GetMapping("/search")
     public String search(@ModelAttribute Query query, Model model, Principal principal){
+        model.addAttribute("shelves", shelvesService.getShelves(principal.getName()));
         model.addAttribute("results", getSearchResults.searchResults(query.getQuery(), principal.getName()));
         return "dashboard-results";
     }
@@ -48,7 +48,7 @@ public class SearchController {
 
     @GetMapping("/books")
     public String books(Model model, Principal principal){
-        model.addAttribute("results", daoService.getBooks(principal.getName()));
+        model.addAttribute("results", bookService.getBooks(principal.getName()));
         model.addAttribute("shelves", shelvesService.getShelves(principal.getName()));
         model.addAttribute("query", new Query());
         return "Cards";
@@ -56,7 +56,7 @@ public class SearchController {
 
     @GetMapping("/author/{id}")
     public String getAuthor(@PathVariable("id") Long id, Model model, Principal principal){
-        model.addAttribute("results", daoService.getAuthor(id, principal.getName()));
+        model.addAttribute("results", bookService.getAuthor(id, principal.getName()));
         model.addAttribute("shelves", shelvesService.getShelves(principal.getName()));
         model.addAttribute("query", new Query());
         return "Cards";
@@ -64,7 +64,7 @@ public class SearchController {
 
     @GetMapping("/bookinfo/{isbn13}")
     public String singleBook(@PathVariable("isbn13") String isbn13, Model model, Principal principal){
-        model.addAttribute("results", daoService.getSingleBook(isbn13));
+        model.addAttribute("results", bookService.getSingleBook(isbn13));
         model.addAttribute("shelves", shelvesService.getShelves(principal.getName()));
         model.addAttribute("query", new Query());
         return "Book-Info";
@@ -72,7 +72,7 @@ public class SearchController {
 
     @GetMapping("/delete/{id}")
     public String deleteBook(@PathVariable("id") Long id, Principal principal){
-        daoService.deleteBook(id, principal.getName());
+        bookService.deleteBook(id, principal.getName());
         return "redirect:/books";
     }
 

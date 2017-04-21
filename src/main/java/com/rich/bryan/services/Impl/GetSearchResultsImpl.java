@@ -1,6 +1,6 @@
 package com.rich.bryan.services.Impl;
 
-import com.rich.bryan.dao.Impl.DaoService;
+import com.rich.bryan.dao.BookDao;
 import com.rich.bryan.dao.GoogleBooksAPIdao;
 import com.rich.bryan.dao.NewBookDao;
 import com.rich.bryan.entity.Book;
@@ -27,7 +27,7 @@ public class GetSearchResultsImpl implements GetSearchResults {
     private NewBookDao newBookDao;
 
     @Autowired
-    private DaoService daoService;
+    private BookDao bookDao;
 
     private Map<String, Map<Integer, SearchResult>> searchResultMap = new HashMap<>();
 
@@ -39,7 +39,7 @@ public class GetSearchResultsImpl implements GetSearchResults {
         SearchResult searchResult = results.get(id);
 
         try{
-            Book book = daoService.getSingleBook(searchResult.getIsbn13());
+            Book book = bookDao.getSingleBook(searchResult.getIsbn13());
             newBookDao.newBook(book.getId(), username);
         } catch (NoResultException e) {
             newBookDao.newBook(searchResult, username);

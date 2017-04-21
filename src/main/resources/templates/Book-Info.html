@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="Layout">
+<head lang="en">
+</head>
+<body>
+<!--Everything Goes Here-->
+<div layout:fragment="content">
+    <div class="w3-card card-background">
+        <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3">
+                <img class="info-page-image" th:src="${results.imageUrl}"/>
+            </div>
+            <div class="col-sm-7">
+                <h2 th:text="${results.title}"></h2>
+                <div th:each="author : ${results.authors}">
+                    <a th:href="@{'/author/'+${author.id}}">
+                        <h4><span class="secondary-text-color" th:text="' '+${author.firstName} +' '+ ${author.lastName}"></span></h4>
+                    </a>
+                </div>
+                <div class="page-info-list">
+                    <ul class="list-unstyled">
+                        <li><label>Publisher:</label><span th:text="' '+${results.publisher.publisher}"></span></li>
+                        <li><label>Date Published:</label><span th:text="' '+${results.datePublished}"></span></li>
+                        <li><label>ISBN-13:</label><span th:text="' '+${results.isbn13}"></span></li>
+                        <li><label>ISBN:</label><span th:text="' '+${results.isbn10}"></span></li>
+                        <li><label>Page Count:</label><span th:text="' '+${results.pageCount}"></span></li>
+                    </ul>
+                </div>
+                <a href="" class="w3-button w3-red hidden-xs" data-toggle="modal" data-target="#myModal">Delete Book</a>
+            </div>
+            <div class="col-sm-2">
+            </div>
+        </div>
+        <br/>
+        <br/>
+        <div class="row">
+            <div class="col-md-9 col-sm-12">
+                <div class="w3-conatiner">
+                    <p th:text="${results.description}"></p>
+                </div>
+            </div>
+        </div>
+            <a href="" class="w3-button w3-red visible-xs sm-delete" data-toggle="modal" data-target="#myModal">Delete Book</a>
+        </div>
+    </div>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Are You Sure</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Deleting the book will remove it from all shelves.</p>
+                </div>
+                <div class="modal-footer">
+                    <input id="delete-hidden" type="hidden" name="id" th:value="${results.id}"/>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button id="delete-book" type="button" class="btn btn-danger">Delete Book</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--End Everything-->
+</body>
+</html>

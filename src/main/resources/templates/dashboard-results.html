@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="Layout">
+<head lang="en">
+</head>
+<body>
+<!--Everything Goes Here-->
+<div layout:fragment="content">
+    <h1 class="page-header">
+        Search Results
+    </h1>
+    <div th:if="${not #lists.isEmpty(results)}">
+        <table class="table table-striped">
+            <tr>
+                <th>Cover</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Page Count</th>
+                <th>Publisher</th>
+                <th>Date Published</th>
+                <th>ISBN 10</th>
+                <th>ISBN 13</th>
+                <th>Save</th>
+            </tr>
+            <tr th:each="result : ${results}">
+                <td><img th:src="${result.imageUrl}" class="cover"/></td>
+                <td th:text="${result.title}"></td>
+                <td th:text="${result.author}"></td>
+                <td th:text="${result.pageCount}"></td>
+                <td th:text="${result.publisher}"></td>
+                <td th:text="${result.datePublished}"></td>
+                <td th:text="${result.isbn10}"></td>
+                <td th:text="${result.isbn13}"></td>
+                <td>
+                    <form th:action="${'/save/' + result.id}" method="post">
+                        <button type="submit" class="btn btn-default">Add Book</button>
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<!--End Everything-->
+</body>
+</html>

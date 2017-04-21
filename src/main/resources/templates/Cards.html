@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html"
+      layout:decorator="Layout">
+<head lang="en">
+</head>
+<body>
+<!--Everything Goes Here-->
+<div layout:fragment="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div th:each="result : ${results}">
+                <div class="col-lg-4 col-md-6 col-xs-12">
+                    <div class="w3-container card-padding">
+                        <div class="w3-card-4">
+                            <div class="w3-container card-main" style="height: 200px">
+                                <img th:src="${result.imageUrl}" class="w3-left card-image"/>
+                                <h4><a th:href="@{'/bookinfo/'+${result.isbn13}}" class="primary-text-color" href=""><strong
+                                        th:text="${result.title}"></strong></a></h4>
+                                <div class="author" th:each="author : ${result.authors}">
+                                    <a th:href="@{'/author/'+${author.id}}">
+                                        <span class="secondary-text-color" th:text="${author.firstName} +' '+ ${author.lastName}"></span>
+                                    </a>
+                                </div>
+                                <h5 th:text="${result.dateCreated}"></h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br/>
+</div>
+<!--End Everything-->
+</body>
+</html>

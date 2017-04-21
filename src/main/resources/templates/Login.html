@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Bookshelves &amp; Reading Lists</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500"/>
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+    <!--<link rel="stylesheet" href="/css/font-awesome.min.css"/>-->
+    <link rel="stylesheet" href="/css/form-elements.css"/>
+    <link rel="stylesheet" href="/css/login-style.css"/>
+    <link rel="icon" type="image/x-icon" th:href="@{/img/favicon.ico}"/>
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+<!-- Top content -->
+<div class="top-content">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2 text">
+                <h1><strong>Bookshelves &amp; Reading Lists</strong></h1>
+                <div class="description">
+                    <p>
+                        Organize your book collection, and keep track of your reading progress.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row login-form">
+            <div class="col-sm-offset-4 col-sm-4">
+                <form role="form" th:action="@{/login}" method="post" class="l-form">
+                    <div th:if="${(param.r != null) and (param.r[0] == 'registered')}" class="alert alert-success">
+                        <p><strong>Successfully registered. Please Login</strong></p>
+                    </div>
+                    <div th:if="${param.error}" class="alert alert-danger">
+                        <p><strong>Incorrect Email or Password</strong></p>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="username" placeholder="Email..."
+                               th:class="${param.error}? 'form-control input-error':'form-control'"/>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" name="password" placeholder="Password..."
+                               th:class="${param.error}? 'form-control input-error':'form-control'"/>
+                    </div>
+                    <button type="submit" class="btn">Sign in!</button>
+                </form>
+                <div  style="margin-top: 20px"><a class="show-forms" style="padding-top: 0px;" th:href="@{/register}">Register New User</a></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+
+            <div class="col-sm-8 col-sm-offset-2">
+                <div class="footer-border"></div>
+                <p>Made by Bryan Rich</p>
+            </div>
+
+        </div>
+    </div>
+</footer>
+
+<!-- Javascript -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.backstretch.min.js"></script>
+<script src="/js/login-scripts.js"></script>
+
+<!--[if lt IE 10]>
+<script src="/js/placeholder.js"></script>
+<![endif]-->
+
+</body>
+
+</html>

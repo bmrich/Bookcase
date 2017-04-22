@@ -3,7 +3,6 @@ package com.rich.bryan.dao;
 import com.rich.bryan.entity.Book;
 
 import javax.persistence.NoResultException;
-import javax.transaction.Transactional;
 import java.util.List;
 
 public interface BookDao {

@@ -1,6 +1,5 @@
 package com.rich.bryan.dao;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 public interface ShelvesDao {

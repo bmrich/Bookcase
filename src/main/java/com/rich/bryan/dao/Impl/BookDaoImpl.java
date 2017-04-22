@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceUnit;
 import java.util.List;
 
 
@@ -35,11 +33,11 @@ public class BookDaoImpl implements BookDao {
     }
 
     @Override
-    public void deleteBook(Long id, String name){
+    public void deleteBook(Long id, String username){
         Session session = sessionFactory.getCurrentSession();
 
-        Query query = session.createQuery("from BooksUsers bu where bu.book.id=:id and bu.user.username=:name")
-                .setParameter("id", id).setParameter("name", name);
+        Query query = session.createQuery("from BooksUsers bu where bu.book.id=:id and bu.user.username=:username")
+                .setParameter("id", id).setParameter("username", username);
         BooksUsers booksUsers = (BooksUsers) query.list();
 
         session.delete(booksUsers);

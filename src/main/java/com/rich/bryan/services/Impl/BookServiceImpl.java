@@ -10,7 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.NoResultException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -19,10 +21,10 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public List<Book> getBooks(String username) {
+    public Set<Book> getBooks(String username) {
 
         List<Object[]> objects = bookDao.getBooks(username);
-        List<Book> books = new ArrayList<>();
+        Set<Book> books = new HashSet<>();
         for (Object[] obj: objects){
             Book book = (Book) obj[0];
             book.setDateCreated((Timestamp) obj[1]);
@@ -46,7 +48,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional(noRollbackFor = NullPointerException.class)
-    public Book getSingleBook(String isbn13) throws NoResultException {
+    public Book getSingleBook(String isbn13) throws NullPointerException {
         return bookDao.getSingleBook(isbn13);
     }
 }

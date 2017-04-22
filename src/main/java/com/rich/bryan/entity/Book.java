@@ -160,6 +160,24 @@ public class Book {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Book book = (Book) o;
+
+        if (!isbn10.equals(book.isbn10)) return false;
+        return isbn13.equals(book.isbn13);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = isbn10.hashCode();
+        result = 31 * result + isbn13.hashCode();
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "Book{" +
                 "id=" + id +

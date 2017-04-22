@@ -11,51 +11,48 @@
     <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
-    <link rel="icon" type="image/x-icon" th:href="@{/img/favicon.ico}"/>
+    <link rel="icon" type="image/x-icon" th:href="@{/img/favicon/favicon.ico}"/>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"/>
     <link href="/css/styles.css" rel="stylesheet"/>
 </head>
 <body>
-<nav class="navbar navbar navbar-fixed-top" role="navigation">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <i class="glyphicon glyphicon-align-justify myicon"></i>
-            </button>
-            <div class="sidebar-open-icon" onclick="showHide()">
-                <i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i>
-            </div>
-            <a class="navbar-brand"><strong>Bookshelves</strong></a>
-            <button type="button" class="navbar-left visible-xs open-btn text-primary-color" data-toggle="offcanvas">
-                <i class="glyphicon glyphicon-chevron-left"></i>
-            </button>
-        </div>
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">User <span class="caret"></span></a>
-                    <ul class="dropdown-menu small-color">
-                        <li><a href="#" onclick="document.getElementById('logout').submit();">Logout</a></li>
-                        <form id="logout" th:action="@{/logout}" method="post"/>
-                    </ul>
-                </li>
-            </ul>
-            <form class="navbar-form navbar-right" th:action="@{/search}" th:object="${query}" method="get">
-                <div class="input-group">
-                    <input type="text" id="search-bar" class="form-control" placeholder="Search" th:field="*{query}"/>
-                    <div class="input-group-btn">
-                        <button class="btn btn-default" type="submit">
-                            <i class="glyphicon glyphicon-search"></i>
-                        </button>
-                    </div>
+    <nav class="navbar navbar navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <i class="glyphicon glyphicon-align-justify myicon"></i>
+                </button>
+                <div class="sidebar-open-icon" onclick="showHide()">
+                    <i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i>
                 </div>
-            </form>
+                <a class="navbar-brand"><strong>Bookshelves</strong></a>
+                <button type="button" class="navbar-left visible-xs open-btn text-primary-color" data-toggle="offcanvas">
+                    <i class="glyphicon glyphicon-chevron-left"></i>
+                </button>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">User <span class="caret"></span></a>
+                        <ul class="dropdown-menu small-color">
+                            <li><a href="#" onclick="document.getElementById('logout').submit();">Logout</a></li>
+                            <form id="logout" th:action="@{/logout}" method="post"/>
+                        </ul>
+                    </li>
+                </ul>
+                <form class="navbar-form navbar-right" th:action="@{/search}" th:object="${query}" method="get">
+                    <div class="input-group">
+                        <input type="text" id="search-bar" class="form-control" placeholder="Search" th:field="*{query}"/>
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" type="submit">
+                                <i class="glyphicon glyphicon-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>
-</nav>
-
-<div class="container-fluid content height sm-fix">
-
+    </nav>
     <style>
         :root {
             --primary-color: #2B333E;
@@ -67,12 +64,25 @@
             --secondary-light: #ffffff;
             --secondary-dark: #c2c2c7;
             --accent-color: #0AF;
-            --trasition__bezier: all 300ms cubic-bezier(0.5, 0.57, 0.42, 1)
+            --trasition__bezier: all 300ms cubic-bezier(0.5, 0.57, 0.42, 1);
+            --z-depth-1: 0 2px 2px 0 rgba(0,0,0,0.14),0 1px 5px 0 rgba(0,0,0,0.12),0 3px 1px -2px rgba(0,0,0,0.2);
+            --z-depth-1-half: 0 3px 3px 0 rgba(0,0,0,0.14),0 1px 7px 0 rgba(0,0,0,0.12),0 3px 1px -1px rgba(0,0,0,0.2);
+            --z-depth-2: 0 4px 5px 0 rgba(0,0,0,0.14),0 1px 10px 0 rgba(0,0,0,0.12),0 2px 4px -1px rgba(0,0,0,0.3);
+            --z-depth-3: 0 6px 10px 0 rgba(0,0,0,0.14),0 1px 18px 0 rgba(0,0,0,0.12),0 3px 5px -1px rgba(0,0,0,0.3);
+            --z-depth-4: 0 8px 10px 1px rgba(0,0,0,0.14),0 3px 14px 2px rgba(0,0,0,0.12),0 5px 5px -3px rgba(0,0,0,0.3);
+            --z-depth-5: 0 16px 24px 2px rgba(0,0,0,0.14),0 6px 30px 5px rgba(0,0,0,0.12),0 8px 10px -5px rgba(0,0,0,0.3);
+        }
+        html,body {
+            min-height: 100vh;
         }
         .navbar-fixed-top {
             background-color: var(--secondary-light);
         }
         .navbar-brand {
+            color: var(--primary-color);
+            cursor:context-menu;
+        }
+        .navbar-brand:hover {
             color: var(--primary-color);
         }
         .navbar-nav li a {
@@ -81,11 +91,12 @@
         .content {
             margin-left: -15px;
             margin-right: -15px;
+            min-height: calc(100vh - 50px);
         }
         .main-content {
             margin-left: 250px;
             margin-right: 0px;
-            min-height: 100vh;
+            min-height: calc(100vh - 50px);
             background-color: var(--secondary-color);
             padding: 10px;
             transition: var(--trasition__bezier);
@@ -152,41 +163,58 @@
             margin: 0px;
             border-top-color: var(--primary-text-white);
         }
-        #footer {
-            height: 32px;
-            background: none repeat scroll 0 0 var(--secondary-dark);
+        .sidebar-inner {
+            margin-bottom: 50px;
+            height: calc(100% - 50px);
+            overflow-y: auto;
+        }
+        .sidebar-footer {
+            height: 50px;
+            background-color: var(--primary-dark);
+            text-decoration: none;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            margin-top: -50px;
+            box-sizing: border-box;
+        }
+        .sidebar-footer:hover {
+            background-color: var(--primary-light);
+        }
+        .sidebar-footer a {
+            color: var(--secondary-light);
+            display: block;
+            width: 100%;
+            line-height: 50px;
+            text-align: center;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .sidebar-footer a:hover {
+            color: var(--accent-color);
         }
     </style>
     <div class="sidebar">
-        <ul class="sidebar-nav">
-            <li><a th:href="@{/books}">My Books</a></li>
-            <li><a href="">Currently Reading</a></li>
-            <li><a href="">To Read</a></li>
-            <li><a href="">Completed</a></li>
-            <hr class="sidebar-nav__separator"/>
-            <li th:each="shelf :${shelves}"><a th:text="${shelf}"></a></li>
-            <li><a style="text-align: right">New Shelf  +</a></li>
-        </ul>
+        <div class="sidebar-inner">
+            <ul class="sidebar-nav">
+                <li><a th:href="@{/books}">My Books</a></li>
+                <li><a href="">Currently Reading</a></li>
+                <li><a href="">To Read</a></li>
+                <li><a href="">Completed</a></li>
+                <hr class="sidebar-nav__separator"/>
+                <li th:each="shelf :${shelves}"><a th:text="${shelf}"></a></li>
+            </ul>
+        </div>
+        <div class="sidebar-footer">
+            <a>New Shelf  +</a>
+        </div>
     </div>
-    <div class="main-content">
-        <div layout:fragment="content"></div>
+    <div class="container-fluid content height sm-fix">
+        <div class="main-content">
+            <div layout:fragment="content"></div>
+        </div>
     </div>
-</div>
-
-<footer id="footer">
-    <p class="pull-right text-primary-color">©2017 Reading List</p>
-</footer>
-
-<script>
-    //<![CDATA[
-    function showHide() {
-        $('.sidebar-nav').toggleClass('sidebar-close-nav');
-        $('.sidebar').toggleClass('sidebar-close');
-        $('.main-content').toggleClass('main-content-close');
-        $('.sidebar-open-icon').toggleClass('sidebar-open-click')
-    }
-    //]]>
-</script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
 <script src="/js/bootstrap.min.js"></script>
 <script src="/js/scripts.js"></script>

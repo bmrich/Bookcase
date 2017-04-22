@@ -171,10 +171,6 @@ footer {
     width: 110px;
 }
 
-.height {
-    min-height: 100vh;
-}
-
 #info-table {
     border-collapse: separate;
     border-spacing: 1em;

@@ -28,6 +28,7 @@ public class BookServiceImpl implements BookService {
             book.setDateCreated((Timestamp) obj[1]);
             books.add(book);
         }
+        System.out.println(books);
         return books;
     }
 
@@ -44,7 +45,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    @Transactional(noRollbackFor = NoResultException.class)
+    @Transactional(noRollbackFor = NullPointerException.class)
     public Book getSingleBook(String isbn13) throws NoResultException {
         return bookDao.getSingleBook(isbn13);
     }

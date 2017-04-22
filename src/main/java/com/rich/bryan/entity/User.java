@@ -22,7 +22,7 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "book", cascade = CascadeType.DETACH)
     private Set<BooksUsers> books;
 
-    @OneToMany(mappedBy = "userList", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "userList", cascade = CascadeType.DETACH)
     private Set<Shelves> shelves;
 
     public User() {}

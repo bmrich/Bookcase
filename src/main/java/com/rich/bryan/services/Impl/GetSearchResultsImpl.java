@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
+import javax.validation.constraints.Null;
 import java.util.*;
 
 @Service
@@ -32,7 +33,7 @@ public class GetSearchResultsImpl implements GetSearchResults {
     private Map<String, Map<Integer, SearchResult>> searchResultMap = new HashMap<>();
 
     @Override
-    @Transactional(dontRollbackOn = NoResultException.class)
+    @Transactional(dontRollbackOn = NullPointerException.class)
     public void saveSearchResult(Integer id, String username) {
 
         Map<Integer, SearchResult> results = searchResultMap.get(username);
@@ -41,7 +42,7 @@ public class GetSearchResultsImpl implements GetSearchResults {
         try{
             Book book = bookDao.getSingleBook(searchResult.getIsbn13());
             newBookDao.newBook(book.getId(), username);
-        } catch (NoResultException e) {
+        } catch (NullPointerException e) {
             newBookDao.newBook(searchResult, username);
         }
 

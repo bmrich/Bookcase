@@ -24,7 +24,7 @@ public class BookDaoImpl implements BookDao {
         Session session = sessionFactory.getCurrentSession();
 
         Query query = session.createQuery("select b, bu.dateCreated from BooksUsers bu " +
-                "join bu.book b join fetch b.publisher join fetch b.authors where bu.user.username=:username")
+                "join bu.book b join fetch b.publisher join fetch b.authors where bu.user.username=:username group by b.isbn13")
                 .setParameter("username", username);
 
         List<Object[]> objects = query.list();
@@ -36,9 +36,9 @@ public class BookDaoImpl implements BookDao {
     public void deleteBook(Long id, String username){
         Session session = sessionFactory.getCurrentSession();
 
-        Query query = session.createQuery("from BooksUsers bu where bu.book.id=:id and bu.user.username=:username")
+        Query query = session.createQuery("select bu from BooksUsers bu join fetch bu.book b join fetch bu.user u where b.id =:id and u.username =:username")
                 .setParameter("id", id).setParameter("username", username);
-        BooksUsers booksUsers = (BooksUsers) query.list();
+        BooksUsers booksUsers = (BooksUsers) query.uniqueResult();
 
         session.delete(booksUsers);
     }

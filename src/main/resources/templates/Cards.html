@@ -7,30 +7,78 @@
 <body>
 <!--Everything Goes Here-->
 <div layout:fragment="content">
-    <div class="container-fluid">
-        <div class="row">
-            <div th:each="result : ${results}">
-                <div class="col-lg-4 col-md-6 col-xs-12">
-                    <div class="w3-container card-padding">
-                        <div class="w3-card-4">
-                            <div class="w3-container card-main" style="height: 200px">
-                                <img th:src="${result.imageUrl}" class="w3-left card-image"/>
-                                <h4><a th:href="@{'/bookinfo/'+${result.isbn13}}" class="primary-text-color" href=""><strong
-                                        th:text="${result.title}"></strong></a></h4>
-                                <div class="author" th:each="author : ${result.authors}">
-                                    <a th:href="@{'/author/'+${author.id}}">
-                                        <span class="secondary-text-color" th:text="${author.firstName} +' '+ ${author.lastName}"></span>
-                                    </a>
-                                </div>
-                                <h5 th:text="${result.dateCreated}"></h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <!--<div class="container-fluid">-->
+        <!--<div class="row">-->
+            <!--<div th:each="result : ${results}">-->
+                <!--<div class="col-lg-4 col-md-6 col-xs-12">-->
+                    <!--<div class="w3-container card-padding">-->
+                        <!--<div class="w3-card-4">-->
+                            <!--<div class="w3-container card-main" style="height: 200px">-->
+                                <!--<img th:src="${result.imageUrl}" class="w3-left card-image"/>-->
+                                <!--<h4><a th:href="@{'/bookinfo/'+${result.isbn13}}" class="primary-text-color" href=""><strong-->
+                                        <!--th:text="${result.title}"></strong></a></h4>-->
+                                <!--<div class="author" th:each="author : ${result.authors}">-->
+                                    <!--<a th:href="@{'/author/'+${author.id}}">-->
+                                        <!--<span class="secondary-text-color" th:text="${author.firstName} +' '+ ${author.lastName}"></span>-->
+                                    <!--</a>-->
+                                <!--</div>-->
+                                <!--<h5 th:text="${result.dateCreated}"></h5>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+    <!--<br/>-->
+    <style>
+        .card-holder * {
+            margin: 0;
+            padding: 0;
+        }
+        .card-holder {
+            display: flex;
+            /*flex-direction: row;*/
+            flex-wrap: wrap;
+            align-items: flex-start;
+            justify-content: space-around;
+        }
+        .card {
+            display: inline-flex;
+            border-radius: 2px;
+            margin: 10px;
+            box-shadow: var(--z-depth-2);
+            width: 30%
+        }
+        .card-img {
+            height: 150px;
+            width: 100px;
+            border-radius: 2px 0px 0px 2px;
+        }
+        .card-content {
+            height: 200px;
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border-radius: 0px 2px 2px 0px;
+            background-color: var(--secondary-light);
+        }
+        .card-content h4 {
+            margin-bottom: 5px;
+        }
+    </style>
+    <div class="card-holder">
+        <div class="card" th:each="book :${results}">
+            <img class="card-img" th:src="${book.imageUrl}"/>
+            <div class="card-content">
+                <h4><a th:href="@{'/bookinfo/'+${book.isbn13}}" th:text="${book.title}"></a></h4>
+                <p th:each="author :${book.authors}">
+                    <a th:href="@{'/author/'+${author.id}}" th:text="${author.firstName} +' '+ ${author.lastName}"></a>
+                    <span th:text="${book.authors}"></span>
+                </p>
             </div>
         </div>
     </div>
-    <br/>
 </div>
 <!--End Everything-->
 </body>

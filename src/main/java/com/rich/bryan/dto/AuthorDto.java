@@ -1,11 +1,11 @@
 package com.rich.bryan.dto;
 
-public class DtoAuthor {
+public class AuthorDto {
     private String name;
     private String fName;
     private String lName;
 
-    public DtoAuthor(String name) {
+    public AuthorDto(String name) {
         this.name = name;
         breakName(name);
     }
@@ -46,7 +46,7 @@ public class DtoAuthor {
 
     @Override
     public String toString() {
-        return "DtoAuthor{" +
+        return "AuthorDto{" +
                 "name='" + name + '\'' +
                 ", fName='" + fName + '\'' +
                 ", lName='" + lName + '\'' +

@@ -23,7 +23,7 @@ public class User implements UserDetails {
     private Set<BooksUsers> books;
 
     @OneToMany(mappedBy = "userList", cascade = CascadeType.DETACH)
-    private Set<Shelves> shelves;
+    private Set<Shelf> shelves;
 
     public User() {}
     public User(String username, String password) {

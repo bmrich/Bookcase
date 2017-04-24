@@ -57,7 +57,7 @@ public class Author {
 
     @Override
     public String  toString() {
-        return "DtoAuthor{" +
+        return "AuthorDto{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +

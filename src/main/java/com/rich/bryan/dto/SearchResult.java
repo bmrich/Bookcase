@@ -16,7 +16,7 @@ public class SearchResult {
     private String isbn10;
     private String imageUrl;
     private String author;
-    private List<DtoAuthor> dtoAuthorList = new ArrayList<>();
+    private List<AuthorDto> authorDtoList = new ArrayList<>();
 
     public SearchResult() {}
 
@@ -105,25 +105,25 @@ public class SearchResult {
     }
 
     public void setAuthor() {
-        if (dtoAuthorList.size() > 1) {
+        if (authorDtoList.size() > 1) {
             StringBuilder sb = new StringBuilder();
-            for (DtoAuthor a : dtoAuthorList) {
+            for (AuthorDto a : authorDtoList) {
                 sb.append(a.getName()).append(", ");
             }
             this.author = sb.substring(0, sb.lastIndexOf(", "));
-        } else if (dtoAuthorList.size() == 1) {
-            this.author = dtoAuthorList.get(0).getName();
+        } else if (authorDtoList.size() == 1) {
+            this.author = authorDtoList.get(0).getName();
         } else {
             this.author = null;
         }
     }
 
-    public List<DtoAuthor> getDtoAuthorList() {
-        return dtoAuthorList;
+    public List<AuthorDto> getAuthorDtoList() {
+        return authorDtoList;
     }
 
-    public void setDtoAuthorList(List<DtoAuthor> dtoAuthorList) {
-        this.dtoAuthorList = dtoAuthorList;
+    public void setAuthorDtoList(List<AuthorDto> authorDtoList) {
+        this.authorDtoList = authorDtoList;
     }
 
     @Override
@@ -139,7 +139,7 @@ public class SearchResult {
                 ", isbn13='" + isbn13 + '\'' +
                 ", isbn10='" + isbn10 + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
-                ", dtoAuthorList=" + dtoAuthorList +
+                ", authorDtoList=" + authorDtoList +
                 '}';
     }
 }

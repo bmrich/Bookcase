@@ -2,7 +2,7 @@ package com.rich.bryan.dao.Impl;
 
 import com.rich.bryan.dao.ShelvesDao;
 import com.rich.bryan.entity.BooksUsers;
-import com.rich.bryan.entity.Shelves;
+import com.rich.bryan.entity.Shelf;
 import com.rich.bryan.entity.User;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -24,7 +24,7 @@ public class ShelvesDaoImpl implements ShelvesDao {
         User user = new User();
         user.setUsername(username);
 
-        Shelves shelf = new Shelves();
+        Shelf shelf = new Shelf();
         shelf.setShelfName(shelfName);
         shelf.setUserList(user);
 
@@ -45,7 +45,7 @@ public class ShelvesDaoImpl implements ShelvesDao {
         User user = new User();
         user.setUsername(username);
 
-        Shelves shelf = new Shelves();
+        Shelf shelf = new Shelf();
         shelf.setShelfName(shelfName);
         shelf.setUserList(user);
 
@@ -61,7 +61,7 @@ public class ShelvesDaoImpl implements ShelvesDao {
     public List<String> getShelves(String username){
         Session session = sessionFactory.getCurrentSession();
 
-        Query query = session.createQuery("select s.shelfName from Shelves s where s.userList.username=:username group by s.shelfName")
+        Query query = session.createQuery("select s.shelfName from Shelf s where s.userList.username=:username group by s.shelfName")
                 .setParameter("username", username);
 
         return query.list();

@@ -1,8 +1,8 @@
 package com.rich.bryan.dao.Impl;
 
 import com.rich.bryan.dao.NewBookDao;
+import com.rich.bryan.dto.AuthorDto;
 import com.rich.bryan.entity.*;
-import com.rich.bryan.dto.DtoAuthor;
 import com.rich.bryan.dto.SearchResult;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -24,8 +24,8 @@ public class NewBookDaoImpl implements NewBookDao {
         Session session = sessionFactory.getCurrentSession();
 
         List<Author> authorEntities = new ArrayList<>();
-        List<DtoAuthor> dtoAuthorList = sr.getDtoAuthorList();
-        for (DtoAuthor a: dtoAuthorList) {
+        List<AuthorDto> authorDtoList = sr.getAuthorDtoList();
+        for (AuthorDto a: authorDtoList) {
             Query query = session.createQuery("from Author a where a.firstName = :fname and a.lastName = :lname").
                     setParameter("fname", a.getfName()).
                     setParameter("lname", a.getlName());

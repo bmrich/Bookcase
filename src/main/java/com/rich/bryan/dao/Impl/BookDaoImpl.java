@@ -45,27 +45,37 @@ public class BookDaoImpl implements BookDao {
     }
 
     @Override
-    public List<Book> getAuthor(Long id, String username) {
+    public List<Object[]> getAuthor(Long id, String username) {
         Session session = sessionFactory.getCurrentSession();
 
-        Query query = session.createQuery("select b from BooksUsers bu join bu.book b " +
+        Query query = session.createQuery("select b, bu.dateCreated from BooksUsers bu join bu.book b " +
                 "join fetch b.authors a join fetch b.publisher join bu.user u where a.id =:id and u.username =:username")
                 .setParameter("id", id).setParameter("username", username);
 
-        List<Book> books = query.list();
+        List<Object[]> books = query.list();
 
         return books;
+    }
+
+    @Override
+    public Object[] getSingleBook(String isbn13, String username) throws NoResultException {
+        Session session = sessionFactory.getCurrentSession();
+
+        Query query = session.createQuery("select b, bu.dateCreated from BooksUsers bu join bu.book b " +
+                "join fetch b.authors join fetch b.publisher where b.isbn13 =:isbn13 and bu.user.username =:username")
+                .setParameter("isbn13", isbn13)
+                .setParameter("username", username);
+
+        return (Object[]) query.uniqueResult();
     }
 
     @Override
     public Book getSingleBook(String isbn13) throws NoResultException {
         Session session = sessionFactory.getCurrentSession();
 
-        Query query = session.createQuery("from Book b " +
-                "join fetch b.authors join fetch b.publisher where b.isbn13 =:isbn13")
+        Query query = session.createQuery("from Book b join fetch b.authors join fetch b.publisher where b.isbn13 =:isbn13")
                 .setParameter("isbn13", isbn13);
 
-        Book book = (Book) query.uniqueResult();
-        return book;
+        return (Book) query.uniqueResult();
     }
 }

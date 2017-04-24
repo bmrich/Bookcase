@@ -27,7 +27,7 @@ public class BooksUsers {
     private Timestamp dateCreated;
 
     @OneToMany(mappedBy = "booksUsersList", cascade = CascadeType.REMOVE)
-    private Set<Shelves> shelves;
+    private Set<Shelf> shelves;
 
     public Long getId() {
         return id;

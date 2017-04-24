@@ -1,10 +1,10 @@
 package com.rich.bryan.services.Impl;
 
 import com.rich.bryan.dao.BookDao;
-import com.rich.bryan.dao.GoogleBooksAPIdao;
+import com.rich.bryan.dao.GoogleBooksApiDao;
 import com.rich.bryan.dao.NewBookDao;
 import com.rich.bryan.entity.Book;
-import com.rich.bryan.dto.DtoAuthor;
+import com.rich.bryan.dto.AuthorDto;
 import com.rich.bryan.dto.SearchResult;
 import com.rich.bryan.services.GetSearchResults;
 import org.json.JSONArray;
@@ -13,16 +13,14 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
-import javax.validation.constraints.Null;
 import java.util.*;
 
 @Service
 public class GetSearchResultsImpl implements GetSearchResults {
 
     @Autowired
-    private GoogleBooksAPIdao googleBooksAPIdao;
+    private GoogleBooksApiDao googleBooksApiDao;
 
     @Autowired
     private NewBookDao newBookDao;
@@ -58,7 +56,7 @@ public class GetSearchResultsImpl implements GetSearchResults {
 
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject = googleBooksAPIdao.googleBooksApiSearch(query);
+            jsonObject = googleBooksApiDao.googleBooksApiSearch(query);
         } catch (Exception e) {
             System.out.println("HTTP ERROR");
         }
@@ -112,7 +110,7 @@ public class GetSearchResultsImpl implements GetSearchResults {
                 JSONArray authorsJsonArray = volumeInfo.optJSONArray("authors");
                 if (authorsJsonArray != null){
                     for (int k = 0; k < authorsJsonArray.length(); k++){
-                        res.getDtoAuthorList().add(new DtoAuthor(authorsJsonArray.getString(k)));
+                        res.getAuthorDtoList().add(new AuthorDto(authorsJsonArray.getString(k)));
                     }
                 }
                 res.setAuthor();

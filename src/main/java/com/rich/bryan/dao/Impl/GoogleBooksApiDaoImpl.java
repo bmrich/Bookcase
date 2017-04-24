@@ -1,6 +1,6 @@
 package com.rich.bryan.dao.Impl;
 
-import com.rich.bryan.dao.GoogleBooksAPIdao;
+import com.rich.bryan.dao.GoogleBooksApiDao;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,7 @@ import java.net.URLEncoder;
 import static org.springframework.http.HttpHeaders.USER_AGENT;
 
 @Service
-public class GoogleBooksAPIdaoImpl implements GoogleBooksAPIdao {
+public class GoogleBooksApiDaoImpl implements GoogleBooksApiDao {
 
     @Override
     public JSONObject googleBooksApiSearch(String query) throws Exception {

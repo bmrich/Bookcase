@@ -22,6 +22,7 @@
                 </div>
                 <div class="page-info-list">
                     <ul class="list-unstyled">
+                        <li><label>Date Added:</label><span th:text="' '+${results.dateCreated}"></span></li>
                         <li><label>Publisher:</label><span th:text="' '+${results.publisher.publisher}"></span></li>
                         <li><label>Date Published:</label><span th:text="' '+${results.datePublished}"></span></li>
                         <li><label>ISBN-13:</label><span th:text="' '+${results.isbn13}"></span></li>

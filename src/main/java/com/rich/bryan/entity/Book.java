@@ -3,8 +3,7 @@ package com.rich.bryan.entity;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "books")
@@ -38,7 +37,7 @@ public class Book {
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id")
     )
-    private Set<Author> authors = new HashSet<>();
+    private List<Author> authors = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.DETACH)
     private Set<BooksUsers> users;
@@ -61,7 +60,7 @@ public class Book {
 
     public void setDateCreated(Timestamp dateCreated) {
         try {
-            this.dateCreated = new SimpleDateFormat("MMM d, ''yy").format(dateCreated);
+            this.dateCreated = new SimpleDateFormat("yyyy-MM-dd").format(dateCreated);
         } catch (NullPointerException e) {
             this.dateCreated = null;
         }
@@ -139,11 +138,11 @@ public class Book {
         this.publisher = publisher;
     }
 
-    public Set<Author> getAuthors() {
+    public List<Author> getAuthors() {
         return authors;
     }
 
-    public void setAuthors(Set<Author> authors) {
+    public void setAuthors(List<Author> authors) {
         this.authors = authors;
     }
 

@@ -13,7 +13,7 @@
             <div class="col-sm-3">
                 <img class="info-page-image" th:src="${results.imageUrl}"/>
             </div>
-            <div class="col-sm-7">
+            <div class="col-sm-6">
                 <h2 th:text="${results.title}"></h2>
                 <div th:each="author : ${results.authors}">
                     <a th:href="@{'/author/'+${author.id}}">
@@ -32,7 +32,28 @@
                 </div>
                 <a href="" class="w3-button w3-red hidden-xs" data-toggle="modal" data-target="#myModal">Delete Book</a>
             </div>
-            <div class="col-sm-2">
+            <style>
+                .shelf-checkbox-div {
+                    padding-left: 10px;
+                }
+                .shelf-checkbox-div h4 {
+                    text-align: center;
+                }
+                .shelf-checkbox label {
+                    font-weight: normal;
+                }
+            </style>
+            <div class="col-sm-3">
+                <div class="shelf-checkbox-div">
+                    <h4>Shelves</h4>
+                    <hr/>
+                    <div class="shelf-checkbox" th:each="shelf,iter :${isOnShelf}">
+                        <input th:id="'checkbox'+${iter.index}" type="checkbox" th:value="${shelf[1]}"
+                               th:checked="${shelf[0]}"
+                               th:onchange="'shelfChange(\'' + ${iter.index} + '\')'" />
+                        <label th:for="'checkbox'+${iter.index}" th:text="${shelf[1]}"></label>
+                    </div>
+                </div>
             </div>
         </div>
         <br/>
@@ -47,6 +68,7 @@
             <a href="" class="w3-button w3-red visible-xs sm-delete" data-toggle="modal" data-target="#myModal">Delete Book</a>
         </div>
     </div>
+    <input id="book-id" type="hidden" name="id" th:value="${results.id}"/>
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -58,7 +80,6 @@
                     <p>Deleting the book will remove it from all shelves.</p>
                 </div>
                 <div class="modal-footer">
-                    <input id="delete-hidden" type="hidden" name="id" th:value="${results.id}"/>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                     <button id="delete-book" type="button" class="btn btn-danger">Delete Book</button>
                 </div>

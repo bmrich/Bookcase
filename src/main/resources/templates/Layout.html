@@ -224,16 +224,37 @@
                 <li><a href="">To Read</a></li>
                 <li><a href="">Completed</a></li>
                 <hr class="sidebar-nav__separator"/>
-                <li th:each="shelf :${shelves}"><a th:text="${shelf}"></a></li>
+                <li th:each="shelf :${shelves}"><a th:href="@{'/getShelf/'+ ${shelf}}" th:text="${shelf}"></a></li>
             </ul>
         </div>
         <div class="sidebar-footer">
-            <a>New Shelf  +</a>
+            <a data-toggle="modal" data-target="#newShelf">New Shelf  +</a>
         </div>
     </div>
     <div class="container-fluid content height sm-fix">
         <div class="main-content">
             <div layout:fragment="content"></div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="newShelf" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Create a new Shelf</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="newShelfInput">New Shelf</label>
+                        <input id="newShelfInput" class="form-control" type="text" placeholder="Shelf Name"/>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button id="saveNewShelf" type="button" class="btn btn-primary" onclick="saveShelf()">Save</button>
+                </div>
+            </div>
         </div>
     </div>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>

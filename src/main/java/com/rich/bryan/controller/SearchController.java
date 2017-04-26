@@ -4,18 +4,18 @@ import com.rich.bryan.dto.Query;
 import com.rich.bryan.services.BookService;
 import com.rich.bryan.services.GetSearchResults;
 import com.rich.bryan.services.ShelvesService;
-import com.rich.bryan.services.Enum.SortBy;
+import com.rich.bryan.services.Utils.SortBy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.security.Principal;
 
-import static com.rich.bryan.services.Enum.SortBy.DATE_ADDED_DESC;
+import static com.rich.bryan.services.Utils.SortBy.DATE_ADDED_DESC;
 
 @Controller
 public class SearchController {
@@ -77,6 +77,7 @@ public class SearchController {
     public String singleBook(@PathVariable("isbn13") String isbn13, Model model, Principal principal){
         model.addAttribute("results", bookService.getSingleBook(isbn13, principal.getName()));
         model.addAttribute("shelves", shelvesService.getShelves(principal.getName()));
+        model.addAttribute("isOnShelf", shelvesService.getShelvesBookIsOn(principal.getName(),isbn13));
         model.addAttribute("query", new Query());
         return "Book-Info";
     }
@@ -85,5 +86,35 @@ public class SearchController {
     public String deleteBook(@PathVariable("id") Long id, Principal principal){
         bookService.deleteBook(id, principal.getName());
         return "redirect:/books";
+    }
+
+    @GetMapping("/createShelf/{shelfName}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void createShelf(@PathVariable("shelfName") String shelfName, Principal principal){
+        shelvesService.createShelf(principal.getName(), shelfName);
+    }
+
+    @GetMapping("/addToShelf/{id}/{shelfName}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void addToShelf(@PathVariable("id") Long id, @PathVariable("shelfName") String shelfName, Principal principal){
+        try {
+            shelfName = URLDecoder.decode(shelfName, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        shelvesService.addBooktoShelf(principal.getName(), shelfName, id);
+    }
+
+    @GetMapping("/getShelf/{shelfName}")
+    public String getShelf(@PathVariable("shelfName") String shelfName, Principal principal, Model model){
+        try {
+            shelfName = URLDecoder.decode(shelfName, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        model.addAttribute("results", shelvesService.getShelf(principal.getName(), shelfName));
+        model.addAttribute("shelves", shelvesService.getShelves(principal.getName()));
+        model.addAttribute("query", new Query());
+        return "Cards";
     }
 }

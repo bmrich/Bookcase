@@ -1,4 +1,4 @@
-package com.rich.bryan.services.Enum;
+package com.rich.bryan.services.Utils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,8 +18,8 @@ public enum SortBy {
     private static Map<Integer, SortBy> map = new HashMap<>();
 
     static {
-        for (SortBy sortNum : SortBy.values()) {
-            map.put(sortNum.sortNum, sortNum);
+        for (SortBy sortBy : SortBy.values()) {
+            map.put(sortBy.sortNum, sortBy);
         }
     }
 

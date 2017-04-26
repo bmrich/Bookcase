@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class GetSearchResultsImpl implements GetSearchResults {
@@ -28,7 +29,7 @@ public class GetSearchResultsImpl implements GetSearchResults {
     @Autowired
     private BookDao bookDao;
 
-    private Map<String, Map<Integer, SearchResult>> searchResultMap = new HashMap<>();
+    private ConcurrentHashMap<String, Map<Integer, SearchResult>> searchResultMap = new ConcurrentHashMap<>();
 
     @Override
     @Transactional(dontRollbackOn = NullPointerException.class)

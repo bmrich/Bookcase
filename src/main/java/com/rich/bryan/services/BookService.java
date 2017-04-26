@@ -1,7 +1,7 @@
 package com.rich.bryan.services;
 
 import com.rich.bryan.entity.Book;
-import com.rich.bryan.services.Enum.SortBy;
+import com.rich.bryan.services.Utils.SortBy;
 
 import javax.persistence.NoResultException;
 import java.util.List;

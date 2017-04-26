@@ -66,7 +66,7 @@ public class BookDaoImpl implements BookDao {
                 .setParameter("isbn13", isbn13)
                 .setParameter("username", username);
 
-        return (Object[]) query.uniqueResult();
+        return (Object[]) query.list().get(0);
     }
 
     @Override

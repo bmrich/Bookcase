@@ -52,4 +52,14 @@ public class Shelf {
     public void setBooksUsersList(BooksUsers booksUsersList) {
         this.booksUsersList = booksUsersList;
     }
+
+    @Override
+    public String toString() {
+        return "Shelf{" +
+                "id=" + id +
+                ", shelfName='" + shelfName + '\'' +
+                ", userList=" + userList +
+                ", booksUsersList=" + booksUsersList +
+                '}';
+    }
 }

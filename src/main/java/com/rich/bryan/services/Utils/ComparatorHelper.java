@@ -10,10 +10,10 @@ public class ComparatorHelper {
         Comparator<Book> comparator = null;
         switch (sortBy) {
             case DATE_ADDED_ASC:
-                comparator = Comparator.comparing(Book::getDateCreated).thenComparing(Book::getTitle);
+                comparator = Comparator.comparing(Book::getTimestamp);
                 break;
             case DATE_ADDED_DESC:
-                comparator = Comparator.comparing(Book::getDateCreated).reversed().thenComparing(Book::getTitle);
+                comparator = Comparator.comparing(Book::getTimestamp).reversed();
                 break;
             case PAGE_COUNT_ASC:
                 comparator = Comparator.comparing(Book::getPageCount);

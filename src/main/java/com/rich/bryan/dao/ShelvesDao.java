@@ -10,4 +10,6 @@ public interface ShelvesDao {
     List<String> getShelves(String username);
     List<Object[]> getShelf(String username, String shelfName);
     List<String> getShelvesBookIsOn(String username, String isbn13);
+    void removeFromShelf(String username, String shelfName, Long id);
+    String getReadingState(String username, String isbn13);
 }

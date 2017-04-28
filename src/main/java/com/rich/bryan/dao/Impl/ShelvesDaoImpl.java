@@ -55,9 +55,21 @@ public class ShelvesDaoImpl implements ShelvesDao {
 
         shelf.setBooksUsersList(newBooksUsers);
 
-        System.out.println(shelf);
-
         session.saveOrUpdate(shelf);
+    }
+
+    @Override
+    public void removeFromShelf(String username, String shelfName, Long id) {
+        Session session = sessionFactory.getCurrentSession();
+
+        Query query = session.createQuery("select s from BooksUsers bu join bu.shelves s " +
+                "where bu.book.id=:id and s.shelfName=:shelfName and s.userList.username=:username")
+                .setParameter("id", id)
+                .setParameter("shelfName", shelfName)
+                .setParameter("username", username);
+
+        Shelf shelf = (Shelf) query.list().get(0);
+        session.delete(shelf);
     }
 
     @Override
@@ -80,6 +92,17 @@ public class ShelvesDaoImpl implements ShelvesDao {
                 .setParameter("isbn13", isbn13);
 
         return query.list();
+    }
+
+    @Override
+    public String getReadingState(String username, String isbn13) {
+        Session session = sessionFactory.getCurrentSession();
+
+        Query query = session.createQuery("select bu.state from BooksUsers bu where bu.book.isbn13=:isbn13 and bu.user.username=:username")
+                .setParameter("isbn13", isbn13)
+                .setParameter("username", username);
+
+        return (String) query.list().get(0);
     }
 
     @Override

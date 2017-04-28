@@ -29,6 +29,9 @@ public class BooksUsers {
     @OneToMany(mappedBy = "booksUsersList", cascade = CascadeType.REMOVE)
     private Set<Shelf> shelves;
 
+    //CR = Currently Reading, TR = To Read, R = Read
+    private String state;
+
     public Long getId() {
         return id;
     }
@@ -61,12 +64,22 @@ public class BooksUsers {
         this.dateCreated = dateCreated;
     }
 
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
     @Override
     public String toString() {
         return "BooksUsers{" +
                 "id=" + id +
                 ", user=" + user +
                 ", book=" + book +
+                ", dateCreated=" + dateCreated +
+                ", state='" + state + '\'' +
                 '}';
     }
 }

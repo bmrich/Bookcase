@@ -12,210 +12,39 @@
     <![endif]-->
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
     <link rel="icon" type="image/x-icon" th:href="@{/img/favicon/favicon.ico}"/>
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"/>
     <link href="/css/styles.css" rel="stylesheet"/>
 </head>
 <body>
-    <nav class="navbar navbar-fixed-top" role="navigation">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <i class="glyphicon glyphicon-align-justify myicon"></i>
-                </button>
-                <div class="sidebar-open-icon" onclick="showHide()">
-                    <i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i>
-                </div>
-                <a class="navbar-brand"><strong>Bookcase</strong></a>
-                <button type="button" class="navbar-left visible-xs open-btn text-primary-color" data-toggle="offcanvas">
-                    <i class="glyphicon glyphicon-chevron-left"></i>
-                </button>
+    <nav class="navigation">
+        <div class="navigation-left">
+            <div class="sidebar-open-icon" onclick="showHide()">
+                <i class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></i>
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav navbar-right">
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">User <span class="caret"></span></a>
-                        <ul class="dropdown-menu small-color">
-                            <li><a href="#" onclick="document.getElementById('logout').submit();">Logout</a></li>
-                            <form id="logout" th:action="@{/logout}" method="post"/>
-                        </ul>
-                    </li>
-                </ul>
-                <form class="navbar-form navbar-right" th:action="@{/search}" th:object="${query}" method="get">
-                    <div class="input-group">
-                        <input type="text" id="search-bar" class="form-control" placeholder="Search" th:field="*{query}"/>
-                        <div class="input-group-btn">
-                            <button class="btn btn-default" type="submit">
-                                <i class="glyphicon glyphicon-search"></i>
-                            </button>
-                        </div>
+            <h2 class="navigation-brand navigation-item">Bookcase</h2>
+        </div>
+        <div class="navigation-right">
+            <form class="navigation-search hidden-xs" th:action="@{/search}" th:object="${query}" method="get">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search" th:field="*{query}"/>
+                    <div class="input-group-btn">
+                        <button class="btn btn-default" type="submit">
+                            <i class="glyphicon glyphicon-search"></i>
+                        </button>
                     </div>
-                </form>
+                </div>
+            </form>
+            <div class="dropdown">
+                <button class="btn btn-link dropdown-toggle user-icon-btn" type="button" id="user-dropdown"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    <i class="glyphicon glyphicon-option-vertical"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="user-dropdown">
+                    <li><a href="#" onclick="document.getElementById('logout').submit();">Logout</a></li>
+                    <form id="logout" th:action="@{/logout}" method="post"/>
+                </ul>
             </div>
         </div>
     </nav>
-    <style>
-        :root {
-            --primary-color: #2B333E;
-            --primary-text-white: rgba(255, 255, 255, 0.9);
-            --primary-light: #545c69;
-            --primary-dark: #010c18;
-            --secondary-color: #f5f5fa;
-            --secondary-text-black: rgba(0, 0, 0, 0.6);
-            --secondary-light: #ffffff;
-            --secondary-light-text-black: rgb(0, 0, 0);
-            --secondary-dark: #c2c2c7;
-            --accent-color: #0AF;
-            --trasition__bezier: all 300ms cubic-bezier(0.5, 0.57, 0.42, 1);
-            --elevation--z0: 0 0 0 0 rgba(0,0,0,.2),0 0 0 0 rgba(0,0,0,.14),0 0 0 0 rgba(0,0,0,.12);
-            --elevation--z1: 0 2px 1px -1px rgba(0,0,0,.2),0 1px 1px 0 rgba(0,0,0,.14),0 1px 3px 0 rgba(0,0,0,.12);
-            --elevation--z2: 0 3px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12);
-            --elevation--z3: 0 3px 3px -2px rgba(0,0,0,.2),0 3px 4px 0 rgba(0,0,0,.14),0 1px 8px 0 rgba(0,0,0,.12);
-            --elevation--z4: 0 2px 4px -1px rgba(0,0,0,.2),0 4px 5px 0 rgba(0,0,0,.14),0 1px 10px 0 rgba(0,0,0,.12);
-            --elevation--z5: 0 3px 5px -1px rgba(0,0,0,.2),0 5px 8px 0 rgba(0,0,0,.14),0 1px 14px 0 rgba(0,0,0,.12);
-            --elevation--z6: 0 3px 5px -1px rgba(0,0,0,.2),0 6px 10px 0 rgba(0,0,0,.14),0 1px 18px 0 rgba(0,0,0,.12);
-            --elevation--z7: 0 4px 5px -2px rgba(0,0,0,.2),0 7px 10px 1px rgba(0,0,0,.14),0 2px 16px 1px rgba(0,0,0,.12);
-            --elevation--z8: 0 5px 5px -3px rgba(0,0,0,.2),0 8px 10px 1px rgba(0,0,0,.14),0 3px 14px 2px rgba(0,0,0,.12);
-            --elevation--z9: 0 5px 6px -3px rgba(0,0,0,.2),0 9px 12px 1px rgba(0,0,0,.14),0 3px 16px 2px rgba(0,0,0,.12);
-            --elevation--z10: 0 6px 6px -3px rgba(0,0,0,.2),0 10px 14px 1px rgba(0,0,0,.14),0 4px 18px 3px rgba(0,0,0,.12);
-            --elevation--z11: 0 6px 7px -4px rgba(0,0,0,.2),0 11px 15px 1px rgba(0,0,0,.14),0 4px 20px 3px rgba(0,0,0,.12);
-            --elevation--z12: 0 7px 8px -4px rgba(0,0,0,.2),0 12px 17px 2px rgba(0,0,0,.14),0 5px 22px 4px rgba(0,0,0,.12);
-            --elevation--z13: 0 7px 8px -4px rgba(0,0,0,.2),0 13px 19px 2px rgba(0,0,0,.14),0 5px 24px 4px rgba(0,0,0,.12);
-            --elevation--z14: 0 7px 9px -4px rgba(0,0,0,.2),0 14px 21px 2px rgba(0,0,0,.14),0 5px 26px 4px rgba(0,0,0,.12);
-            --elevation--z15: 0 8px 9px -5px rgba(0,0,0,.2),0 15px 22px 2px rgba(0,0,0,.14),0 6px 28px 5px rgba(0,0,0,.12);
-            --elevation--z16: 0 8px 10px -5px rgba(0,0,0,.2),0 16px 24px 2px rgba(0,0,0,.14),0 6px 30px 5px rgba(0,0,0,.12);
-            --elevation--z17: 0 8px 11px -5px rgba(0,0,0,.2),0 17px 26px 2px rgba(0,0,0,.14),0 6px 32px 5px rgba(0,0,0,.12);
-            --elevation--z18: 0 9px 11px -5px rgba(0,0,0,.2),0 18px 28px 2px rgba(0,0,0,.14),0 7px 34px 6px rgba(0,0,0,.12);
-            --elevation--z19: 0 9px 12px -6px rgba(0,0,0,.2),0 19px 29px 2px rgba(0,0,0,.14),0 7px 36px 6px rgba(0,0,0,.12);
-            --elevation--z20: 0 10px 13px -6px rgba(0,0,0,.2),0 20px 31px 3px rgba(0,0,0,.14),0 8px 38px 7px rgba(0,0,0,.12);
-            --elevation--z21: 0 10px 13px -6px rgba(0,0,0,.2),0 21px 33px 3px rgba(0,0,0,.14),0 8px 40px 7px rgba(0,0,0,.12);
-            --elevation--z22: 0 10px 14px -6px rgba(0,0,0,.2),0 22px 35px 3px rgba(0,0,0,.14),0 8px 42px 7px rgba(0,0,0,.12);
-            --elevation--z23: 0 11px 14px -7px rgba(0,0,0,.2),0 23px 36px 3px rgba(0,0,0,.14),0 9px 44px 8px rgba(0,0,0,.12);
-            --elevation--z24: 0 11px 15px -7px rgba(0,0,0,.2),0 24px 38px 3px rgba(0,0,0,.14),0 9px 46px 8px rgba(0,0,0,.12);
-        }
-        html,body {
-            min-height: 100vh;
-        }
-        .navbar-fixed-top {
-            background-color: var(--secondary-light);
-            box-shadow: var(--elevation--z8);
-        }
-        .navbar-brand {
-            color: var(--primary-color);
-            cursor:context-menu;
-        }
-        .navbar-brand:hover {
-            color: var(--primary-color);
-        }
-        .navbar-nav li a {
-            color: var(--primary-color);
-        }
-        .content {
-            margin-left: -15px;
-            margin-right: -15px;
-            min-height: calc(100vh - 50px);
-        }
-        .main-content {
-            margin-left: 250px;
-            margin-right: 0px;
-            min-height: calc(100vh - 50px);
-            background-color: var(--secondary-color);
-            padding: 10px;
-            transition: var(--trasition__bezier);
-        }
-        .main-content-close {
-            margin-left: 0px;
-        }
-        .sidebar-open-icon {
-            float: left;
-            margin-right: 11px;
-            height: 50px;
-            font-size: 40px;
-            line-height: 48px;
-            cursor: pointer;
-            transition: transform 300ms;
-        }
-        .sidebar-open-click {
-            transform: rotate(180deg);
-        }
-        .sidebar {
-            width: 250px;
-            height: calc(100vh - 50px);
-            background-color: var(--primary-color);
-            overflow-x: hidden;
-            transition: var(--trasition__bezier);
-            position: fixed;
-            right: 0;
-            left: 0;
-            box-shadow: var(--elevation--z8);
-        }
-        .sidebar-close {
-            width: 0px;
-        }
-        .sidebar-nav {
-            list-style: none;
-             -webkit-padding-start: 0px;
-        }
-        .sidebar-close-nav {
-            opacity: 0;
-        }
-        .sidebar-nav li {
-            box-sizing: border-box;
-            border-left-color: transparent;
-            border-left-width: 5px;
-            border-left-style: solid;
-            cursor: pointer;
-        }
-        .sidebar-nav li:hover {
-            background-color: var(--primary-dark);
-            border-left-color: var(--accent-color);
-        }
-        .sidebar-nav li a {
-            color: var(--primary-text-white);
-            display: inline-block;
-            width: 100%;
-            text-decoration: none;
-            padding: 8px 10px;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            overflow: hidden;
-        }
-
-        .sidebar-nav__separator {
-            margin: 0px;
-            border-top-color: var(--primary-text-white);
-        }
-        .sidebar-inner {
-            margin-bottom: 50px;
-            height: calc(100% - 50px);
-            overflow-y: auto;
-        }
-        .sidebar-footer {
-            height: 50px;
-            background-color: var(--primary-dark);
-            text-decoration: none;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            overflow: hidden;
-            margin-top: -50px;
-            box-sizing: border-box;
-        }
-        .sidebar-footer:hover {
-            background-color: var(--primary-light);
-        }
-        .sidebar-footer a {
-            color: var(--secondary-light);
-            display: block;
-            width: 100%;
-            line-height: 50px;
-            text-align: center;
-            font-weight: bold;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        .sidebar-footer a:hover {
-            color: var(--accent-color);
-        }
-    </style>
     <div class="sidebar">
         <div class="sidebar-inner">
             <ul class="sidebar-nav">
@@ -231,10 +60,8 @@
             <a data-toggle="modal" data-target="#newShelf">New Shelf  +</a>
         </div>
     </div>
-    <div class="container-fluid content height sm-fix">
-        <div class="main-content">
-            <div layout:fragment="content"></div>
-        </div>
+    <div class="main-content">
+        <div layout:fragment="content"></div>
     </div>
 
     <div class="modal fade" id="newShelf" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -242,11 +69,11 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Create a new Shelf</h4>
+                    <h4 class="modal-title" id="myModalLabel">Create a New Shelf</h4>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="newShelfInput">New Shelf</label>
+                        <label for="newShelfInput">Shelf Name</label>
                         <input id="newShelfInput" class="form-control" type="text" placeholder="Shelf Name"/>
                     </div>
                 </div>

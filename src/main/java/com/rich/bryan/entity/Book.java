@@ -45,6 +45,9 @@ public class Book {
     @Transient
     private String dateCreated;
 
+    @Transient
+    private Timestamp timestamp;
+
     public Book() {}
     public Book(String title, String isbn10, String isbn13, Integer pageCount,
                 String datePublished, String imageUrl, String description, Publisher publisher) {
@@ -59,6 +62,7 @@ public class Book {
     }
 
     public void setDateCreated(Timestamp dateCreated) {
+        this.timestamp = dateCreated;
         try {
             this.dateCreated = new SimpleDateFormat("yyyy-MM-dd").format(dateCreated);
         } catch (NullPointerException e) {
@@ -73,6 +77,8 @@ public class Book {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public Timestamp getTimestamp() { return timestamp;}
 
     public String getTitle() {
         return title;

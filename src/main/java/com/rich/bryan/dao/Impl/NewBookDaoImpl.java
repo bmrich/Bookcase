@@ -61,6 +61,7 @@ public class NewBookDaoImpl implements NewBookDao {
         BooksUsers booksUsers = new BooksUsers();
         booksUsers.setUser(user);
         booksUsers.setBook(book);
+        booksUsers.setState("TR");
 
         session.persist(booksUsers);
     }
@@ -78,6 +79,7 @@ public class NewBookDaoImpl implements NewBookDao {
         BooksUsers booksUsers = new BooksUsers();
         booksUsers.setBook(book);
         booksUsers.setUser(user);
+        booksUsers.setState("TR");
 
         session.merge(booksUsers);
     }

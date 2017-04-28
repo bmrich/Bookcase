@@ -11,4 +11,6 @@ public interface ShelvesService {
     List<String> getShelves(String username);
     List<Object[]> getShelvesBookIsOn(String username, String isbn13);
     Set<Book> getShelf(String username, String shelfName);
+    void removeFromShelf(String username, String shelfName, Long id);
+    String getReadingState(String username, String isbn13);
 }

@@ -11,8 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.security.Principal;
 
 import static com.rich.bryan.services.Utils.SortBy.DATE_ADDED_DESC;
@@ -45,8 +43,8 @@ public class SearchController {
 
     @PostMapping("/save/{id}")
     public String save(@PathVariable Integer id, Principal principal){
-        getSearchResults.saveSearchResult(id, principal.getName());
-        return "redirect:/books";
+        String isbn13 = getSearchResults.saveSearchResult(id, principal.getName());
+        return "redirect:/bookinfo/" + isbn13;
     }
 
     @GetMapping("/books")
@@ -78,6 +76,7 @@ public class SearchController {
         model.addAttribute("results", bookService.getSingleBook(isbn13, principal.getName()));
         model.addAttribute("shelves", shelvesService.getShelves(principal.getName()));
         model.addAttribute("isOnShelf", shelvesService.getShelvesBookIsOn(principal.getName(),isbn13));
+        model.addAttribute("readingState", shelvesService.getReadingState(principal.getName(),isbn13));
         model.addAttribute("query", new Query());
         return "Book-Info";
     }
@@ -97,21 +96,17 @@ public class SearchController {
     @GetMapping("/addToShelf/{id}/{shelfName}")
     @ResponseStatus(value = HttpStatus.OK)
     public void addToShelf(@PathVariable("id") Long id, @PathVariable("shelfName") String shelfName, Principal principal){
-        try {
-            shelfName = URLDecoder.decode(shelfName, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
         shelvesService.addBooktoShelf(principal.getName(), shelfName, id);
+    }
+
+    @GetMapping("/removeFromShelf/{id}/{shelfName}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void removeFromShelf(@PathVariable("id") Long id, @PathVariable("shelfName") String shelfName, Principal principal){
+        shelvesService.removeFromShelf(principal.getName(), shelfName, id);
     }
 
     @GetMapping("/getShelf/{shelfName}")
     public String getShelf(@PathVariable("shelfName") String shelfName, Principal principal, Model model){
-        try {
-            shelfName = URLDecoder.decode(shelfName, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
         model.addAttribute("results", shelvesService.getShelf(principal.getName(), shelfName));
         model.addAttribute("shelves", shelvesService.getShelves(principal.getName()));
         model.addAttribute("query", new Query());

@@ -33,19 +33,21 @@ public class GetSearchResultsImpl implements GetSearchResults {
 
     @Override
     @Transactional(dontRollbackOn = NullPointerException.class)
-    public void saveSearchResult(Integer id, String username) {
+    public String saveSearchResult(Integer id, String username) {
 
         Map<Integer, SearchResult> results = searchResultMap.get(username);
         SearchResult searchResult = results.get(id);
-
+        String isbn13 = searchResult.getIsbn13();
         try{
-            Book book = bookDao.getSingleBook(searchResult.getIsbn13());
+            Book book = bookDao.getSingleBook(isbn13);
             newBookDao.newBook(book.getId(), username);
         } catch (NullPointerException e) {
             newBookDao.newBook(searchResult, username);
         }
 
         searchResultMap.remove(username);
+
+        return isbn13;
     }
 
     @Override

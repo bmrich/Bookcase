@@ -7,65 +7,78 @@
 <body>
 <!--Everything Goes Here-->
 <div layout:fragment="content">
-    <div class="w3-card card-background">
+    <div class="card-background">
         <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-3">
-                <img class="info-page-image" th:src="${results.imageUrl}"/>
-            </div>
-            <div class="col-sm-6">
-                <h2 th:text="${results.title}"></h2>
-                <div th:each="author : ${results.authors}">
-                    <a th:href="@{'/author/'+${author.id}}">
-                        <h4><span class="secondary-text-color" th:text="' '+${author.firstName} +' '+ ${author.lastName}"></span></h4>
-                    </a>
+            <div class="row">
+                <div class="col-sm-9">
+                    <div class="row">
+                    <div class="col-sm-5">
+                        <img class="info-page-image" th:src="${results.imageUrl}"/>
+                    </div>
+                    <div class="col-sm-7">
+                        <h2 th:text="${results.title}"></h2>
+                        <div th:each="author : ${results.authors}">
+                            <a th:href="@{'/author/'+${author.id}}">
+                                <span class="secondary-text-color author-span" th:text="' '+${author.firstName} +' '+ ${author.lastName}"></span>
+                            </a>
+                        </div>
+                        <div class="page-info-list">
+                            <ul class="list-unstyled">
+                                <li><label>Date Added:</label><span th:text="' '+${results.dateCreated}"></span></li>
+                                <li><label>Publisher:</label><span th:text="' '+${results.publisher.publisher}"></span></li>
+                                <li><label>Date Published:</label><span th:text="' '+${results.datePublished}"></span></li>
+                                <li><label>ISBN-13:</label><span th:text="' '+${results.isbn13}"></span></li>
+                                <li><label>ISBN:</label><span th:text="' '+${results.isbn10}"></span></li>
+                                <li><label>Page Count:</label><span th:text="' '+${results.pageCount}"></span></li>
+                            </ul>
+                        </div>
+                        <a href="" class="btn-sm btn-danger" data-toggle="modal" data-target="#myModal">Delete Book</a>
+                    </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <br/>
+                            <br/>
+                            <div class="w3-conatiner">
+                                <p th:text="${results.description}"></p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="page-info-list">
-                    <ul class="list-unstyled">
-                        <li><label>Date Added:</label><span th:text="' '+${results.dateCreated}"></span></li>
-                        <li><label>Publisher:</label><span th:text="' '+${results.publisher.publisher}"></span></li>
-                        <li><label>Date Published:</label><span th:text="' '+${results.datePublished}"></span></li>
-                        <li><label>ISBN-13:</label><span th:text="' '+${results.isbn13}"></span></li>
-                        <li><label>ISBN:</label><span th:text="' '+${results.isbn10}"></span></li>
-                        <li><label>Page Count:</label><span th:text="' '+${results.pageCount}"></span></li>
-                    </ul>
-                </div>
-                <a href="" class="w3-button w3-red hidden-xs" data-toggle="modal" data-target="#myModal">Delete Book</a>
-            </div>
-            <style>
-                .shelf-checkbox-div {
-                    padding-left: 10px;
-                }
-                .shelf-checkbox-div h4 {
-                    text-align: center;
-                }
-                .shelf-checkbox label {
-                    font-weight: normal;
-                }
-            </style>
-            <div class="col-sm-3">
-                <div class="shelf-checkbox-div">
-                    <h4>Shelves</h4>
-                    <hr/>
-                    <div class="shelf-checkbox" th:each="shelf,iter :${isOnShelf}">
-                        <input th:id="'checkbox'+${iter.index}" type="checkbox" th:value="${shelf[1]}"
-                               th:checked="${shelf[0]}"
-                               th:onchange="'shelfChange(\'' + ${iter.index} + '\')'" />
-                        <label th:for="'checkbox'+${iter.index}" th:text="${shelf[1]}"></label>
+                <div class="col-sm-3">
+                    <div class="shelf-checkbox-div">
+                        <h4>Shelves</h4>
+                        <hr class="list-separator"/>
+                        <ul>
+                            <li class="shelf-radio">
+                                <input id="CR" type="radio" name="readingState" value="CR"
+                                       th:checked="${readingState} == 'CR'? true : false"/>
+                                <label for="CR" title="Currently Reading">Currently Reading</label>
+                            </li>
+                            <li class="shelf-radio">
+                                <input id="TR" type="radio" name="readingState" value="TR"
+                                       th:checked="${readingState} == 'TR'? true : false"/>
+                                <label for="TR" title="To Read">To Read</label>
+                            </li>
+                            <li class="shelf-radio">
+                                <input id="R" type="radio" name="readingState" value="R"
+                                       th:checked="${readingState} == 'R'? true : false"/>
+                                <label for="R" title="Completed">Completed</label>
+                            </li>
+                        </ul>
+                        <hr class="list-separator"/>
+                        <ul>
+                            <li class="shelf-checkbox" th:each="shelf,iter :${isOnShelf}">
+                                <input th:id="'checkbox'+${iter.index}" type="checkbox" th:value="${shelf[1]}"
+                                       th:checked="${shelf[0]}"
+                                       th:onchange="'shelfChange(\'' + ${iter.index} + '\')'" />
+                                <label th:for="'checkbox'+${iter.index}" th:text="${shelf[1]}"
+                                       th:title="${shelf[1]}"></label>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
-        </div>
-        <br/>
-        <br/>
-        <div class="row">
-            <div class="col-md-9 col-sm-12">
-                <div class="w3-conatiner">
-                    <p th:text="${results.description}"></p>
-                </div>
-            </div>
-        </div>
-            <a href="" class="w3-button w3-red visible-xs sm-delete" data-toggle="modal" data-target="#myModal">Delete Book</a>
         </div>
     </div>
     <input id="book-id" type="hidden" name="id" th:value="${results.id}"/>
@@ -87,8 +100,6 @@
         </div>
     </div>
 </div>
-
-
 <!--End Everything-->
 </body>
 </html>

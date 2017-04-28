@@ -25,13 +25,16 @@ public class BookServiceImpl implements BookService {
 
         List<Object[]> objects = bookDao.getBooks(username);
 
-        Set<Book> books = new TreeSet<>(setComparator(sortBy));
+        List<Book> booksList = new ArrayList<>();
 
         for (Object[] obj: objects){
             Book book = (Book) obj[0];
             book.setDateCreated((Timestamp) obj[1]);
-            books.add(book);
+            booksList.add(book);
         }
+
+        Collections.sort(booksList, setComparator(sortBy));
+        Set<Book> books = new LinkedHashSet<>(booksList);
 
         return books;
     }

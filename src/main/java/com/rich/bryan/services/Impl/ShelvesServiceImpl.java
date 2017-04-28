@@ -37,8 +37,20 @@ public class ShelvesServiceImpl implements ShelvesService {
 
     @Override
     @Transactional
+    public void removeFromShelf(String username, String shelfName, Long id) {
+        shelvesDao.removeFromShelf(username, shelfName, id);
+    }
+
+    @Override
+    @Transactional
     public List<String> getShelves(String username) {
         return shelvesDao.getShelves(username);
+    }
+
+    @Override
+    @Transactional
+    public String getReadingState(String username, String isbn13) {
+        return shelvesDao.getReadingState(username, isbn13);
     }
 
     @Override

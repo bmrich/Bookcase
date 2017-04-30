@@ -1,6 +1,8 @@
 package com.rich.bryan.services.Impl;
 
 import com.rich.bryan.dao.BookDao;
+import com.rich.bryan.dto.AuthorDto;
+import com.rich.bryan.entity.Author;
 import com.rich.bryan.entity.Book;
 import com.rich.bryan.services.BookService;
 import com.rich.bryan.services.Utils.SortBy;
@@ -33,10 +35,9 @@ public class BookServiceImpl implements BookService {
             booksList.add(book);
         }
 
-        Collections.sort(booksList, setComparator(sortBy));
-        Set<Book> books = new LinkedHashSet<>(booksList);
+        booksList.sort(setComparator(sortBy));
 
-        return books;
+        return new LinkedHashSet<>(booksList);
     }
 
     @Override
@@ -47,20 +48,24 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public List<Book> getAuthor(Long id, String username) {
+    public Object[] getAuthor(Long id, String username) {
 
         List<Object[]> objects = bookDao.getAuthor(id, username);
 
         List<Book> books = new ArrayList<>();
+        Book b = (Book) objects.get(0)[0];
+        Author a = b.getAuthors().get(0);
         for (Object[] obj: objects){
             Book book = (Book) obj[0];
             book.setDateCreated((Timestamp) obj[1]);
             books.add(book);
         }
 
-        Collections.sort(books, setComparator(DATE_ADDED_DESC));
+        books.sort(setComparator(DATE_ADDED_DESC));
 
-        return books;
+        String name = a.getFirstName() +" "+ a.getLastName();
+
+        return new Object[]{name, books};
     }
 
     @Override

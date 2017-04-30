@@ -9,7 +9,7 @@
 <div layout:fragment="content">
     <div class="card-holder">
         <div class="card-page-header">
-            <h2>My Books</h2>
+            <h2 id="page-name" th:text="${pageName}"></h2>
             <div class="dropdown">
                 <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                     Sorting
@@ -26,9 +26,20 @@
                     <li><a th:href="@{'/books/1'}">Author: Z to A</a></li>
                 </ul>
             </div>
+            <div class="dropdown" th:if="${showOptions}">
+                <button class="btn btn-link dropdown-toggle" type="button" id="options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    Options
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu options-dropdown" aria-labelledby="options">
+                    <li><a data-toggle="modal" data-target="#renameShelf">Rename Shelf</a></li>
+                    <li><a data-toggle="modal" data-target="#deleteShelf">Delete Shelf</a></li>
+                </ul>
+            </div>
         </div>
+
         <div class="card" th:each="book :${results}">
-            <img class="card-img" th:src="${book.imageUrl}"/>
+            <div class="card-img-container"><img class="card-img" th:src="${book.imageUrl}"/></div>
             <div class="card-content">
                 <div class="card-details-container">
                     <div class="card-title limit-2">
@@ -51,6 +62,46 @@
         <div class="placeholder"></div>
         <div class="placeholder"></div>
     </div>
+
+    <div class="modal fade" id="renameShelf" tabindex="-1" role="dialog" aria-labelledby="renameShelfModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="renameShelfModal">Rename Shelf</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="renameShelfInput">New Name</label>
+                        <input id="renameShelfInput" class="form-control" type="text" placeholder="New Name"/>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button id="renameShelfSave" type="button" class="btn btn-primary" onclick="renameShelf()">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteShelf" tabindex="-1" role="dialog" aria-labelledby="deleteShelfModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="deleteShelfModal">Are you sure?</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Deleting this shelf will NOT delete any books.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button id="deleteShelfSave" type="button" class="btn btn-danger" onclick="deleteShelf()">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 <!--End Everything-->
 </body>

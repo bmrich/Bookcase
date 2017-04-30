@@ -1,9 +1,11 @@
 package com.rich.bryan.entity;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -25,6 +27,17 @@ public class BooksUsers {
     @Column(name = "date_created", updatable = false)
     @CreationTimestamp
     private Timestamp dateCreated;
+
+    @Column(name = "date_started")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date dateStarted;
+
+    @Column(name = "date_finished")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date dateFinished;
+
+    @Column(name = "current_page")
+    private Integer currentPage;
 
     @OneToMany(mappedBy = "booksUsersList", cascade = CascadeType.REMOVE)
     private Set<Shelf> shelves;
@@ -70,6 +83,30 @@ public class BooksUsers {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public Date getDateStarted() {
+        return dateStarted;
+    }
+
+    public void setDateStarted(Date dateStarted) {
+        this.dateStarted = dateStarted;
+    }
+
+    public Date getDateFinished() {
+        return dateFinished;
+    }
+
+    public void setDateFinished(Date dateFinished) {
+        this.dateFinished = dateFinished;
+    }
+
+    public Integer getCurrentPage() {
+        return currentPage;
+    }
+
+    public void setCurrentPage(Integer currentPage) {
+        this.currentPage = currentPage;
     }
 
     @Override

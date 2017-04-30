@@ -10,7 +10,9 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -73,10 +75,10 @@ public class ShelvesDaoImpl implements ShelvesDao {
     }
 
     @Override
-    public List<String> getShelves(String username){
+    public List<Object[]> getShelves(String username){
         Session session = sessionFactory.getCurrentSession();
 
-        Query query = session.createQuery("select s.shelfName from Shelf s where s.userList.username=:username group by s.shelfName")
+        Query query = session.createQuery("select s.shelfName, count(*) from Shelf s where s.userList.username=:username group by s.shelfName")
                 .setParameter("username", username);
 
         return query.list();
@@ -95,14 +97,14 @@ public class ShelvesDaoImpl implements ShelvesDao {
     }
 
     @Override
-    public String getReadingState(String username, String isbn13) {
+    public Object[] getReadingState(String username, String isbn13) {
         Session session = sessionFactory.getCurrentSession();
 
-        Query query = session.createQuery("select bu.state from BooksUsers bu where bu.book.isbn13=:isbn13 and bu.user.username=:username")
+        Query query = session.createQuery("select bu.id, bu.state from BooksUsers bu where bu.book.isbn13=:isbn13 and bu.user.username=:username")
                 .setParameter("isbn13", isbn13)
                 .setParameter("username", username);
 
-        return (String) query.list().get(0);
+        return (Object[]) query.list().get(0);
     }
 
     @Override
@@ -114,6 +116,40 @@ public class ShelvesDaoImpl implements ShelvesDao {
                 .setParameter("username", username)
                 .setParameter("shelfName", shelfName);
 
+
+        return query.list();
+    }
+
+    @Override
+    public void renameShelf(String username, String shelfName, String newShelfName) {
+        Session session = sessionFactory.getCurrentSession();
+
+        Query query = session.createQuery("update Shelf s set s.shelfName=:newShelfName " +
+                "where s.shelfName=:shelfName and s.userList.username=:username")
+                .setParameter("newShelfName", newShelfName)
+                .setParameter("shelfName", shelfName)
+                .setParameter("username", username);
+
+        query.executeUpdate();
+    }
+
+    @Override
+    public void deleteShelf(String username, String shelfName) {
+        Session session = sessionFactory.getCurrentSession();
+
+        Query query = session.createQuery("delete from Shelf s where s.shelfName=:shelfName and s.userList.username=:username")
+                .setParameter("shelfName", shelfName)
+                .setParameter("username", username);
+
+        query.executeUpdate();
+    }
+
+    @Override
+    public List<BooksUsers> numBooksOnShelf(String username) {
+        Session session = sessionFactory.getCurrentSession();
+
+        Query query = session.createQuery("from BooksUsers bu where bu.user.username=:username")
+                .setParameter("username", username);
 
         return query.list();
     }

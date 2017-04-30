@@ -2,6 +2,7 @@ package com.rich.bryan.services.Impl;
 
 import com.rich.bryan.dao.ShelvesDao;
 import com.rich.bryan.entity.Book;
+import com.rich.bryan.entity.BooksUsers;
 import com.rich.bryan.services.ShelvesService;
 import com.rich.bryan.services.Utils.SortBy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 import static com.rich.bryan.services.Utils.ComparatorHelper.setComparator;
 
@@ -43,13 +41,13 @@ public class ShelvesServiceImpl implements ShelvesService {
 
     @Override
     @Transactional
-    public List<String> getShelves(String username) {
+    public List<Object[]> getShelves(String username) {
         return shelvesDao.getShelves(username);
     }
 
     @Override
     @Transactional
-    public String getReadingState(String username, String isbn13) {
+    public Object[] getReadingState(String username, String isbn13) {
         return shelvesDao.getReadingState(username, isbn13);
     }
 
@@ -57,17 +55,17 @@ public class ShelvesServiceImpl implements ShelvesService {
     @Transactional
     public List<Object[]> getShelvesBookIsOn(String username, String isbn13) {
 
-        List<String> shelves = shelvesDao.getShelves(username);
+        List<Object[]> shelves = shelvesDao.getShelves(username);
         List<String> shelf = shelvesDao.getShelvesBookIsOn(username, isbn13);
 
         List<Object[]> objects = new ArrayList<>();
         int i = 0;
-        for (String shelfName : shelves){
+        for (Object[] shelfName : shelves){
 
-            if (shelf.contains(shelfName)){
-                objects.add(new Object[]{true, shelfName});
+            if (shelf.contains(shelfName[0])){
+                objects.add(new Object[]{true, shelfName[0]});
             } else {
-                objects.add(new Object[]{false, shelfName});
+                objects.add(new Object[]{false, shelfName[0]});
             }
             i++;
         }
@@ -87,5 +85,43 @@ public class ShelvesServiceImpl implements ShelvesService {
         }
 
         return books;
+    }
+
+    @Override
+    @Transactional
+    public void renameShelf(String username, String shelfName, String newShelfName) {
+        shelvesDao.renameShelf(username, shelfName, newShelfName);
+    }
+
+    @Override
+    @Transactional
+    public void deleteShelf(String username, String shelfName) {
+        shelvesDao.deleteShelf(username, shelfName);
+    }
+
+    @Override
+    @Transactional
+    public Map<String, Integer> numBooksOnShelf(String username) {
+        List<BooksUsers> users = shelvesDao.numBooksOnShelf(username);
+
+        int tr = 0, cr = 0, r = 0;
+        for(BooksUsers bu : users){
+            String state = bu.getState();
+            if(state.equals("TR")){
+                tr++;
+            } else if(state.equals("CR")){
+                cr++;
+            } else {
+                r++;
+            }
+        }
+
+        Map<String, Integer> map = new HashMap<>();
+        map.put("CR", cr);
+        map.put("TR", tr);
+        map.put("R", r);
+        map.put("All", cr+tr+r);
+
+        return map;
     }
 }

@@ -49,23 +49,26 @@
                     <div class="shelf-checkbox-div">
                         <h4>Shelves</h4>
                         <hr class="list-separator"/>
-                        <ul>
-                            <li class="shelf-radio">
-                                <input id="CR" type="radio" name="readingState" value="CR"
-                                       th:checked="${readingState} == 'CR'? true : false"/>
-                                <label for="CR" title="Currently Reading">Currently Reading</label>
-                            </li>
-                            <li class="shelf-radio">
-                                <input id="TR" type="radio" name="readingState" value="TR"
-                                       th:checked="${readingState} == 'TR'? true : false"/>
-                                <label for="TR" title="To Read">To Read</label>
-                            </li>
-                            <li class="shelf-radio">
-                                <input id="R" type="radio" name="readingState" value="R"
-                                       th:checked="${readingState} == 'R'? true : false"/>
-                                <label for="R" title="Completed">Completed</label>
-                            </li>
-                        </ul>
+                        <input id="bu-id" type="hidden" th:value="${readingState[0]}" />
+                        <fieldset id="reading-state-radio">
+                            <ul>
+                                <li class="shelf-radio">
+                                    <input id="CR" type="radio" name="readingState" value="CR"
+                                           th:checked="${readingState[1]} == 'CR'? true : false"/>
+                                    <label for="CR" title="Currently Reading">Currently Reading</label>
+                                </li>
+                                <li class="shelf-radio">
+                                    <input id="TR" type="radio" name="readingState" value="TR"
+                                           th:checked="${readingState[1]} == 'TR'? true : false"/>
+                                    <label for="TR" title="To Read">To Read</label>
+                                </li>
+                                <li class="shelf-radio">
+                                    <input id="R" type="radio" name="readingState" value="R"
+                                           th:checked="${readingState[1]} == 'R'? true : false"/>
+                                    <label for="R" title="Completed">Completed</label>
+                                </li>
+                            </ul>
+                        </fieldset>
                         <hr class="list-separator"/>
                         <ul>
                             <li class="shelf-checkbox" th:each="shelf,iter :${isOnShelf}">
@@ -87,10 +90,10 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Are You Sure</h4>
+                    <h4 class="modal-title" id="myModalLabel">Are You Sure?</h4>
                 </div>
                 <div class="modal-body">
-                    <p>Deleting the book will remove it from all shelves.</p>
+                    <p>Deleting this book will remove it from all shelves.</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>

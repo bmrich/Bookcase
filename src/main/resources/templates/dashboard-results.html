@@ -7,11 +7,12 @@
 <body>
 <!--Everything Goes Here-->
 <div layout:fragment="content">
-    <h1 class="page-header">
+    <h1>
         Search Results
     </h1>
     <div th:if="${not #lists.isEmpty(results)}">
-        <table class="table table-striped">
+        <div class="table-responsive">
+            <table class="table table-striped">
             <tr>
                 <th>Cover</th>
                 <th>Title</th>
@@ -39,6 +40,7 @@
                 </td>
             </tr>
         </table>
+        </div>
     </div>
 </div>
 <!--End Everything-->

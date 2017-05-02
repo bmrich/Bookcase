@@ -1,6 +1,7 @@
 package com.rich.bryan.services;
 
 import com.rich.bryan.entity.Book;
+import com.rich.bryan.entity.BooksUsers;
 
 import java.util.List;
 import java.util.Map;
@@ -17,4 +18,5 @@ public interface ShelvesService {
     void renameShelf(String username, String shelfName, String newShelfName);
     void deleteShelf(String username, String shelfName);
     Map<String, Integer> numBooksOnShelf(String username);
+    Map<String,Integer> updateState(BooksUsers bu, String username);
 }

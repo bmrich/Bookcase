@@ -17,20 +17,15 @@ public class GoogleBooksApiDaoImpl implements GoogleBooksApiDao {
 
     @Override
     public JSONObject googleBooksApiSearch(String query) throws Exception {
-        String urlString = "https://www.googleapis.com/books/v1/volumes?q=" +
-                URLEncoder.encode(query, "UTF-8") + "&orderBy=relevance&maxResults=40";
+        String urlString = "https://www.googleapis.com/books/v1/volumes/" +
+                URLEncoder.encode(query, "UTF-8");
         URL url = new URL(urlString);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
-        // By default it is GET request
         con.setRequestMethod("GET");
 
         //add request header
         con.setRequestProperty("UserEntity-Agent", USER_AGENT);
-
-//        int responseCode = con.getResponseCode();
-//        System.out.println("Sending get request : "+ url);
-//        System.out.println("Response code : "+ responseCode);
 
         // Reading response from input Stream
         BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
@@ -42,7 +37,6 @@ public class GoogleBooksApiDaoImpl implements GoogleBooksApiDao {
         }
         in.close();
 
-        //printing result from response
         JSONObject jsonObj = new JSONObject(response.toString());
 
         return jsonObj;

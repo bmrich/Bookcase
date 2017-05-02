@@ -124,4 +124,35 @@ public class ShelvesServiceImpl implements ShelvesService {
 
         return map;
     }
+
+    @Override
+    @Transactional
+    public Map<String, Integer> updateState(BooksUsers bu, String username) {
+
+        BooksUsers booksUsers = shelvesDao.getBooksUsers(bu.getId());
+
+        if(bu.getState().equals("CR")){
+
+            booksUsers.setState("CR");
+            booksUsers.setDateFinished(null);
+            booksUsers.setDateStarted(bu.getDateStarted());
+            booksUsers.setCurrentPage(bu.getCurrentPage());
+
+        } else if(bu.getState().equals("R")){
+
+            booksUsers.setState("R");
+            booksUsers.setDateFinished(bu.getDateFinished());
+            booksUsers.setDateStarted(null);
+            booksUsers.setCurrentPage(null);
+
+        } else if(bu.getState().equals("TR")){
+
+            booksUsers.setState("TR");
+            booksUsers.setDateFinished(null);
+            booksUsers.setDateStarted(null);
+            booksUsers.setCurrentPage(null);
+        }
+
+        return numBooksOnShelf(username);
+    }
 }

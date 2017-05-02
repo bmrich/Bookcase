@@ -29,7 +29,7 @@
                                 <li><label>Date Published:</label><span th:text="' '+${results.datePublished}"></span></li>
                                 <li><label>ISBN-13:</label><span th:text="' '+${results.isbn13}"></span></li>
                                 <li><label>ISBN:</label><span th:text="' '+${results.isbn10}"></span></li>
-                                <li><label>Page Count:</label><span th:text="' '+${results.pageCount}"></span></li>
+                                <li><label>Page Count:</label><span id="page-count" th:text="' '+${results.pageCount}"></span></li>
                             </ul>
                         </div>
                         <a href="" class="btn-sm btn-danger" data-toggle="modal" data-target="#myModal">Delete Book</a>
@@ -50,6 +50,7 @@
                         <h4>Shelves</h4>
                         <hr class="list-separator"/>
                         <input id="bu-id" type="hidden" th:value="${readingState[0]}" />
+                        <input id="currentState" type="hidden" th:value="${readingState[1]}"/>
                         <fieldset id="reading-state-radio">
                             <ul>
                                 <li class="shelf-radio">
@@ -98,6 +99,89 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                     <button id="delete-book" type="button" class="btn btn-danger">Delete Book</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="startDateModal" tabindex="-1" role="dialog" aria-labelledby="startDateModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="startDateModalLabel">Currently Reading</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="" id="start-date-form" class="form-horizontal">
+                        <div id="err1-group" class="form-group">
+                            <label for="start-date-input" class="col-sm-3 control-label">Start Date</label>
+                            <div class="col-sm-9">
+                                <input id="start-date-input" type="date" class="form-control date-input"
+                                       name="dateStarted" placeholder="mm/dd/yyyy" th:max="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"/>
+                                <p id="err1-message" class="text-danger hidden"></p>
+                            </div>
+                        </div>
+                        <div id="err2-group" class="form-group">
+                            <label for="currentPage" class="col-sm-3 control-label">Current Page</label>
+                            <div class="col-sm-9">
+                                <input type="number" class="form-control" id="currentPage" name="currentPage" placeholder="Current Page"
+                                    min="0" th:max="${results.pageCount}"/>
+                                <p id="err2-message" class="text-danger hidden"></p>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button id="start-date-submit" type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="finishDateModal" tabindex="-1" role="dialog" aria-labelledby="finishDateModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="finishDateModalLabel">Completed</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="date-finished-form" class="form-horizontal">
+                        <div id="err3-group" class="form-group">
+                            <label for="date-finished-input" class="col-sm-3 control-label">Date Finished</label>
+                            <div class="col-sm-9">
+                                <input id="date-finished-input" type="date" class="form-control date-input" name="dateFinished"
+                                       placeholder="mm/dd/yyyy" th:max="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"/>
+                                <p id="err3-message" class="text-danger"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button id="date-finished-submit" type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="toReadModal" tabindex="-1" role="dialog" aria-labelledby="toReadModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="toReadModalLabel">To Read</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Changing the reading state to "To Read" will delete your progress.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button id="to-read-submit" type="button" class="btn btn-danger">Save changes</button>
                 </div>
             </div>
         </div>

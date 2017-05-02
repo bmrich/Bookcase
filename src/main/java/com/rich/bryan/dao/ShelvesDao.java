@@ -16,4 +16,6 @@ public interface ShelvesDao {
     void renameShelf(String username, String shelfName, String newShelfName);
     void deleteShelf(String username, String shelfName);
     List<BooksUsers> numBooksOnShelf(String username);
+    void updateState(BooksUsers bu);
+    BooksUsers getBooksUsers(Long buid);
 }

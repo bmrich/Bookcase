@@ -21,7 +21,7 @@ public class RegisterForm {
     private boolean valid;
 
     @AssertTrue(message="Passwords Must Match")
-    private boolean isValid() {
+    public boolean isValid() {
         return this.password.equals(this.confirm);
     }
 

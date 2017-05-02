@@ -1,7 +1,6 @@
 package com.rich.bryan.dao.Impl;
 
 import com.rich.bryan.dao.ShelvesDao;
-import com.rich.bryan.entity.Book;
 import com.rich.bryan.entity.BooksUsers;
 import com.rich.bryan.entity.Shelf;
 import com.rich.bryan.entity.User;
@@ -10,9 +9,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -152,5 +149,18 @@ public class ShelvesDaoImpl implements ShelvesDao {
                 .setParameter("username", username);
 
         return query.list();
+    }
+
+    @Override
+    public BooksUsers getBooksUsers(Long buid) {
+        Session session = sessionFactory.getCurrentSession();
+        return session.get(BooksUsers.class, buid);
+    }
+
+    @Override
+    public void updateState(BooksUsers bu) {
+        Session session = sessionFactory.getCurrentSession();
+
+        session.saveOrUpdate(bu);
     }
 }

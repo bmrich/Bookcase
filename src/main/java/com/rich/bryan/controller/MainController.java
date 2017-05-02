@@ -1,8 +1,8 @@
 package com.rich.bryan.controller;
 
-import com.rich.bryan.dto.Query;
+import com.rich.bryan.entity.BooksUsers;
 import com.rich.bryan.services.BookService;
-import com.rich.bryan.services.GetSearchResults;
+import com.rich.bryan.services.SaveBookService;
 import com.rich.bryan.services.ShelvesService;
 import com.rich.bryan.services.Utils.SortBy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +13,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 import static com.rich.bryan.services.Utils.SortBy.DATE_ADDED_DESC;
 
 @Controller
-public class SearchController {
-
-    @Autowired
-    private GetSearchResults getSearchResults;
+public class MainController {
 
     @Autowired
     private BookService bookService;
@@ -28,17 +26,12 @@ public class SearchController {
     @Autowired
     private ShelvesService shelvesService;
 
-    @GetMapping("/search")
-    public String search(@ModelAttribute Query query, Model model, Principal principal){
-        model.addAttribute("shelves", shelvesService.getShelves(principal.getName()));
-        model.addAttribute("results", getSearchResults.searchResults(query.getQuery(), principal.getName()));
-        model.addAttribute("numMap", shelvesService.numBooksOnShelf(principal.getName()));
-        return "dashboard-results";
-    }
+    @Autowired
+    private SaveBookService saveBookService;
 
-    @PostMapping("/save/{id}")
-    public String save(@PathVariable Integer id, Principal principal){
-        String isbn13 = getSearchResults.saveSearchResult(id, principal.getName());
+    @GetMapping("/save/{id}")
+    public String save(@PathVariable String id, Principal principal){
+        String isbn13 = saveBookService.saveBook(id, principal.getName());
         return "redirect:/bookinfo/" + isbn13;
     }
 
@@ -48,7 +41,6 @@ public class SearchController {
         model.addAttribute("shelves", shelvesService.getShelves(principal.getName()));
         model.addAttribute("numMap", shelvesService.numBooksOnShelf(principal.getName()));
         model.addAttribute("pageName", "My Books");
-        model.addAttribute("query", new Query());
         return "Cards";
     }
 
@@ -58,7 +50,6 @@ public class SearchController {
         model.addAttribute("shelves", shelvesService.getShelves(principal.getName()));
         model.addAttribute("numMap", shelvesService.numBooksOnShelf(principal.getName()));
         model.addAttribute("pageName", "My Books");
-        model.addAttribute("query", new Query());
         return "Cards";
     }
 
@@ -71,7 +62,6 @@ public class SearchController {
         model.addAttribute("shelves", shelvesService.getShelves(principal.getName()));
         model.addAttribute("numMap", shelvesService.numBooksOnShelf(principal.getName()));
         model.addAttribute("pageName", objects[0]);
-        model.addAttribute("query", new Query());
         return "Cards";
     }
 
@@ -82,7 +72,6 @@ public class SearchController {
         model.addAttribute("isOnShelf", shelvesService.getShelvesBookIsOn(principal.getName(),isbn13));
         model.addAttribute("readingState", shelvesService.getReadingState(principal.getName(),isbn13));
         model.addAttribute("numMap", shelvesService.numBooksOnShelf(principal.getName()));
-        model.addAttribute("query", new Query());
         return "Book-Info";
     }
 
@@ -119,7 +108,6 @@ public class SearchController {
         model.addAttribute("numMap", shelvesService.numBooksOnShelf(principal.getName()));
         model.addAttribute("pageName", shelfName);
         model.addAttribute("showOptions", true);
-        model.addAttribute("query", new Query());
         return "Cards";
     }
 
@@ -134,5 +122,11 @@ public class SearchController {
         shelvesService.deleteShelf(principal.getName(), shelfName);
 
         return "redirect:/books";
+    }
+
+    @GetMapping("/state")
+    @ResponseBody
+    public Map<String, Integer> state(BooksUsers bu, Principal principal){
+        return shelvesService.updateState(bu, principal.getName());
     }
 }

@@ -1,19 +1,20 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
 <head lang="en">
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-    <meta charset="utf-8"/>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8" />
     <title>Bookcase</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-    <link href="/css/bootstrap.min.css" rel="stylesheet"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <link href="/css/bootstrap.min.css" rel="stylesheet" />
     <!--[if lt IE 9]>
     <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
-    <link rel="icon" type="image/x-icon" th:href="@{/img/favicon/favicon.ico}"/>
-    <link href="/css/styles.css" rel="stylesheet"/>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="icon" type="image/x-icon" th:href="@{/img/favicon/favicon.ico}" />
+    <link href="/css/styles.css" rel="stylesheet" />
 </head>
+
 <body>
     <nav class="navigation">
         <div class="navigation-left">
@@ -23,24 +24,23 @@
             <h2 class="navigation-brand navigation-item">Bookcase</h2>
         </div>
         <div class="navigation-right">
-            <form class="navigation-search hidden-xs" th:action="@{/search}" th:object="${query}" method="get">
+            <div class="navigation-search hidden-xs">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Search" th:field="*{query}"/>
+                    <input id="search-input" type="text" class="form-control" placeholder="Search" />
                     <div class="input-group-btn">
-                        <button class="btn btn-default" type="submit">
+                        <button id="submit-btn" class="btn btn-default" type="submit">
                             <i class="glyphicon glyphicon-search"></i>
                         </button>
                     </div>
                 </div>
-            </form>
+            </div>
             <div class="dropdown">
-                <button class="btn btn-link dropdown-toggle user-icon-btn" type="button" id="user-dropdown"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                <button class="btn btn-link dropdown-toggle user-icon-btn" type="button" id="user-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                     <i class="glyphicon glyphicon-option-vertical"></i>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="user-dropdown">
                     <li><a href="#" onclick="document.getElementById('logout').submit();">Logout</a></li>
-                    <form id="logout" th:action="@{/logout}" method="post"/>
+                    <form id="logout" th:action="@{/logout}" method="post" />
                 </ul>
             </div>
         </div>
@@ -49,42 +49,40 @@
         <div class="sidebar-inner">
             <ul class="sidebar-nav">
                 <li class="sidebar-search hidden-sm hidden-md hidden-lg">
-                    <form th:action="@{/search}" th:object="${query}" method="get">
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Search" th:field="*{query}"/>
-                            <div class="input-group-btn">
-                                <button class="btn btn-default" type="submit">
-                                    <i class="glyphicon glyphicon-search"></i>
-                                </button>
-                            </div>
+                    <div class="input-group">
+                        <input id="search-input-nav" type="text" class="form-control" placeholder="Search" />
+                        <div class="input-group-btn">
+                            <button id="submit-btn-nav" class="btn btn-default" type="submit">
+                                <i class="glyphicon glyphicon-search"></i>
+                            </button>
                         </div>
-                    </form>
+                    </div>
                 </li>
                 <li>
                     <a th:href="@{/books}" title="My Books">
                         <span class="title-span">My Books</span>
-                        <span class="badge" th:text="${numMap.get('All')}"></span>
+                        <span id="all-badge" class="badge" th:text="${numMap.get('All')}"></span>
                     </a>
                 </li>
                 <li>
                     <a href="" title="Currently Reading">
                         <span class="title-span">Currently Reading</span>
-                        <span class="badge" th:text="${numMap.get('CR')}"></span>
+                        <span id="cr-badge" class="badge" th:text="${numMap.get('CR')}"></span>
                     </a>
                 </li>
                 <li>
                     <a href="" title="To Read">
                         <span class="title-span">To Read</span>
-                        <span class="badge" th:text="${numMap.get('TR')}"></span>
+                        <span id="tr-badge" class="badge" th:text="${numMap.get('TR')}"></span>
                     </a>
                 </li>
                 <li>
                     <a href="" title="Completed">
                         <span class="title-span">Completed</span>
-                        <span class="badge" th:text="${numMap.get('R')}"></span>
+                        <span id="r-badge" class="badge" th:text="${numMap.get('R')}"></span>
                     </a>
                 </li>
-                <hr class="sidebar-nav__separator"/>
+                <hr class="sidebar-nav__separator" />
                 <li th:each="shelf,iter :${shelves}">
                     <a th:href="@{'/getShelf/'+ ${shelf[0]}}" th:title="${shelf[0]}">
                         <span th:text="${shelf[0]}" class="title-span"></span>
@@ -97,7 +95,7 @@
             <a data-toggle="modal" data-target="#newShelf">New Shelf  +</a>
         </div>
     </div>
-    <div class="main-content">
+    <div id="con" class="main-content">
         <div layout:fragment="content"></div>
     </div>
 
@@ -111,7 +109,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="newShelfInput">Shelf Name</label>
-                        <input id="newShelfInput" class="form-control" type="text" placeholder="Shelf Name"/>
+                        <input id="newShelfInput" class="form-control" type="text" placeholder="Shelf Name" />
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -122,8 +120,9 @@
         </div>
     </div>
     <div id="overlay" class="hidden"></div>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
-<script src="/js/bootstrap.min.js"></script>
-<script src="/js/scripts.js"></script>
+    <script src="/js/jquery-3.2.1.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/scripts.js"></script>
 </body>
+
 </html>

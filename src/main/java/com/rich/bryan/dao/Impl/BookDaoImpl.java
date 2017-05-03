@@ -20,16 +20,14 @@ public class BookDaoImpl implements BookDao {
     private SessionFactory sessionFactory;
 
     @Override
-    public List<Object[]> getBooks(String username){
+    public List<Object[]> getBooks(String username, String sort){
         Session session = sessionFactory.getCurrentSession();
 
         Query query = session.createQuery("select b, bu.dateCreated from BooksUsers bu " +
-                "join bu.book b join fetch b.publisher join fetch b.authors where bu.user.username=:username")
+                "join bu.book b join fetch b.publisher join fetch b.authors a where bu.user.username=:username order by " + sort)
                 .setParameter("username", username);
 
-        List<Object[]> objects = query.list();
-
-        return objects;
+        return query.list();
     }
 
     @Override
@@ -45,16 +43,14 @@ public class BookDaoImpl implements BookDao {
     }
 
     @Override
-    public List<Object[]> getAuthor(Long id, String username) {
+    public List<Object[]> getAuthor(Long id, String username, String sort) {
         Session session = sessionFactory.getCurrentSession();
 
         Query query = session.createQuery("select b, bu.dateCreated from BooksUsers bu join bu.book b " +
-                "join fetch b.authors a join fetch b.publisher join bu.user u where a.id =:id and u.username =:username")
+                "join fetch b.authors a join fetch b.publisher join bu.user u where a.id =:id and u.username =:username order by " + sort)
                 .setParameter("id", id).setParameter("username", username);
 
-        List<Object[]> books = query.list();
-
-        return books;
+        return query.list();
     }
 
     @Override

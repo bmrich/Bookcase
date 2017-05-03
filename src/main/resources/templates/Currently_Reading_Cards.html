@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html"
+      layout:decorator="Layout">
+<head lang="en">
+</head>
+<body>
+<!--Everything Goes Here-->
+<div layout:fragment="content">
+    <div class="card-holder">
+        <div class="card-page-header">
+            <h2 id="page-name" th:text="${pageName}"></h2>
+            <div class="dropdown">
+                <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    Sorting
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <li><a th:href="@{'/perm/CR/1'}">Date Added: New to Old</a></li>
+                    <li><a th:href="@{'/perm/CR/2'}">Date Added: Old to New</a></li>
+                    <li><a th:href="@{'/perm/CR/3'}">Title: A to Z</a></li>
+                    <li><a th:href="@{'/perm/CR/4'}">Title: Z to A</a></li>
+                    <li><a th:href="@{'/perm/CR/11'}">Page Count: Low to High</a></li>
+                    <li><a th:href="@{'/perm/CR/12'}">Page Count: High to Low</a></li>
+                    <li><a th:href="@{'/perm/CR/5'}">Author: A to Z</a></li>
+                    <li><a th:href="@{'/perm/CR/6'}">Author: Z to A</a></li>
+                    <li><a th:href="@{'/perm/CR/8'}">Date Started: New to Old</a></li>
+                    <li><a th:href="@{'/perm/CR/7'}">Date Started: Old to New</a></li>
+                    <li><a th:href="@{'/perm/CR/14'}">Progress</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <style>
+            .card-holder * {
+                margin: 0;
+                padding: 0;
+            }
+            .card-holder {
+                display: -ms-flexbox;
+                display: -webkit-box;
+                display: flex;
+                -ms-flex-direction: row;
+                -webkit-box-orient: horizontal;
+                -webkit-box-direction: normal;
+                flex-direction: row;
+                -ms-flex-wrap: wrap;
+                flex-wrap: wrap;
+                -ms-flex-pack: center;
+                -webkit-box-pack: center;
+                justify-content: center;
+            }
+            .card {
+                display: inherit;
+                border-radius: 4px;
+                margin: 10px;
+                box-shadow: var(--elevation--z4);
+                width: 300px;
+                box-sizing: border-box;
+            }
+            .card-img-container {
+                height: 150px;
+                width: 100px;
+                border-top-left-radius: inherit;
+                border-bottom-left-radius: inherit;
+            }
+            .card-img {
+                height: 100%;
+                width: 100%;
+                border-top-left-radius: inherit;
+                border-bottom-left-radius: inherit;
+            }
+            .card-content {
+                height: 150px;
+                width: calc(100% - 100px);
+                padding: 10px;
+                box-sizing: border-box;
+                border-top-right-radius: inherit;
+                border-bottom-right-radius: inherit;
+                background-color: var(--secondary-light);
+            }
+
+            @media (max-width: 676px) {
+                .card {
+                    width: 100%;
+                }
+            }
+            .card-content h4 a {
+                color: var(--secondary-light-text-black);
+            }
+            .card-content h4 a:hover {
+                color: var(--primary-color);
+            }
+            .card-content p a {
+                color: var(--secondary-text-black);
+            }
+            .card-content p a:hover {
+                color: var(--primary-light);
+            }
+            .card-content hr {
+                margin: 5px -10px;
+            }
+            .card-page-header {
+                max-width: 945px;
+                width: 100%;
+            }
+            .card-page-header h2 {
+                color: var(--primary-dark);
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+            }
+            .btn-link {
+                color: var(--primary-dark);
+            }
+            .placeholder {
+                width: 300px;
+                visibility: hidden;
+                height: 0;
+                padding: 0;
+                margin: 10px;
+                border-top-width: 0;
+                border-bottom-width: 0;
+            }
+            .card-page-header>div.dropdown {
+                display: inline-block;
+                margin-right: 10px;
+            }
+            .card-details-container {
+                height: 115px;
+            }
+            .card-footer>small.page-count {
+                float: right;
+                line-height: 22px;
+            }
+            .card-author {
+                display: inline !important;
+            }
+        </style>
+
+        <div class="card" th:each="book :${results}">
+            <div class="card-img-container"><img class="card-img" th:src="${book.imageUrl}"/></div>
+            <div class="card-content">
+                <div class="card-details-container">
+                    <div class="card-title limit-2">
+                        <h4><a th:href="@{'/bookinfo/'+${book.isbn13}}" th:text="${book.title}" th:title="${book.title}"></a></h4>
+                    </div>
+                    <hr/>
+                    <div class="card-author limit-2">
+                        <p th:each="author :${book.authors}">
+                            <a th:href="@{'/author/'+${author.id}}" th:text="${author.lastName} +', '+ ${author.firstName}"
+                               th:title="${author.lastName} +', '+ ${author.firstName}"></a>
+                        </p>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <small class="date" th:text="${book.dateCreated}"></small>
+                    <small class="page-count" th:text="${book.pageCount}"></small>
+                </div>
+            </div>
+            <div class="">
+                <small class="" th:text="${book.dateStarted}"></small>
+                <small class="" th:text="${book.currentPage}"></small>
+            </div>
+        </div>
+        <div class="placeholder"></div>
+        <div class="placeholder"></div>
+    </div>
+
+</div>
+<!--End Everything-->
+</body>
+</html>

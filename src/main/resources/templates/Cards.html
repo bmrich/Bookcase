@@ -15,15 +15,33 @@
                     Sorting
                     <span class="caret"></span>
                 </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                    <li><a th:href="@{'/books/5'}">Date Added: New to Old</a></li>
-                    <li><a th:href="@{'/books/4'}">Date Added: Old to New</a></li>
-                    <li><a th:href="@{'/books/6'}">Title: A to Z</a></li>
-                    <li><a th:href="@{'/books/7'}">Title: Z to A</a></li>
-                    <li><a th:href="@{'/books/2'}">Page Count: Low to High</a></li>
-                    <li><a th:href="@{'/books/3'}">Page Count: High to Low</a></li>
-                    <li><a th:href="@{'/books/0'}">Author: A to Z</a></li>
-                    <li><a th:href="@{'/books/1'}">Author: Z to A</a></li>
+                <ul th:if="${dropdown} == 'books'" class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <li><a th:href="@{'/books/1'}">Date Added: New to Old</a></li>
+                    <li><a th:href="@{'/books/2'}">Date Added: Old to New</a></li>
+                    <li><a th:href="@{'/books/3'}">Title: A to Z</a></li>
+                    <li><a th:href="@{'/books/4'}">Title: Z to A</a></li>
+                    <li><a th:href="@{'/books/5'}">Author: A to Z</a></li>
+                    <li><a th:href="@{'/books/6'}">Author: Z to A</a></li>
+                    <li><a th:href="@{'/books/11'}">Page Count: Low to High</a></li>
+                    <li><a th:href="@{'/books/12'}">Page Count: High to Low</a></li>
+                </ul>
+                <ul th:if="${dropdown} == 'author'" class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <li><a th:href="@{'/author/'+${authorId}+'/1'}">Date Added: New to Old</a></li>
+                    <li><a th:href="@{'/author/'+${authorId}+'/2'}">Date Added: Old to New</a></li>
+                    <li><a th:href="@{'/author/'+${authorId}+'/3'}">Title: A to Z</a></li>
+                    <li><a th:href="@{'/author/'+${authorId}+'/4'}">Title: Z to A</a></li>
+                    <li><a th:href="@{'/author/'+${authorId}+'/11'}">Page Count: Low to High</a></li>
+                    <li><a th:href="@{'/author/'+${authorId}+'/12'}">Page Count: High to Low</a></li>
+                </ul>
+                <ul th:if="${dropdown} == 'shelf'" class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <li><a th:href="@{'/getShelf/'+${pageName}+'/1'}">Date Added: New to Old</a></li>
+                    <li><a th:href="@{'/getShelf/'+${pageName}+'/2'}">Date Added: Old to New</a></li>
+                    <li><a th:href="@{'/getShelf/'+${pageName}+'/3'}">Title: A to Z</a></li>
+                    <li><a th:href="@{'/getShelf/'+${pageName}+'/4'}">Title: Z to A</a></li>
+                    <li><a th:href="@{'/getShelf/'+${pageName}+'/5'}">Author: A to Z</a></li>
+                    <li><a th:href="@{'/getShelf/'+${pageName}+'/6'}">Author: Z to A</a></li>
+                    <li><a th:href="@{'/getShelf/'+${pageName}+'/11'}">Page Count: Low to High</a></li>
+                    <li><a th:href="@{'/getShelf/'+${pageName}+'/12'}">Page Count: High to Low</a></li>
                 </ul>
             </div>
             <div class="dropdown" th:if="${showOptions}">

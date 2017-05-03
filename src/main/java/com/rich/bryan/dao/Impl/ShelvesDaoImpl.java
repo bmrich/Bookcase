@@ -4,9 +4,7 @@ import com.rich.bryan.dao.ShelvesDao;
 import com.rich.bryan.entity.BooksUsers;
 import com.rich.bryan.entity.Shelf;
 import com.rich.bryan.entity.User;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.hibernate.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -105,11 +103,11 @@ public class ShelvesDaoImpl implements ShelvesDao {
     }
 
     @Override
-    public List<Object[]> getShelf(String username, String shelfName) {
+    public List<Object[]> getShelf(String username, String shelfName, String sort) {
         Session session = sessionFactory.getCurrentSession();
 
         Query query = session.createQuery("select b, bu.dateCreated from BooksUsers bu join bu.book b join bu.shelves s " +
-                "join fetch b.authors join fetch b.publisher where s.userList.username=:username and s.shelfName=:shelfName")
+                "join fetch b.authors a join fetch b.publisher where s.userList.username=:username and s.shelfName=:shelfName order by " + sort)
                 .setParameter("username", username)
                 .setParameter("shelfName", shelfName);
 
@@ -162,5 +160,17 @@ public class ShelvesDaoImpl implements ShelvesDao {
         Session session = sessionFactory.getCurrentSession();
 
         session.saveOrUpdate(bu);
+    }
+
+    @Override
+    public List<BooksUsers> getPerm(String username, String shelf, String sort) {
+        Session session = sessionFactory.getCurrentSession();
+
+        Query query = session.createQuery("from BooksUsers bu join fetch bu.book b join fetch b.authors a join fetch b.publisher " +
+                "where bu.state=:shelf and bu.user.username=:username order by " + sort)
+                .setParameter("shelf", shelf)
+                .setParameter("username", username);
+
+        return query.list();
     }
 }

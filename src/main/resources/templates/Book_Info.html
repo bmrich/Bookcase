@@ -12,10 +12,10 @@
             <div class="row">
                 <div class="col-sm-9">
                     <div class="row">
-                    <div class="col-sm-5">
+                    <div class="col-xs-5 col-sm-my">
                         <img class="info-page-image" th:src="${results.imageUrl}"/>
                     </div>
-                    <div class="col-sm-7">
+                    <div class="col-xs-7  col-sm-my">
                         <h2 th:text="${results.title}"></h2>
                         <div th:each="author : ${results.authors}">
                             <a th:href="@{'/author/'+${author.id}}">
@@ -48,31 +48,30 @@
                 <div class="col-sm-3">
                     <div class="shelf-checkbox-div">
                         <h4>Shelves</h4>
-                        <hr class="list-separator"/>
                         <input id="bu-id" type="hidden" th:value="${readingState[0]}" />
                         <input id="currentState" type="hidden" th:value="${readingState[1]}"/>
                         <fieldset id="reading-state-radio">
-                            <ul>
-                                <li class="shelf-radio">
+                            <ul class="list-group">
+                                <li class="shelf-radio list-group-item">
                                     <input id="CR" type="radio" name="readingState" value="CR"
                                            th:checked="${readingState[1]} == 'CR'? true : false"/>
                                     <label for="CR" title="Currently Reading">Currently Reading</label>
                                 </li>
-                                <li class="shelf-radio">
+                                <li class="shelf-radio list-group-item">
                                     <input id="TR" type="radio" name="readingState" value="TR"
                                            th:checked="${readingState[1]} == 'TR'? true : false"/>
                                     <label for="TR" title="To Read">To Read</label>
                                 </li>
-                                <li class="shelf-radio">
+                                <li class="shelf-radio list-group-item">
                                     <input id="R" type="radio" name="readingState" value="R"
                                            th:checked="${readingState[1]} == 'R'? true : false"/>
                                     <label for="R" title="Completed">Completed</label>
                                 </li>
                             </ul>
                         </fieldset>
-                        <hr class="list-separator"/>
-                        <ul>
-                            <li class="shelf-checkbox" th:each="shelf,iter :${isOnShelf}">
+                        <br/>
+                        <ul class="list-group">
+                            <li class="shelf-checkbox list-group-item" th:each="shelf,iter :${isOnShelf}">
                                 <input th:id="'checkbox'+${iter.index}" type="checkbox" th:value="${shelf[1]}"
                                        th:checked="${shelf[0]}"
                                        th:onchange="'shelfChange(\'' + ${iter.index} + '\')'" />
@@ -80,6 +79,7 @@
                                        th:title="${shelf[1]}"></label>
                             </li>
                         </ul>
+                        <br/>
                     </div>
                 </div>
             </div>

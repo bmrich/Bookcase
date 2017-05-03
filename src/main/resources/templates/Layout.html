@@ -65,19 +65,19 @@
                     </a>
                 </li>
                 <li>
-                    <a href="" title="Currently Reading">
+                    <a th:href="@{/perm/CR}" title="Currently Reading">
                         <span class="title-span">Currently Reading</span>
                         <span id="cr-badge" class="badge" th:text="${numMap.get('CR')}"></span>
                     </a>
                 </li>
                 <li>
-                    <a href="" title="To Read">
+                    <a th:href="@{/perm/TR}" title="To Read">
                         <span class="title-span">To Read</span>
                         <span id="tr-badge" class="badge" th:text="${numMap.get('TR')}"></span>
                     </a>
                 </li>
                 <li>
-                    <a href="" title="Completed">
+                    <a th:href="@{/perm/R}" title="Completed">
                         <span class="title-span">Completed</span>
                         <span id="r-badge" class="badge" th:text="${numMap.get('R')}"></span>
                     </a>

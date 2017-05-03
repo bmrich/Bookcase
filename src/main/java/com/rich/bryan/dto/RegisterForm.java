@@ -18,11 +18,16 @@ public class RegisterForm {
 
     private String unique;
 
-    private boolean valid;
+    private boolean valid ;
 
     @AssertTrue(message="Passwords Must Match")
     public boolean isValid() {
-        return this.password.equals(this.confirm);
+
+        if (this.password == null || this.confirm == null){
+            return false;
+        } else {
+            return this.password.equals(this.confirm);
+        }
     }
 
     public boolean getValid(){

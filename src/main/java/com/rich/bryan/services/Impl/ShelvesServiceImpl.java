@@ -4,7 +4,7 @@ import com.rich.bryan.dao.ShelvesDao;
 import com.rich.bryan.entity.Book;
 import com.rich.bryan.entity.BooksUsers;
 import com.rich.bryan.services.ShelvesService;
-import com.rich.bryan.services.Utils.SortBy;
+import com.rich.bryan.services.Utils.Sort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Timestamp;
 import java.util.*;
 
-import static com.rich.bryan.services.Utils.ComparatorHelper.setComparator;
+import static com.rich.bryan.services.Utils.SortMethod.getSortMethod;
 
 @Service
 public class ShelvesServiceImpl implements ShelvesService {
@@ -74,10 +74,10 @@ public class ShelvesServiceImpl implements ShelvesService {
 
     @Override
     @Transactional
-    public Set<Book> getShelf(String username, String shelfName) {
-        List<Object[]> objects = shelvesDao.getShelf(username, shelfName);
+    public Set<Book> getShelf(String username, String shelfName, Sort sort) {
+        List<Object[]> objects = shelvesDao.getShelf(username, shelfName, getSortMethod(sort));
 
-        Set<Book> books = new TreeSet<>(setComparator(SortBy.DATE_ADDED_DESC));
+        Set<Book> books = new LinkedHashSet<>();
         for(Object[] object : objects){
             Book book = (Book) object[0];
             book.setDateCreated((Timestamp) object[1]);
@@ -154,5 +154,24 @@ public class ShelvesServiceImpl implements ShelvesService {
         }
 
         return numBooksOnShelf(username);
+    }
+
+    @Override
+    @Transactional
+    public Set<Book> getPerm(String username, String shelf, Sort sortMethod) {
+
+        List<BooksUsers> list = shelvesDao.getPerm(username, shelf, getSortMethod(sortMethod));
+
+        Set<Book> books = new LinkedHashSet<>();
+        for(BooksUsers item : list){
+            Book b = item.getBook();
+            b.setDateCreated(item.getDateCreated());
+            b.setDateFinished(item.getDateFinished());
+            b.setDateStarted(item.getDateStarted());
+            b.setCurrentPage(item.getCurrentPage());
+            books.add(b);
+        }
+
+        return books;
     }
 }

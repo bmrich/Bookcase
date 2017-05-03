@@ -409,9 +409,6 @@ body {
 .author-span {
     font-size: 18px;
 }
-.shelf-checkbox-div {
-    padding-left: 10px;
-}
 .shelf-checkbox-div h4 {
     text-align: center;
 }
@@ -423,20 +420,28 @@ body {
 .shelf-checkbox-div ul li {
     white-space: nowrap;
 }
+.shelf-checkbox-div ul li:hover {
+    background-color: var(--secondary-color);
+}
 .shelf-checkbox-div label {
     font-weight: normal;
     margin-left: 5px;
-    width: 175px;
+    width: calc(100% - 20px);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     display: inline-block;
 }
+
 .shelf-checkbox-div ul li input {
     vertical-align: 7px;
 }
-.list-separator {
-    margin: 5px 0px;
+.list-group {
+    /*box-shadow: var(--elevation--z2);*/
+    border-radius: 4px;
+}
+.list-group-item {
+    padding: 4px 15px 0px;
 }
 #info-table {
     border-collapse: separate;
@@ -472,4 +477,10 @@ body {
 
 .date-input {
     line-height: 20px !important;
+}
+
+@media (max-width: 560px) {
+    .col-sm-my {
+        width: 100% !important;
+    }
 }

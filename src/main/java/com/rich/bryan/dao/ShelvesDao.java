@@ -9,7 +9,7 @@ public interface ShelvesDao {
     void createShelf(String username, String shelfName);
     void addBooktoShelf(String username, String shelfName, Long bookId);
     List<Object[]> getShelves(String username);
-    List<Object[]> getShelf(String username, String shelfName);
+    List<Object[]> getShelf(String username, String shelfName, String sort);
     List<String> getShelvesBookIsOn(String username, String isbn13);
     void removeFromShelf(String username, String shelfName, Long id);
     Object[] getReadingState(String username, String isbn13);
@@ -18,4 +18,5 @@ public interface ShelvesDao {
     List<BooksUsers> numBooksOnShelf(String username);
     void updateState(BooksUsers bu);
     BooksUsers getBooksUsers(Long buid);
+    List<BooksUsers> getPerm(String username, String shelf, String sort);
 }

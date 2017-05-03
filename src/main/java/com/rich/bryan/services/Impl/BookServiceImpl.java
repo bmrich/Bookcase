@@ -4,7 +4,7 @@ import com.rich.bryan.dao.BookDao;
 import com.rich.bryan.entity.Author;
 import com.rich.bryan.entity.Book;
 import com.rich.bryan.services.BookService;
-import com.rich.bryan.services.Utils.SortBy;
+import com.rich.bryan.services.Utils.Sort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,8 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Timestamp;
 import java.util.*;
 
-import static com.rich.bryan.services.Utils.ComparatorHelper.setComparator;
-import static com.rich.bryan.services.Utils.SortBy.*;
+import static com.rich.bryan.services.Utils.SortMethod.getSortMethod;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -22,9 +21,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public Set<Book> getBooks(String username, SortBy sortBy) {
+    public Set<Book> getBooks(String username, Sort sort) {
 
-        List<Object[]> objects = bookDao.getBooks(username);
+        List<Object[]> objects = bookDao.getBooks(username, getSortMethod(sort));
 
         List<Book> booksList = new ArrayList<>();
 
@@ -33,8 +32,6 @@ public class BookServiceImpl implements BookService {
             book.setDateCreated((Timestamp) obj[1]);
             booksList.add(book);
         }
-
-        booksList.sort(setComparator(sortBy));
 
         return new LinkedHashSet<>(booksList);
     }
@@ -47,11 +44,12 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public Object[] getAuthor(Long id, String username) {
+    public Object[] getAuthor(Long id, String username, Sort sort) {
 
-        List<Object[]> objects = bookDao.getAuthor(id, username);
+        List<Object[]> objects = bookDao.getAuthor(id, username, getSortMethod(sort));
 
         List<Book> books = new ArrayList<>();
+
         Book b = (Book) objects.get(0)[0];
         Author a = b.getAuthors().get(0);
         for (Object[] obj: objects){
@@ -59,8 +57,6 @@ public class BookServiceImpl implements BookService {
             book.setDateCreated((Timestamp) obj[1]);
             books.add(book);
         }
-
-        books.sort(setComparator(DATE_ADDED_DESC));
 
         String name = a.getFirstName() +" "+ a.getLastName();
 

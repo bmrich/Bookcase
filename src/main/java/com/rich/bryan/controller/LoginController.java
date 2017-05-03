@@ -33,7 +33,6 @@ public class LoginController {
     public String postRegister(@Validated @ModelAttribute("register") RegisterForm rf, BindingResult bindingResult, RedirectAttributes redirectAttributes){
 
         if(bindingResult.hasErrors()){
-            System.out.println(bindingResult);
             return "Register";
         } else if(!newUserService.newUser(rf)){
             bindingResult.rejectValue("unique","uniqueEmail", "This Email is already in use");

@@ -1,9 +1,10 @@
 package com.rich.bryan.entity;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "books")
@@ -46,6 +47,15 @@ public class Book {
     private String dateCreated;
 
     @Transient
+    private String dateStarted;
+
+    @Transient
+    private String dateFinished;
+
+    @Transient
+    private Integer currentPage;
+
+    @Transient
     private Timestamp timestamp;
 
     public Book() {}
@@ -68,6 +78,38 @@ public class Book {
         } catch (NullPointerException e) {
             this.dateCreated = null;
         }
+    }
+
+    public void setDateStarted(Date dateCreated) {
+        try {
+            this.dateStarted = new SimpleDateFormat("yyyy-MM-dd").format(dateCreated);
+        } catch (NullPointerException e) {
+            this.dateStarted = null;
+        }
+    }
+
+    public void setDateFinished(Date dateCreated) {
+        try {
+            this.dateFinished = new SimpleDateFormat("yyyy-MM-dd").format(dateCreated);
+        } catch (NullPointerException e) {
+            this.dateFinished = null;
+        }
+    }
+
+    public String getDateStarted() {
+        return dateStarted;
+    }
+
+    public String getDateFinished() {
+        return dateFinished;
+    }
+
+    public Integer getCurrentPage() {
+        return currentPage;
+    }
+
+    public void setCurrentPage(Integer currentPage) {
+        this.currentPage = currentPage;
     }
 
     public Long getId() {

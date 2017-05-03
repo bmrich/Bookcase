@@ -48,12 +48,10 @@ $(document).ready(function () {
     });
 
     $('#startDateModal').on('hide.bs.modal', function (e) {
-        $('#err1-group').removeClass('has-error');
-        $('#err1-message').addClass('hidden');
+        remove_err_1();
         $('#start-date-input').val('');
 
-        $('#err2-group').removeClass('has-error');
-        $('#err2-message').addClass('hidden');
+        remove_err_2();
         $('#currentPage').val('');
     });
 
@@ -63,6 +61,16 @@ $(document).ready(function () {
         $('#date-finished-input').val('');
     });
 });
+
+function remove_err_1() {
+    $('#err1-group').removeClass('has-error');
+    $('#err1-message').addClass('hidden');
+}
+
+function remove_err_2() {
+    $('#err2-group').removeClass('has-error');
+    $('#err2-message').addClass('hidden');
+}
 
 function widowSize930() {
     if ($(window).width() < 930) {
@@ -112,7 +120,7 @@ function shelfChange(shelf) {
     let checkboxSelector = $('#checkbox' + shelf);
     let checked = checkboxSelector.is(':checked');
     let id = $('#book-id').val();
-    let name = checkboxSelector.val()
+    let name = checkboxSelector.val();
     if (checked) {
         $.get('/addToShelf/' + id + '/' + name, function (response) {
             let obj = response[shelf];
@@ -134,7 +142,7 @@ function deleteShelf() {
 function startDate() {
     let has_errors = false;
 
-    let user_input = $('#start-date-input').val()
+    let user_input = $('#start-date-input').val();
     let user_date = new Date(user_input);
     let diff = user_date.getTimezoneOffset();
     let date = new Date(user_date.getTime() + diff*60000);
@@ -142,12 +150,26 @@ function startDate() {
     if (today < date){
         let message = $('#err1-message');
         message.removeClass('hidden');
-        message.text('Date is out of range')
+        message.text('Date is out of range');
         $('#err1-group').addClass('has-error');
         has_errors = true;
+    } else {
+        remove_err_1();
     }
 
+    let page_num = Number($('#page-count').text());
     let current_page = $('#currentPage').val();
+    let comp = Number(current_page);
+    if(comp < 1 || comp > page_num) {
+        let message = $('#err2-message');
+        message.removeClass('hidden');
+        message.text('Page number must be between 1 and ' + page_num);
+        $('#err2-group').addClass('has-error');
+        has_errors = true;
+    } else {
+        remove_err_2();
+    }
+
     let date_trim = $.trim(user_input);
     let current_page_trim = $.trim(current_page);
     if(date_trim == '' || current_page_trim == ''){
@@ -163,16 +185,6 @@ function startDate() {
             message.text('Field cannot be blank');
             $('#err2-group').addClass('has-error');
         }
-        has_errors = true;
-    }
-
-    let page_num = Number($('#page-count').text());
-    let comp = Number(current_page);
-    if(comp < 0 || comp > page_num) {
-        let message = $('#err2-message');
-        message.removeClass('hidden');
-        message.text('Page number must be between 0 and ' + page_num);
-        $('#err2-group').addClass('has-error');
         has_errors = true;
     }
 

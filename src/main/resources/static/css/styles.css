@@ -50,9 +50,6 @@ body {
     background: #ffffff;
 }
 
-.form-control {
-    height: inherit;
-}
 .main {
     padding: 20px;
     background-color: #f7f7f7;
@@ -408,6 +405,9 @@ body {
 
 .author-span {
     font-size: 18px;
+}
+#author-text {
+    color: var(--secondary-text-black);
 }
 .shelf-checkbox-div h4 {
     text-align: center;

@@ -21,4 +21,5 @@ public interface ShelvesService {
     Map<String, Integer> numBooksOnShelf(String username);
     Map<String,Integer> updateState(BooksUsers bu, String username);
     Set<Book> getPerm(String username, String shelf, Sort sort);
+    Integer getCurrentPage(Long id);
 }

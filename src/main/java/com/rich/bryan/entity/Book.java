@@ -56,23 +56,14 @@ public class Book {
     private Integer currentPage;
 
     @Transient
-    private Timestamp timestamp;
+    private Long progress;
+
+    @Transient
+    private Long buid;
 
     public Book() {}
-    public Book(String title, String isbn10, String isbn13, Integer pageCount,
-                String datePublished, String imageUrl, String description, Publisher publisher) {
-        this.title = title;
-        this.isbn10 = isbn10;
-        this.isbn13 = isbn13;
-        this.pageCount = pageCount;
-        this.datePublished = datePublished;
-        this.imageUrl = imageUrl;
-        this.description = description;
-        this.publisher = publisher;
-    }
 
     public void setDateCreated(Timestamp dateCreated) {
-        this.timestamp = dateCreated;
         try {
             this.dateCreated = new SimpleDateFormat("yyyy-MM-dd").format(dateCreated);
         } catch (NullPointerException e) {
@@ -94,6 +85,22 @@ public class Book {
         } catch (NullPointerException e) {
             this.dateFinished = null;
         }
+    }
+
+    public Long getProgress() {
+        return progress;
+    }
+
+    public void setProgress(Long progress) {
+        this.progress = progress;
+    }
+
+    public Long getBuid() {
+        return buid;
+    }
+
+    public void setBuid(Long buid) {
+        this.buid = buid;
     }
 
     public String getDateStarted() {
@@ -119,8 +126,6 @@ public class Book {
     public void setId(Long id) {
         this.id = id;
     }
-
-    public Timestamp getTimestamp() { return timestamp;}
 
     public String getTitle() {
         return title;

@@ -99,8 +99,9 @@ function saveShelf() {
     if ($.trim(val) == '') {
         selector.closest('div').addClass('has-error');
     } else {
-        $.get('/createShelf/' + val);
-        location.reload();
+        $.get('/createShelf/' + val, function (event) {
+            location.reload();
+        });
     }
 }
 
@@ -160,10 +161,10 @@ function startDate() {
     let page_num = Number($('#page-count').text());
     let current_page = $('#currentPage').val();
     let comp = Number(current_page);
-    if(comp < 1 || comp > page_num) {
+    if(comp < 1 || comp > (page_num-1)) {
         let message = $('#err2-message');
         message.removeClass('hidden');
-        message.text('Page number must be between 1 and ' + page_num);
+        message.text('Page number must be between 1 and ' + (page_num-1));
         $('#err2-group').addClass('has-error');
         has_errors = true;
     } else {
@@ -268,6 +269,38 @@ function toRead(){
     document.getElementById('currentState').value = 'TR';
 
     $('#toReadModal').modal('hide');
+}
+
+function update(index) {
+    let buid = $('#update-buid_'+index).val();
+    let author = $('#update-author_'+index).text();
+    let pageCout = Number($('#update-pageCount_'+index).val());
+    let currentPage = Number($('#update-currentPage_'+index).val());
+    $('#updateModalLabel').text('Update ' + author);
+    $('#update-page').val(currentPage);
+    $('#update-page').attr({"max":pageCout-1});
+    $('#update-page-btn').click({buid:buid, index:index, pageCount:pageCout},update_page);
+    $('#updateModal').modal('show');
+}
+
+function update_page(event) {
+    let buid = event.data.buid;
+    let currentPage = $('#update-page').val();
+
+    let bu_arr = {'id':buid, 'state':'CRU', 'currentPage':currentPage};
+    $.get('/updatecr', bu_arr, function (data) {
+        $('#updateModal').modal('hide');
+        let progress = Math.round((Number(currentPage)/event.data.pageCount)*100);
+        $('#progress-bar_'+event.data.index)
+            .text(progress + '%')
+            .attr({
+                'aria-valuenow': progress
+            })
+            .css('width',progress+'%');
+        $('#update-current_'+event.data.index).text('  '+currentPage);
+        $('#update-currentPage_'+event.data.index).val(currentPage);
+        $('#update-page-btn').off('click');
+    });
 }
 
 function booksearch() {

@@ -19,4 +19,5 @@ public interface ShelvesDao {
     void updateState(BooksUsers bu);
     BooksUsers getBooksUsers(Long buid);
     List<BooksUsers> getPerm(String username, String shelf, String sort);
+    Integer getCurrentPage(Long id);
 }

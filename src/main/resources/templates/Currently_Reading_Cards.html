@@ -26,124 +26,119 @@
                     <li><a th:href="@{'/perm/CR/6'}">Author: Z to A</a></li>
                     <li><a th:href="@{'/perm/CR/8'}">Date Started: New to Old</a></li>
                     <li><a th:href="@{'/perm/CR/7'}">Date Started: Old to New</a></li>
-                    <li><a th:href="@{'/perm/CR/14'}">Progress</a></li>
+                    <li><a th:href="@{'/perm/CR/15'}">Progress</a></li>
                 </ul>
             </div>
         </div>
 
         <style>
-            .card-holder * {
-                margin: 0;
-                padding: 0;
-            }
-            .card-holder {
-                display: -ms-flexbox;
-                display: -webkit-box;
-                display: flex;
-                -ms-flex-direction: row;
-                -webkit-box-orient: horizontal;
-                -webkit-box-direction: normal;
-                flex-direction: row;
-                -ms-flex-wrap: wrap;
-                flex-wrap: wrap;
-                -ms-flex-pack: center;
-                -webkit-box-pack: center;
-                justify-content: center;
-            }
-            .card {
+            .card_cr {
                 display: inherit;
+                flex-wrap: wrap;
                 border-radius: 4px;
                 margin: 10px;
                 box-shadow: var(--elevation--z4);
                 width: 300px;
                 box-sizing: border-box;
             }
-            .card-img-container {
-                height: 150px;
-                width: 100px;
-                border-top-left-radius: inherit;
-                border-bottom-left-radius: inherit;
-            }
-            .card-img {
-                height: 100%;
-                width: 100%;
-                border-top-left-radius: inherit;
-                border-bottom-left-radius: inherit;
-            }
-            .card-content {
+            .card-content_cr {
                 height: 150px;
                 width: calc(100% - 100px);
                 padding: 10px;
                 box-sizing: border-box;
                 border-top-right-radius: inherit;
-                border-bottom-right-radius: inherit;
                 background-color: var(--secondary-light);
             }
+            .card-content_cr h4 a {
+                color: var(--secondary-light-text-black);
+            }
+            .card-content_cr h4 a:hover {
+                color: var(--primary-color);
+            }
+            .card-content_cr p a {
+                color: var(--secondary-text-black);
+            }
+            .card-content_cr p a:hover {
+                color: var(--primary-light);
+            }
+            .card-content_cr hr {
+                margin: 5px -10px;
+            }
+            .card-img-container_cr {
+                height: 150px;
+                width: 100px;
+                border-top-left-radius: inherit;
+            }
 
+            .card_cr_details {
+                background-color: var(--secondary-light);
+                width: 100%;
+                border-bottom-left-radius: inherit;
+                border-bottom-right-radius: inherit;
+                border-top: 1px solid #eee;
+                height: 70px;
+            }
+            .card_cr_details p {
+                padding-left: 5px;
+                margin: 3px 0px;
+            }
+            .cr_details_info {
+                display: flex;
+                justify-content: space-between;
+            }
+            .cr_details_info label {
+                font-weight: normal;
+            }
+            .progress {
+                border-top-right-radius: 0px;
+                border-top-left-radius: 0px;
+            }
+            .cr_details_info-btn-div {
+                height: 50px;
+                width: 100px;
+            }
+            .cr_details_info-btn-div button{
+                margin-left: 17%;
+                margin-top: 9%;
+            }
+            .btn_cr {
+                padding: 6px 12px !important;
+                margin-bottom: 0 !important;
+                background-color: var(--primary-color);
+                border-color: transparent;
+            }
+            .btn_cr:hover {
+                background-color: var(--secondary-dark);
+                border-color: transparent;
+                color: var(--secondary-text-black);
+            }
+            .progress-bar {
+                min-width: 25px;
+            }
+            #updateModal .control-label {
+                padding-top: 14px
+            }
+            #updateModal .input-group-btn .btn {
+                border-top-left-radius: 0px;
+                border-bottom-left-radius: 0px;
+            }
             @media (max-width: 676px) {
-                .card {
+                .card_cr {
                     width: 100%;
                 }
             }
-            .card-content h4 a {
-                color: var(--secondary-light-text-black);
-            }
-            .card-content h4 a:hover {
-                color: var(--primary-color);
-            }
-            .card-content p a {
-                color: var(--secondary-text-black);
-            }
-            .card-content p a:hover {
-                color: var(--primary-light);
-            }
-            .card-content hr {
-                margin: 5px -10px;
-            }
-            .card-page-header {
-                max-width: 945px;
-                width: 100%;
-            }
-            .card-page-header h2 {
-                color: var(--primary-dark);
-                white-space: nowrap;
-                text-overflow: ellipsis;
-                overflow: hidden;
-            }
-            .btn-link {
-                color: var(--primary-dark);
-            }
-            .placeholder {
-                width: 300px;
-                visibility: hidden;
-                height: 0;
-                padding: 0;
-                margin: 10px;
-                border-top-width: 0;
-                border-bottom-width: 0;
-            }
-            .card-page-header>div.dropdown {
-                display: inline-block;
-                margin-right: 10px;
-            }
-            .card-details-container {
-                height: 115px;
-            }
-            .card-footer>small.page-count {
-                float: right;
-                line-height: 22px;
-            }
-            .card-author {
-                display: inline !important;
-            }
         </style>
 
-        <div class="card" th:each="book :${results}">
-            <div class="card-img-container"><img class="card-img" th:src="${book.imageUrl}"/></div>
-            <div class="card-content">
+        <div class="card_cr" th:each="book,iter :${results}">
+            <input th:id="'update-buid_'+${iter.index}" type="hidden" th:value="${book.buid}"/>
+            <input th:id="'update-pageCount_'+${iter.index}" type="hidden" th:value="${book.pageCount}"/>
+            <input th:id="'update-currentPage_'+${iter.index}" type="hidden" th:value="${book.currentPage}"/>
+            <div class="card-img-container_cr"><img class="card-img" th:src="${book.imageUrl}"/></div>
+            <div class="card-content_cr">
                 <div class="card-details-container">
                     <div class="card-title limit-2">
-                        <h4><a th:href="@{'/bookinfo/'+${book.isbn13}}" th:text="${book.title}" th:title="${book.title}"></a></h4>
+                        <h4><a th:id="'update-author_'+${iter.index}" th:href="@{'/bookinfo/'+${book.isbn13}}"
+                               th:text="${book.title}" th:title="${book.title}"></a></h4>
                     </div>
                     <hr/>
                     <div class="card-author limit-2">
@@ -158,13 +153,70 @@
                     <small class="page-count" th:text="${book.pageCount}"></small>
                 </div>
             </div>
-            <div class="">
-                <small class="" th:text="${book.dateStarted}"></small>
-                <small class="" th:text="${book.currentPage}"></small>
+            <div class="card_cr_details">
+                <div class="cr_details_info">
+                    <div>
+                        <p><label>Date Started:</label><span th:text="'  '+${book.dateStarted}"></span></p>
+                        <p><label>Current Page:</label><span th:id="'update-current_'+${iter.index}" th:text="'  '+${book.currentPage}"></span></p>
+                    </div>
+                    <div class="cr_details_info-btn-div">
+                        <button type="button" class="btn btn_cr btn-info" th:onclick="'update('+${iter.index}+')'">Update</button>
+                    </div>
+                </div>
+                <div class="progress">
+                    <div th:id="'progress-bar_'+${iter.index}" class="progress-bar progress-bar-info" role="progressbar"
+                         th:attr="aria-valuenow=${book.progress}" aria-valuemin="0" aria-valuemax="100"
+                         th:style="'width:'+${book.progress}+'%;'"
+                         th:text="${book.progress}+'%'">
+                    </div>
+                </div>
             </div>
         </div>
         <div class="placeholder"></div>
         <div class="placeholder"></div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="updateModalLabel"></h4>
+                </div>
+                <div class="modal-body">
+                    <form action="" id="update-form" class="form-horizontal">
+                        <div id="err5-group" class="form-group">
+                            <label for="update-page" class="col-sm-3 control-label">Current Page</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="update-page" name="updatePage" placeholder="Current Page"
+                                           min="0"/>
+                                    <span class="input-group-btn">
+                                        <button id="update-page-btn" class="btn btn-info" type="button">Update</button>
+                                    </span>
+                                </div>
+                                <p id="err5-message" class="text-danger hidden"></p>
+                            </div>
+                        </div>
+                        <p style="text-align: center;"><b>OR</b></p>
+                        <div id="err4-group" class="form-group">
+                            <label for="update-input" class="col-sm-3 control-label">Date Finished</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <input id="update-input" type="date" class="form-control date-input"
+                                           name="dateStarted" placeholder="mm/dd/yyyy" th:max="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"/>
+                                    <span class="input-group-btn">
+                                        <button id="update-input-btn" class="btn btn-info" type="button">Update</button>
+                                    </span>
+                                </div>
+                                <p id="err4-message" class="text-danger hidden"></p>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 
 </div>

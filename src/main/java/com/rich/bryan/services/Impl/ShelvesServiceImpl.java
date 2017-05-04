@@ -131,11 +131,15 @@ public class ShelvesServiceImpl implements ShelvesService {
 
         BooksUsers booksUsers = shelvesDao.getBooksUsers(bu.getId());
 
-        if(bu.getState().equals("CR")){
+        if(bu.getState().equals("CR")) {
 
             booksUsers.setState("CR");
             booksUsers.setDateFinished(null);
             booksUsers.setDateStarted(bu.getDateStarted());
+            booksUsers.setCurrentPage(bu.getCurrentPage());
+
+        } else if (bu.getState().equals("CRU")){
+
             booksUsers.setCurrentPage(bu.getCurrentPage());
 
         } else if(bu.getState().equals("R")){
@@ -158,6 +162,12 @@ public class ShelvesServiceImpl implements ShelvesService {
 
     @Override
     @Transactional
+    public Integer getCurrentPage(Long id) {
+        return shelvesDao.getCurrentPage(id);
+    }
+
+    @Override
+    @Transactional
     public Set<Book> getPerm(String username, String shelf, Sort sortMethod) {
 
         List<BooksUsers> list = shelvesDao.getPerm(username, shelf, getSortMethod(sortMethod));
@@ -169,6 +179,11 @@ public class ShelvesServiceImpl implements ShelvesService {
             b.setDateFinished(item.getDateFinished());
             b.setDateStarted(item.getDateStarted());
             b.setCurrentPage(item.getCurrentPage());
+
+            if (item.getState().equals("CR")) {
+                b.setProgress(Math.round(((item.getCurrentPage().doubleValue() / b.getPageCount()) * 100)));
+                b.setBuid(item.getId());
+            }
             books.add(b);
         }
 

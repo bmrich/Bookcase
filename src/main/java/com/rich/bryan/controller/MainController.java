@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 
 import static com.rich.bryan.services.Utils.Sort.DATE_CREATED_DESC;
+import static com.rich.bryan.services.Utils.Sort.DATE_STARTED;
+import static com.rich.bryan.services.Utils.Sort.DATE_STARTED_DESC;
 
 @Controller
 public class MainController {
@@ -102,9 +104,10 @@ public class MainController {
     }
 
     @GetMapping("/createShelf/{shelfName}")
-    @ResponseStatus(value = HttpStatus.OK)
-    public void createShelf(@PathVariable("shelfName") String shelfName, Principal principal){
+    @ResponseBody
+    public String createShelf(@PathVariable("shelfName") String shelfName, Principal principal){
         shelvesService.createShelf(principal.getName(), shelfName);
+        return "";
     }
 
     @GetMapping("/addToShelf/{id}/{shelfName}")
@@ -174,6 +177,14 @@ public class MainController {
         return shelvesService.updateState(bu, principal.getName());
     }
 
+    @GetMapping("/updatecr")
+    @ResponseBody
+    public Integer updateCR(BooksUsers bu, Principal principal){
+        shelvesService.updateState(bu, principal.getName());
+
+        return shelvesService.getCurrentPage(bu.getId());
+    }
+
     @GetMapping("/perm/{shelf}/{sort}")
     public String getPerm(@PathVariable("shelf") String shelf,
                          @PathVariable("sort") Integer sort,
@@ -194,7 +205,7 @@ public class MainController {
     public String getPerm(@PathVariable("shelf") String shelf,
                           Principal principal, Model model){
 
-        model.addAttribute("results", shelvesService.getPerm(principal.getName(), shelf, DATE_CREATED_DESC));
+        model.addAttribute("results", shelvesService.getPerm(principal.getName(), shelf, DATE_STARTED));
         model.addAttribute("shelves", shelvesService.getShelves(principal.getName()));
         model.addAttribute("numMap", shelvesService.numBooksOnShelf(principal.getName()));
 
@@ -207,15 +218,19 @@ public class MainController {
 
     private String[] getStateFromCode(@PathVariable("shelf") String shelf) {
         String[] name = new String[2];
-        if (shelf.equals("TR")){
-            name[0] = "To Read";
-            name[1] = "Cards";
-        } else if (shelf.equals("CR")) {
-            name[0] = "Currently Reading";
-            name[1] ="Currently_Reading_Cards";
-        } else {
-            name[0] = "Completed";
-            name[1] = "Currently_Reading_Cards";
+        switch (shelf){
+            case "TR":
+                name[0] = "To Read";
+                name[1] = "Cards";
+                break;
+            case "CR":
+                name[0] = "Currently Reading";
+                name[1] ="Currently_Reading_Cards";
+                break;
+            case "R":
+                name[0] = "Completed";
+                name[1] = "Currently_Reading_Cards";
+                break;
         }
         return name;
     }

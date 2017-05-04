@@ -18,7 +18,9 @@ public enum Sort {
     PAGE_COUNT(11),
     PAGE_COUNT_DESC(12),
     CURRENT_PAGE(13),
-    CURRENT_PAGE_DESC(14);
+    CURRENT_PAGE_DESC(14),
+    PROGRESS(15);
+
 
     private int sortNum;
 

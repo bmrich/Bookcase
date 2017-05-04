@@ -49,6 +49,8 @@ public class SortMethod {
             case CURRENT_PAGE_DESC:
                 sort = "bu.currentPage desc";
                 break;
+            case PROGRESS:
+                sort = "(bu.currentPage/b.pageCount) desc";
         }
 
         return sort;

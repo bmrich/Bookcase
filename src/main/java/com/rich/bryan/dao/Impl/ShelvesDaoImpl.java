@@ -163,6 +163,15 @@ public class ShelvesDaoImpl implements ShelvesDao {
     }
 
     @Override
+    public Integer getCurrentPage(Long id) {
+        Session session = sessionFactory.getCurrentSession();
+
+        BooksUsers bu = session.get(BooksUsers.class, id);
+
+        return bu.getCurrentPage();
+    }
+
+    @Override
     public List<BooksUsers> getPerm(String username, String shelf, String sort) {
         Session session = sessionFactory.getCurrentSession();
 

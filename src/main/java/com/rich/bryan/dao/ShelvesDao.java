@@ -1,6 +1,5 @@
 package com.rich.bryan.dao;
 
-import com.rich.bryan.entity.Book;
 import com.rich.bryan.entity.BooksUsers;
 
 import java.util.List;
@@ -16,8 +15,7 @@ public interface ShelvesDao {
     void renameShelf(String username, String shelfName, String newShelfName);
     void deleteShelf(String username, String shelfName);
     List<BooksUsers> numBooksOnShelf(String username);
-    void updateState(BooksUsers bu);
-    BooksUsers getBooksUsers(Long buid);
+    void getBooksUsers(BooksUsers bu);
     List<BooksUsers> getPerm(String username, String shelf, String sort);
     Integer getCurrentPage(Long id);
 }

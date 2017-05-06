@@ -12,12 +12,15 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.NoResultException;
 import java.util.List;
 
-
 @Repository
 public class BookDaoImpl implements BookDao {
 
-    @Autowired
     private SessionFactory sessionFactory;
+
+    @Autowired
+    public BookDaoImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     @Override
     public List<Object[]> getBooks(String username, String sort){
@@ -66,12 +69,12 @@ public class BookDaoImpl implements BookDao {
     }
 
     @Override
-    public Book getSingleBook(String isbn13) throws NoResultException {
+    public List<Book> getSingleBook(String isbn13) {
         Session session = sessionFactory.getCurrentSession();
 
         Query query = session.createQuery("from Book b join fetch b.authors join fetch b.publisher where b.isbn13 =:isbn13")
                 .setParameter("isbn13", isbn13);
 
-        return (Book) query.uniqueResult();
+        return query.list();
     }
 }

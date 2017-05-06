@@ -5,6 +5,7 @@ import com.rich.bryan.dao.GoogleBooksApiDao;
 import com.rich.bryan.dao.NewBookDao;
 import com.rich.bryan.entity.Author;
 import com.rich.bryan.entity.Book;
+import com.rich.bryan.entity.BooksUsers;
 import com.rich.bryan.entity.Publisher;
 import com.rich.bryan.services.SaveBookService;
 import org.json.JSONArray;
@@ -14,17 +15,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class SaveBookServiceImpl implements SaveBookService {
 
-    @Autowired
-    private GoogleBooksApiDao  googleBooksApiDao;
-
-    @Autowired
     private BookDao bookDao;
+    private NewBookDao newBookDao;
+    private GoogleBooksApiDao googleBooksApiDao;
 
     @Autowired
-    private NewBookDao newBookDao;
+    public SaveBookServiceImpl(BookDao bookDao, NewBookDao newBookDao, GoogleBooksApiDao googleBooksApiDao) {
+        this.bookDao = bookDao;
+        this.newBookDao = newBookDao;
+        this.googleBooksApiDao = googleBooksApiDao;
+    }
 
     @Override
     @Transactional
@@ -40,10 +46,33 @@ public class SaveBookServiceImpl implements SaveBookService {
         Book book = parseJson(object);
         System.out.println(book);
 
-        try{
-            Book already = bookDao.getSingleBook(book.getIsbn13());
-            newBookDao.newBook(already.getId(), username);
-        } catch (NullPointerException e) {
+        List<Book> already = bookDao.getSingleBook(book.getIsbn13());
+        if (!already.isEmpty()) {
+            List<BooksUsers> booksUsersAlreadyExists = newBookDao.checkBooksUsers(already.get(0).getId(), username);
+            if(booksUsersAlreadyExists.isEmpty()) {
+                newBookDao.newBook(already.get(0).getId(), username);
+            }
+        } else {
+
+            List<Author> oldAuthors = new ArrayList<>();
+            for (int i = 0; i < book.getAuthors().size(); i++){
+                List<Author> authorAlreadyExists = newBookDao.checkAuthor(book.getAuthors().get(i));
+                if(!authorAlreadyExists.isEmpty()){
+                    oldAuthors.add(authorAlreadyExists.get(0));
+                    book.getAuthors().remove(i);
+                }
+            }
+            if(!oldAuthors.isEmpty()){
+                for (Author a : oldAuthors) {
+                    book.getAuthors().add(a);
+                }
+            }
+
+            List<Publisher> publisherAlreadyExists = newBookDao.checkPublisher(book.getPublisher());
+            if(!publisherAlreadyExists.isEmpty()){
+                book.setPublisher(publisherAlreadyExists.get(0));
+            }
+
             newBookDao.newBook(book, username);
         }
 
@@ -55,6 +84,7 @@ public class SaveBookServiceImpl implements SaveBookService {
         Book res = new Book();
 
         try {
+            res.setGoogleApiId(jsonObj.optString("id"));
             JSONObject volumeInfo = jsonObj.getJSONObject("volumeInfo");
 
             res.setTitle(volumeInfo.optString("title"));
@@ -65,7 +95,6 @@ public class SaveBookServiceImpl implements SaveBookService {
 
             res.setDatePublished(volumeInfo.optString("publishedDate"));
             res.setPageCount(volumeInfo.optInt("pageCount"));
-            res.setDescription(volumeInfo.optString("description"));
 
             JSONObject imageLinksObj = volumeInfo.optJSONObject("imageLinks");
             if (imageLinksObj != null) {

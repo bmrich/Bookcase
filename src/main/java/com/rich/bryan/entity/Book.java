@@ -25,9 +25,6 @@ public class Book {
     private String datePublished;
     private String imageUrl;
 
-    @Lob
-    private String description;
-
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH}, fetch = FetchType.LAZY)
     @JoinColumn(name = "publisher_id")
     private Publisher publisher;
@@ -43,14 +40,17 @@ public class Book {
     @OneToMany(mappedBy = "user", cascade = CascadeType.DETACH)
     private Set<BooksUsers> users;
 
-    @Transient
-    private String dateCreated;
+    @Column(name = "google_api_id")
+    private String googleApiId;
 
     @Transient
-    private String dateStarted;
+    private Date dateCreated;
 
     @Transient
-    private String dateFinished;
+    private Date dateStarted;
+
+    @Transient
+    private Date dateFinished;
 
     @Transient
     private Integer currentPage;
@@ -64,27 +64,23 @@ public class Book {
     public Book() {}
 
     public void setDateCreated(Timestamp dateCreated) {
-        try {
-            this.dateCreated = new SimpleDateFormat("yyyy-MM-dd").format(dateCreated);
-        } catch (NullPointerException e) {
-            this.dateCreated = null;
-        }
+        this.dateCreated = dateCreated;
     }
 
-    public void setDateStarted(Date dateCreated) {
-        try {
-            this.dateStarted = new SimpleDateFormat("yyyy-MM-dd").format(dateCreated);
-        } catch (NullPointerException e) {
-            this.dateStarted = null;
-        }
+    public void setDateStarted(Date dateStarted) {
+        this.dateStarted = dateStarted;
     }
 
-    public void setDateFinished(Date dateCreated) {
-        try {
-            this.dateFinished = new SimpleDateFormat("yyyy-MM-dd").format(dateCreated);
-        } catch (NullPointerException e) {
-            this.dateFinished = null;
-        }
+    public void setDateFinished(Date dateFinished) {
+        this.dateFinished = dateFinished;
+    }
+
+    public String getGoogleApiId() {
+        return googleApiId;
+    }
+
+    public void setGoogleApiId(String googleApiId) {
+        this.googleApiId = googleApiId;
     }
 
     public Long getProgress() {
@@ -103,11 +99,11 @@ public class Book {
         this.buid = buid;
     }
 
-    public String getDateStarted() {
+    public Date getDateStarted() {
         return dateStarted;
     }
 
-    public String getDateFinished() {
+    public Date getDateFinished() {
         return dateFinished;
     }
 
@@ -175,14 +171,6 @@ public class Book {
         this.imageUrl = imageUrl;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public Publisher getPublisher() {
         return publisher;
     }
@@ -207,7 +195,7 @@ public class Book {
         this.users = users;
     }
 
-    public String getDateCreated() {
+    public Date getDateCreated() {
         return dateCreated;
     }
 
@@ -238,8 +226,6 @@ public class Book {
                 ", isbn13='" + isbn13 + '\'' +
                 ", pageCount=" + pageCount +
                 ", datePublished='" + datePublished + '\'' +
-                ", imageUrl='" + imageUrl + '\'' +
-                ", description='" + description + '\'' +
                 ", publisher=" + publisher +
                 ", authors=" + authors +
                 ", dateCreated=" + dateCreated +

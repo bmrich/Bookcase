@@ -17,19 +17,20 @@ import java.util.Map;
 
 import static com.rich.bryan.services.Utils.Sort.DATE_CREATED_DESC;
 import static com.rich.bryan.services.Utils.Sort.DATE_STARTED;
-import static com.rich.bryan.services.Utils.Sort.DATE_STARTED_DESC;
 
 @Controller
 public class MainController {
 
-    @Autowired
     private BookService bookService;
-
-    @Autowired
     private ShelvesService shelvesService;
+    private SaveBookService saveBookService;
 
     @Autowired
-    private SaveBookService saveBookService;
+    public MainController(BookService bookService, ShelvesService shelvesService, SaveBookService saveBookService) {
+        this.bookService = bookService;
+        this.shelvesService = shelvesService;
+        this.saveBookService = saveBookService;
+    }
 
     @GetMapping("/save/{id}")
     public String save(@PathVariable String id, Principal principal){
@@ -156,12 +157,13 @@ public class MainController {
     }
 
     @GetMapping("/renameShelf/{shelfName}/{newShelfName}")
-    @ResponseStatus(value = HttpStatus.OK)
-    public void renameShelf(@PathVariable("shelfName") String shelfName,
+    public String renameShelf(@PathVariable("shelfName") String shelfName,
                             @PathVariable("newShelfName") String newShelfName,
                             Principal principal) {
 
         shelvesService.renameShelf(principal.getName(), shelfName, newShelfName);
+        System.out.println("redirect:/getShelf/"+newShelfName);
+        return "redirect:/getShelf/"+newShelfName;
     }
 
     @GetMapping("/deleteShelf/{shelfName}")
@@ -174,14 +176,14 @@ public class MainController {
     @GetMapping("/state")
     @ResponseBody
     public Map<String, Integer> state(BooksUsers bu, Principal principal){
-        return shelvesService.updateState(bu, principal.getName());
+        shelvesService.updateState(bu);
+        return shelvesService.numBooksOnShelf(principal.getName());
     }
 
     @GetMapping("/updatecr")
     @ResponseBody
-    public Integer updateCR(BooksUsers bu, Principal principal){
-        shelvesService.updateState(bu, principal.getName());
-
+    public Integer updateCR(BooksUsers bu){
+        shelvesService.updateState(bu);
         return shelvesService.getCurrentPage(bu.getId());
     }
 
@@ -229,7 +231,7 @@ public class MainController {
                 break;
             case "R":
                 name[0] = "Completed";
-                name[1] = "Currently_Reading_Cards";
+                name[1] = "Cards";
                 break;
         }
         return name;

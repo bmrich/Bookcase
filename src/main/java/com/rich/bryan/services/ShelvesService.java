@@ -19,7 +19,7 @@ public interface ShelvesService {
     void renameShelf(String username, String shelfName, String newShelfName);
     void deleteShelf(String username, String shelfName);
     Map<String, Integer> numBooksOnShelf(String username);
-    Map<String,Integer> updateState(BooksUsers bu, String username);
+    void updateState(BooksUsers bu);
     Set<Book> getPerm(String username, String shelf, Sort sort);
     Integer getCurrentPage(Long id);
 }

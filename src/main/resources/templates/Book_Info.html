@@ -24,7 +24,7 @@
                         </div>
                         <div class="page-info-list">
                             <ul class="list-unstyled">
-                                <li><label>Date Added:</label><span th:text="' '+${results.dateCreated}"></span></li>
+                                <li><label>Date Added:</label><span th:text="' '+${#dates.format(results.dateCreated, 'MMM dd yyyy')}"></span></li>
                                 <li><label>Publisher:</label><span th:text="' '+${results.publisher.publisher}"></span></li>
                                 <li><label>Date Published:</label><span th:text="' '+${results.datePublished}"></span></li>
                                 <li><label>ISBN-13:</label><span th:text="' '+${results.isbn13}"></span></li>
@@ -33,6 +33,12 @@
                             </ul>
                         </div>
                         <a href="" class="btn-sm btn-danger" data-toggle="modal" data-target="#myModal">Delete Book</a>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <a th:href="@{'https://books.google.com/books'(id=${results.googleApiId}, hl='', source='gbs_api')}" target="_blank">
+                            <img src="https://www.google.com/intl/en/googlebooks/images/gbs_preview_button1.png"/>
+                        </a>
                     </div>
                     </div>
                     <div class="row">
@@ -40,7 +46,8 @@
                             <br/>
                             <br/>
                             <div class="w3-conatiner">
-                                <p th:text="${results.description}"></p>
+                                <input id="api-id" type="hidden" th:value="${results.googleApiId}"/>
+                                <p id="des-container"></p>
                             </div>
                         </div>
                     </div>

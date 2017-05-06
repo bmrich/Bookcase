@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.Set;
 
 @Entity
-@Table(name = "books_users")
+@Table(name = "books_users", uniqueConstraints = @UniqueConstraint(columnNames = {"book_id", "username"}))
 public class BooksUsers {
 
     @Id

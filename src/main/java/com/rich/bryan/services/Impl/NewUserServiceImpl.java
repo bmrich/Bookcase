@@ -13,11 +13,14 @@ import javax.transaction.Transactional;
 @Service
 public class NewUserServiceImpl implements NewUserService {
 
-    @Autowired
     private UserDao userDao;
+    private NewUserDao newUserDao;
 
     @Autowired
-    private NewUserDao newUserDao;
+    public NewUserServiceImpl(UserDao userDao, NewUserDao newUserDao) {
+        this.userDao = userDao;
+        this.newUserDao = newUserDao;
+    }
 
     @Override
     @Transactional(dontRollbackOn = UsernameNotFoundException.class)

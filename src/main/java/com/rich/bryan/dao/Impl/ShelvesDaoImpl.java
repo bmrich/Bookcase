@@ -13,8 +13,12 @@ import java.util.List;
 @Repository
 public class ShelvesDaoImpl implements ShelvesDao {
 
-    @Autowired
     private SessionFactory sessionFactory;
+
+    @Autowired
+    public ShelvesDaoImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     @Override
     public void createShelf(String username, String shelfName){
@@ -150,16 +154,35 @@ public class ShelvesDaoImpl implements ShelvesDao {
     }
 
     @Override
-    public BooksUsers getBooksUsers(Long buid) {
-        Session session = sessionFactory.getCurrentSession();
-        return session.get(BooksUsers.class, buid);
-    }
-
-    @Override
-    public void updateState(BooksUsers bu) {
+    public void getBooksUsers(BooksUsers bu) {
         Session session = sessionFactory.getCurrentSession();
 
-        session.saveOrUpdate(bu);
+        BooksUsers booksUsers = session.get(BooksUsers.class, bu.getId());
+        switch(bu.getState()){
+            case "CR":
+                booksUsers.setState("CR");
+                booksUsers.setDateFinished(null);
+                booksUsers.setDateStarted(bu.getDateStarted());
+                booksUsers.setCurrentPage(bu.getCurrentPage());
+                break;
+
+            case "CRU":
+                booksUsers.setCurrentPage(bu.getCurrentPage());
+                break;
+
+            case "R":
+                booksUsers.setState("R");
+                booksUsers.setDateFinished(bu.getDateFinished());
+                booksUsers.setCurrentPage(null);
+                break;
+
+            case "TR":
+                booksUsers.setState("TR");
+                booksUsers.setDateFinished(null);
+                booksUsers.setDateStarted(null);
+                booksUsers.setCurrentPage(null);
+                break;
+        }
     }
 
     @Override

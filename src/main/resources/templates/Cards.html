@@ -72,7 +72,7 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    <small class="date" th:text="${book.dateCreated}"></small>
+                    <small class="date" th:text="${#dates.format(book.dateCreated, 'MMM dd yyyy')}"></small>
                     <small class="page-count" th:text="${book.pageCount}"></small>
                 </div>
             </div>

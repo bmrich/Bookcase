@@ -9,15 +9,17 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 @Repository
 public class UserDoaImpl implements UserDao {
 
-    @Autowired
     private SessionFactory sessionFactory;
+
+    @Autowired
+    public UserDoaImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     @Override
     @Transactional(dontRollbackOn = UsernameNotFoundException.class)

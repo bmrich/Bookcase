@@ -18,8 +18,12 @@ import static com.rich.bryan.services.Utils.SortMethod.getSortMethod;
 @Service
 public class ShelvesServiceImpl implements ShelvesService {
 
-    @Autowired
     private ShelvesDao shelvesDao;
+
+    @Autowired
+    public ShelvesServiceImpl(ShelvesDao shelvesDao) {
+        this.shelvesDao = shelvesDao;
+    }
 
     @Override
     @Transactional
@@ -59,15 +63,12 @@ public class ShelvesServiceImpl implements ShelvesService {
         List<String> shelf = shelvesDao.getShelvesBookIsOn(username, isbn13);
 
         List<Object[]> objects = new ArrayList<>();
-        int i = 0;
         for (Object[] shelfName : shelves){
-
             if (shelf.contains(shelfName[0])){
                 objects.add(new Object[]{true, shelfName[0]});
             } else {
                 objects.add(new Object[]{false, shelfName[0]});
             }
-            i++;
         }
         return objects;
     }
@@ -127,37 +128,8 @@ public class ShelvesServiceImpl implements ShelvesService {
 
     @Override
     @Transactional
-    public Map<String, Integer> updateState(BooksUsers bu, String username) {
-
-        BooksUsers booksUsers = shelvesDao.getBooksUsers(bu.getId());
-
-        if(bu.getState().equals("CR")) {
-
-            booksUsers.setState("CR");
-            booksUsers.setDateFinished(null);
-            booksUsers.setDateStarted(bu.getDateStarted());
-            booksUsers.setCurrentPage(bu.getCurrentPage());
-
-        } else if (bu.getState().equals("CRU")){
-
-            booksUsers.setCurrentPage(bu.getCurrentPage());
-
-        } else if(bu.getState().equals("R")){
-
-            booksUsers.setState("R");
-            booksUsers.setDateFinished(bu.getDateFinished());
-            booksUsers.setDateStarted(null);
-            booksUsers.setCurrentPage(null);
-
-        } else if(bu.getState().equals("TR")){
-
-            booksUsers.setState("TR");
-            booksUsers.setDateFinished(null);
-            booksUsers.setDateStarted(null);
-            booksUsers.setCurrentPage(null);
-        }
-
-        return numBooksOnShelf(username);
+    public void updateState(BooksUsers bu) {
+        shelvesDao.getBooksUsers(bu);
     }
 
     @Override

@@ -37,8 +37,6 @@ public class GoogleBooksApiDaoImpl implements GoogleBooksApiDao {
         }
         in.close();
 
-        JSONObject jsonObj = new JSONObject(response.toString());
-
-        return jsonObj;
+        return new JSONObject(response.toString());
     }
 }

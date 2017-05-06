@@ -9,7 +9,7 @@ $(document).ready(function () {
     $('#newShelfInput').blur(function () {
         $(this).closest('div').removeClass('has-error');
     });
-    $('#newShelf').on('hide.bs.modal', function (e) {
+    $('#newShelf').on('hide.bs.modal', function () {
         $('#newShelfInput').closest('div').removeClass('has-error');
     });
 
@@ -26,6 +26,19 @@ $(document).ready(function () {
         document.getElementById('to-read-submit').addEventListener('click', toRead, false);
         document.getElementById('start-date-submit').addEventListener('click', startDate, false);
         document.getElementById('date-finished-submit').addEventListener('click', dateFinished, false);
+    }
+
+    if(document.getElementById('des-container') != null){
+        let id = document.getElementById('api-id').value;
+        let url = 'https://www.googleapis.com/books/v1/volumes/'+id;
+        $.get(url, function(data){
+            let des = data.volumeInfo.description;
+            let res = document.getElementById('des-container');
+
+            $.parseHTML(des).forEach(function (elem) {
+                res.appendChild(elem);
+            });
+        });
     }
 
     $('#delete-book').click(function () {
@@ -60,6 +73,17 @@ $(document).ready(function () {
         $('#err3-message').addClass('hidden');
         $('#date-finished-input').val('');
     });
+
+    $('#updateModal').on('hide.bs.modal', function () {
+        $('#err5-message').addClass('hidden');
+        $('#err5-group').removeClass('has-error');
+        $('#update-page-btn').off('click');
+
+        $('#err4-message').addClass('hidden');
+        $('#err4-group').removeClass('has-error');
+        $('#update-input-btn').off('click');
+        $('#update-input').val('');
+    })
 });
 
 function remove_err_1() {
@@ -112,8 +136,7 @@ function renameShelf() {
     if ($.trim(val) == '') {
         selector.closest('div').addClass('has-error');
     } else {
-        $.get('/renameShelf/' + name + '/' + val);
-        window.location.href = '/getShelf/' + encodeURIComponent(val);
+        window.location.href = '/renameShelf/' + name + '/' + val;
     }
 }
 
@@ -228,7 +251,7 @@ function dateFinished() {
     if (today < date){
         let message = $('#err3-message');
         message.removeClass('hidden');
-        message.text('Date is out of range')
+        message.text('Date is out of range');
         $('#err3-group').addClass('has-error');
         has_errors = true;
     }
@@ -274,33 +297,80 @@ function toRead(){
 function update(index) {
     let buid = $('#update-buid_'+index).val();
     let author = $('#update-author_'+index).text();
-    let pageCout = Number($('#update-pageCount_'+index).val());
+    let page_count = Number($('#update-pageCount_'+index).val());
     let currentPage = Number($('#update-currentPage_'+index).val());
     $('#updateModalLabel').text('Update ' + author);
-    $('#update-page').val(currentPage);
-    $('#update-page').attr({"max":pageCout-1});
-    $('#update-page-btn').click({buid:buid, index:index, pageCount:pageCout},update_page);
+    $('#update-page')
+        .val(currentPage)
+        .attr({"max":page_count-1});
+    $('#update-page-btn').click({buid:buid, index:index, pageCount:page_count},update_page);
+    $('#update-input-btn').click({buid:buid},update_finished);
     $('#updateModal').modal('show');
 }
 
 function update_page(event) {
-    let buid = event.data.buid;
-    let currentPage = $('#update-page').val();
+    let currentPage = Number($('#update-page').val());
+    let page_count = Number($('#update-pageCount_'+event.data.index).val());
+    let has_errors = false;
 
-    let bu_arr = {'id':buid, 'state':'CRU', 'currentPage':currentPage};
-    $.get('/updatecr', bu_arr, function (data) {
+    if(currentPage < 1 || currentPage > (page_count-1)){
+        $('#err5-group').addClass('has-error');
+        $('#err5-message')
+            .removeClass('hidden')
+            .text('Current Page must be between 1 and '+(page_count-1));
+        has_errors = true;
+    }
+
+    if(!has_errors) {
+        let buid = event.data.buid;
+        let bu_arr = {'id': buid, 'state': 'CRU', 'currentPage': currentPage};
+        $.get('/updatecr', bu_arr, function (data) {
+            $('#updateModal').modal('hide');
+            let progress = Math.round((Number(currentPage) / event.data.pageCount) * 100);
+            $('#progress-bar_' + event.data.index)
+                .text(progress + '%')
+                .attr({
+                    'aria-valuenow': progress
+                })
+                .css('width', progress + '%');
+            $('#update-current_' + event.data.index).text('  ' + currentPage);
+            $('#update-currentPage_' + event.data.index).val(currentPage);
+        });
         $('#updateModal').modal('hide');
-        let progress = Math.round((Number(currentPage)/event.data.pageCount)*100);
-        $('#progress-bar_'+event.data.index)
-            .text(progress + '%')
-            .attr({
-                'aria-valuenow': progress
-            })
-            .css('width',progress+'%');
-        $('#update-current_'+event.data.index).text('  '+currentPage);
-        $('#update-currentPage_'+event.data.index).val(currentPage);
-        $('#update-page-btn').off('click');
-    });
+    }
+}
+
+function update_finished(event) {
+    let input_date = $('#update-input').val();
+    let has_errors = false;
+
+    let user_input = $.trim(input_date);
+    if(user_input == ''){
+        let message = $('#err4-message');
+        message.removeClass('hidden');
+        message.text('Field cannot be blank');
+        $('#err4-group').addClass('has-error');
+        has_errors = true;
+    }
+
+    let user_date = new Date(user_input);
+    let diff = user_date.getTimezoneOffset();
+    let date = new Date(user_date.getTime() + diff*60000);
+    let today = new Date();
+    if (today < date){
+        let message = $('#err4-message');
+        message.removeClass('hidden');
+        message.text('Date is out of range');
+        $('#err4-group').addClass('has-error');
+        has_errors = true;
+    }
+
+    if(!has_errors){
+        let bu_arr = {'id':event.data.buid,'state':'R', 'dateFinished':user_input};
+        $.get('/state', bu_arr, function () {
+            window.location.href = '/perm/R/10';
+        })
+    }
 }
 
 function booksearch() {
@@ -352,7 +422,7 @@ function parseData(data) {
         let tr = document.createElement('tr');
 
         let cover = document.createElement('td');
-        let img = document.createElement('img')
+        let img = document.createElement('img');
         img.className = 'cover';
         if (typeof data.items[i].volumeInfo.imageLinks != 'undefined') {
             img.src = data.items[i].volumeInfo.imageLinks.smallThumbnail;
@@ -360,7 +430,12 @@ function parseData(data) {
         cover.appendChild(img);
 
         let title = document.createElement('td');
-        title.textContent = data.items[i].volumeInfo.title;
+        let title_a = document.createElement('a');
+        // title_a.href = data.items[i].volumeInfo.infoLink;
+        title_a.href = 'https://books.google.com/books?id='+ data.items[i].id +'&hl=&source=gbs_api'
+        title_a.setAttribute('target', '_blank');
+        title_a.textContent = data.items[i].volumeInfo.title;
+        title.appendChild(title_a);
 
         let author = document.createElement('td');
         author.textContent = data.items[i].volumeInfo.authors;
@@ -423,8 +498,8 @@ function parseData(data) {
     table.appendChild(tableBody);
     tableWrapper.appendChild(table);
 
-    let heading = document.createElement('h1');
-    heading.textContent = 'Search Results';
+    let heading = document.createElement('h2');
+    heading.textContent = 'Google Books search results';
 
     results.innerHTML = '';
     results.appendChild(heading);

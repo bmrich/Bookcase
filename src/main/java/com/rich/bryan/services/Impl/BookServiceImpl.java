@@ -16,8 +16,13 @@ import static com.rich.bryan.services.Utils.SortMethod.getSortMethod;
 
 @Service
 public class BookServiceImpl implements BookService {
-    @Autowired
+
     private BookDao bookDao;
+
+    @Autowired
+    public BookServiceImpl(BookDao bookDao) {
+        this.bookDao = bookDao;
+    }
 
     @Override
     @Transactional
@@ -78,9 +83,7 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional(noRollbackFor = NullPointerException.class)
     public Book getSingleBook(String isbn13) throws NullPointerException {
-
-        Book book = bookDao.getSingleBook(isbn13);
-
-        return book;
+        List<Book> book = bookDao.getSingleBook(isbn13);
+        return book.get(0);
     }
 }

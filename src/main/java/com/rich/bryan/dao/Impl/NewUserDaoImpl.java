@@ -10,17 +10,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 @Repository
 public class NewUserDaoImpl implements NewUserDao {
 
-    @Autowired
     private SessionFactory sessionFactory;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    public NewUserDaoImpl(SessionFactory sessionFactory, PasswordEncoder passwordEncoder) {
+        this.sessionFactory = sessionFactory;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public void newUser(RegisterForm registerForm) {

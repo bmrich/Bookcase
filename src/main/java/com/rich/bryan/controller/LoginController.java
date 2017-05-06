@@ -15,8 +15,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class LoginController {
 
-    @Autowired
     private NewUserService newUserService;
+
+    @Autowired
+    public LoginController(NewUserService newUserService) {
+        this.newUserService = newUserService;
+    }
 
     @GetMapping("/login")
     public String login(){

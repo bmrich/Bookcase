@@ -482,6 +482,7 @@ function parseData(data) {
 
                 form.action = '/save/' + data.items[i].id;
                 form.method = 'GET';
+
                 form.appendChild(button);
 
                 save.appendChild(form);

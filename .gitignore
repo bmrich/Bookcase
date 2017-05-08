@@ -1,5 +1,7 @@
 target/
 src/test/
+src/main/resources/static/img
+src/main/resources/static/fonts
 !.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###

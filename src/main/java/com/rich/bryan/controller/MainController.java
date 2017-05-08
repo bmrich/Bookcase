@@ -33,7 +33,7 @@ public class MainController {
     }
 
     @GetMapping("/save/{id}")
-    public String save(@PathVariable String id, Principal principal){
+    public String save(@PathVariable("id") String id, Principal principal){
         String isbn13 = saveBookService.saveBook(id, principal.getName());
         return "redirect:/bookinfo/" + isbn13;
     }

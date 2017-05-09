@@ -1,6 +1,6 @@
 package com.rich.bryan.security;
 
-import com.rich.bryan.dao.UserDao;
+import com.rich.bryan.dao.UserDetailsDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,16 +15,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
-    private UserDao userDao;
+    private UserDetailsDao userDetailsDao;
 
     @Autowired
-    public SecurityConfig(UserDao userDao) {
-        this.userDao = userDao;
+    public SecurityConfig(UserDetailsDao userDetailsDao) {
+        this.userDetailsDao = userDetailsDao;
     }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDao).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(userDetailsDao).passwordEncoder(passwordEncoder());
     }
 
     @Override

@@ -5,42 +5,59 @@
 <head lang="en">
 </head>
 <body>
-<!--Everything Goes Here-->
+
 <div layout:fragment="content">
     <div class="card-background">
         <div class="container-fluid">
+
             <div class="row">
                 <div class="col-sm-9">
                     <div class="row">
-                    <div class="col-xs-5 col-sm-my">
-                        <img class="info-page-image" th:src="${results.imageUrl}"/>
-                    </div>
-                    <div class="col-xs-7  col-sm-my">
-                        <h2 th:text="${results.title}"></h2>
-                        <div th:each="author : ${results.authors}">
-                            <a th:href="@{'/author/'+${author.id}}">
-                                <span id="author-text" class="author-span" th:text="' '+${author.firstName} +' '+ ${author.lastName}"></span>
+
+                        <!--Cover-->
+                        <div class="col-xs-5 col-sm-my">
+                            <img class="info-page-image" th:src="${results.imageUrl}"/>
+                        </div>
+
+                        <div class="col-xs-7  col-sm-my">
+
+                            <!--Title-->
+                            <h2 th:text="${results.title}"></h2>
+
+                            <!--Author-->
+                            <div th:each="author : ${results.authors}">
+                                <a th:href="@{/list/author(id=${author.id})}">
+                                    <span id="author-text" class="author-span" th:text="' '+${author.firstName} +' '+ ${author.lastName}"></span>
+                                </a>
+                            </div>
+
+                            <!--Book Info Table-->
+                            <div class="page-info-list">
+                                <ul class="list-unstyled">
+                                    <li><label>Date Added:</label><span th:text="' '+${#dates.format(results.dateCreated, 'MMM dd yyyy')}"></span></li>
+                                    <li><label>Publisher:</label><span th:text="' '+${results.publisher.publisher}"></span></li>
+                                    <li><label>Date Published:</label><span th:text="' '+${results.datePublished}"></span></li>
+                                    <li><label>ISBN-13:</label><span th:text="' '+${results.isbn13}"></span></li>
+                                    <li><label>ISBN:</label><span th:text="' '+${results.isbn10}"></span></li>
+                                    <li><label>Page Count:</label><span id="page-count" th:text="' '+${results.pageCount}"></span></li>
+                                </ul>
+                            </div>
+
+                            <!--Delete Button-->
+                            <a href="" class="btn-sm btn-danger" data-toggle="modal" data-target="#myModal">Delete Book</a>
+
+                            <br/>
+                            <br/>
+                            <br/>
+
+                            <!--Google Preview-->
+                            <a th:href="@{'https://books.google.com/books'(id=${results.googleApiId}, hl='', source='gbs_api')}" target="_blank">
+                                <img src="https://www.google.com/intl/en/googlebooks/images/gbs_preview_button1.png"/>
                             </a>
                         </div>
-                        <div class="page-info-list">
-                            <ul class="list-unstyled">
-                                <li><label>Date Added:</label><span th:text="' '+${#dates.format(results.dateCreated, 'MMM dd yyyy')}"></span></li>
-                                <li><label>Publisher:</label><span th:text="' '+${results.publisher.publisher}"></span></li>
-                                <li><label>Date Published:</label><span th:text="' '+${results.datePublished}"></span></li>
-                                <li><label>ISBN-13:</label><span th:text="' '+${results.isbn13}"></span></li>
-                                <li><label>ISBN:</label><span th:text="' '+${results.isbn10}"></span></li>
-                                <li><label>Page Count:</label><span id="page-count" th:text="' '+${results.pageCount}"></span></li>
-                            </ul>
-                        </div>
-                        <a href="" class="btn-sm btn-danger" data-toggle="modal" data-target="#myModal">Delete Book</a>
-                        <br/>
-                        <br/>
-                        <br/>
-                        <a th:href="@{'https://books.google.com/books'(id=${results.googleApiId}, hl='', source='gbs_api')}" target="_blank">
-                            <img src="https://www.google.com/intl/en/googlebooks/images/gbs_preview_button1.png"/>
-                        </a>
                     </div>
-                    </div>
+
+                    <!--Description-->
                     <div class="row">
                         <div class="col-sm-12">
                             <br/>
@@ -51,7 +68,10 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
+
+                <!--Shelves-->
                 <div class="col-sm-3">
                     <div class="shelf-checkbox-div">
                         <h4>Shelves</h4>
@@ -81,7 +101,7 @@
                             <li class="shelf-checkbox list-group-item" th:each="shelf,iter :${isOnShelf}">
                                 <input th:id="'checkbox'+${iter.index}" type="checkbox" th:value="${shelf[1]}"
                                        th:checked="${shelf[0]}"
-                                       th:onchange="'shelfChange(\'' + ${iter.index} + '\')'" />
+                                       th:onchange="'shelf_change(\'' + ${iter.index} + '\')'" />
                                 <label th:for="'checkbox'+${iter.index}" th:text="${shelf[1]}"
                                        th:title="${shelf[1]}"></label>
                             </li>
@@ -89,10 +109,16 @@
                         <br/>
                     </div>
                 </div>
+
             </div>
+
         </div>
     </div>
+
+    <!--Book Id-->
     <input id="book-id" type="hidden" name="id" th:value="${results.id}"/>
+
+    <!--Delete Modal-->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -105,13 +131,13 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <button id="delete-book" type="button" class="btn btn-danger">Delete Book</button>
+                    <button id="delete-book" type="button" class="btn btn-danger" onclick="delete_book()">Delete Book</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal -->
+    <!-- Currently Reading Modal -->
     <div class="modal fade" id="startDateModal" tabindex="-1" role="dialog" aria-labelledby="startDateModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -141,13 +167,13 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button id="start-date-submit" type="button" class="btn btn-primary">Save changes</button>
+                    <button id="start-date-submit" type="button" class="btn btn-primary" onclick="start_date()">Save changes</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal -->
+    <!-- Completed Modal -->
     <div class="modal fade" id="finishDateModal" tabindex="-1" role="dialog" aria-labelledby="finishDateModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -169,13 +195,13 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button id="date-finished-submit" type="button" class="btn btn-primary">Save changes</button>
+                    <button id="date-finished-submit" type="button" class="btn btn-primary" onclick="date_finished()">Save changes</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal -->
+    <!-- To Read Modal -->
     <div class="modal fade" id="toReadModal" tabindex="-1" role="dialog" aria-labelledby="toReadModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -188,12 +214,13 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button id="to-read-submit" type="button" class="btn btn-danger">Save changes</button>
+                    <button id="to-read-submit" type="button" class="btn btn-danger" onclick="to_read()">Save changes</button>
                 </div>
             </div>
         </div>
     </div>
+
 </div>
-<!--End Everything-->
+
 </body>
 </html>

@@ -16,32 +16,42 @@
                     <span class="caret"></span>
                 </button>
                 <ul th:if="${dropdown} == 'books'" class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                    <li><a th:href="@{'/books/1'}">Date Added: New to Old</a></li>
-                    <li><a th:href="@{'/books/2'}">Date Added: Old to New</a></li>
-                    <li><a th:href="@{'/books/3'}">Title: A to Z</a></li>
-                    <li><a th:href="@{'/books/4'}">Title: Z to A</a></li>
-                    <li><a th:href="@{'/books/5'}">Author: A to Z</a></li>
-                    <li><a th:href="@{'/books/6'}">Author: Z to A</a></li>
-                    <li><a th:href="@{'/books/11'}">Page Count: Low to High</a></li>
-                    <li><a th:href="@{'/books/12'}">Page Count: High to Low</a></li>
+                    <li><a th:href="@{/list/myBooks(sort=1)}">Date Added: New to Old</a></li>
+                    <li><a th:href="@{/list/myBooks(sort=2)}">Date Added: Old to New</a></li>
+                    <li><a th:href="@{/list/myBooks(sort=3)}">Title: A to Z</a></li>
+                    <li><a th:href="@{/list/myBooks(sort=4)}">Title: Z to A</a></li>
+                    <li><a th:href="@{/list/myBooks(sort=5)}">Author: A to Z</a></li>
+                    <li><a th:href="@{/list/myBooks(sort=6)}">Author: Z to A</a></li>
+                    <li><a th:href="@{/list/myBooks(sort=11)}">Page Count: Low to High</a></li>
+                    <li><a th:href="@{/list/myBooks(sort=12)}">Page Count: High to Low</a></li>
                 </ul>
                 <ul th:if="${dropdown} == 'author'" class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                    <li><a th:href="@{'/author/'+${authorId}+'/1'}">Date Added: New to Old</a></li>
-                    <li><a th:href="@{'/author/'+${authorId}+'/2'}">Date Added: Old to New</a></li>
-                    <li><a th:href="@{'/author/'+${authorId}+'/3'}">Title: A to Z</a></li>
-                    <li><a th:href="@{'/author/'+${authorId}+'/4'}">Title: Z to A</a></li>
-                    <li><a th:href="@{'/author/'+${authorId}+'/11'}">Page Count: Low to High</a></li>
-                    <li><a th:href="@{'/author/'+${authorId}+'/12'}">Page Count: High to Low</a></li>
+                    <li><a th:href="@{/list/author(id=${authorId}, sort=1)}">Date Added: New to Old</a></li>
+                    <li><a th:href="@{/list/author(id=${authorId}, sort=2)}">Date Added: Old to New</a></li>
+                    <li><a th:href="@{/list/author(id=${authorId}, sort=3)}">Title: A to Z</a></li>
+                    <li><a th:href="@{/list/author(id=${authorId}, sort=4)}">Title: Z to A</a></li>
+                    <li><a th:href="@{/list/author(id=${authorId}, sort=11)}">Page Count: Low to High</a></li>
+                    <li><a th:href="@{/list/author(id=${authorId}, sort=12)}">Page Count: High to Low</a></li>
                 </ul>
                 <ul th:if="${dropdown} == 'shelf'" class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                    <li><a th:href="@{'/getShelf/'+${pageName}+'/1'}">Date Added: New to Old</a></li>
-                    <li><a th:href="@{'/getShelf/'+${pageName}+'/2'}">Date Added: Old to New</a></li>
-                    <li><a th:href="@{'/getShelf/'+${pageName}+'/3'}">Title: A to Z</a></li>
-                    <li><a th:href="@{'/getShelf/'+${pageName}+'/4'}">Title: Z to A</a></li>
-                    <li><a th:href="@{'/getShelf/'+${pageName}+'/5'}">Author: A to Z</a></li>
-                    <li><a th:href="@{'/getShelf/'+${pageName}+'/6'}">Author: Z to A</a></li>
-                    <li><a th:href="@{'/getShelf/'+${pageName}+'/11'}">Page Count: Low to High</a></li>
-                    <li><a th:href="@{'/getShelf/'+${pageName}+'/12'}">Page Count: High to Low</a></li>
+                    <li><a th:href="@{/list/shelf(name=${pageName}, sort=1)}">Date Added: New to Old</a></li>
+                    <li><a th:href="@{/list/shelf(name=${pageName}, sort=2)}">Date Added: Old to New</a></li>
+                    <li><a th:href="@{/list/shelf(name=${pageName}, sort=3)}">Title: A to Z</a></li>
+                    <li><a th:href="@{/list/shelf(name=${pageName}, sort=4)}">Title: Z to A</a></li>
+                    <li><a th:href="@{/list/shelf(name=${pageName}, sort=5)}">Author: A to Z</a></li>
+                    <li><a th:href="@{/list/shelf(name=${pageName}, sort=6)}">Author: Z to A</a></li>
+                    <li><a th:href="@{/list/shelf(name=${pageName}, sort=11)}">Page Count: Low to High</a></li>
+                    <li><a th:href="@{/list/shelf(name=${pageName}, sort=12)}">Page Count: High to Low</a></li>
+                </ul>
+                <ul th:if="${dropdown} == 'toRead'" class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <li><a th:href="@{/list/toRead(sort=1)}">Date Added: New to Old</a></li>
+                    <li><a th:href="@{/list/toRead(sort=2)}">Date Added: Old to New</a></li>
+                    <li><a th:href="@{/list/toRead(sort=3)}">Title: A to Z</a></li>
+                    <li><a th:href="@{/list/toRead(sort=4)}">Title: Z to A</a></li>
+                    <li><a th:href="@{/list/toRead(sort=5)}">Author: A to Z</a></li>
+                    <li><a th:href="@{/list/toRead(sort=6)}">Author: Z to A</a></li>
+                    <li><a th:href="@{/list/toRead(sort=11)}">Page Count: Low to High</a></li>
+                    <li><a th:href="@{/list/toRead(sort=12)}">Page Count: High to Low</a></li>
                 </ul>
             </div>
             <div class="dropdown" th:if="${showOptions}">
@@ -61,12 +71,12 @@
             <div class="card-content">
                 <div class="card-details-container">
                     <div class="card-title limit-2">
-                        <h4><a th:href="@{'/bookinfo/'+${book.isbn13}}" th:text="${book.title}" th:title="${book.title}"></a></h4>
+                        <h4><a th:href="@{'/book/info/'+${book.isbn13}}" th:text="${book.title}" th:title="${book.title}"></a></h4>
                     </div>
                     <hr/>
                     <div class="card-author limit-2">
                         <p th:each="author :${book.authors}">
-                            <a th:href="@{'/author/'+${author.id}}" th:text="${author.lastName} +', '+ ${author.firstName}"
+                            <a th:href="@{/list/author(id=${author.id})}" th:text="${author.lastName} +', '+ ${author.firstName}"
                                th:title="${author.lastName} +', '+ ${author.firstName}"></a>
                         </p>
                     </div>
@@ -96,7 +106,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <button id="renameShelfSave" type="button" class="btn btn-primary" onclick="renameShelf()">Save Changes</button>
+                    <button id="renameShelfSave" type="button" class="btn btn-primary" onclick="rename_shelf()">Save Changes</button>
                 </div>
             </div>
         </div>
@@ -114,7 +124,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <button id="deleteShelfSave" type="button" class="btn btn-danger" onclick="deleteShelf()">Delete</button>
+                    <button id="deleteShelfSave" type="button" class="btn btn-danger" onclick="delete_shelf()">Delete</button>
                 </div>
             </div>
         </div>

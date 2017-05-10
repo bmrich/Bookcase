@@ -186,8 +186,14 @@ body {
 #search-input{
     background: white url(https://developers.google.com/books/images/google_watermark.gif) no-repeat;
 }
+#search-input:focus {
+    background: none;
+}
 #search-input-nav{
     background: white url(https://developers.google.com/books/images/google_watermark.gif) no-repeat;
+}
+#search-input-nav:focus {
+    background: white;
 }
 .sidebar-search {
     margin: 5px;
@@ -544,7 +550,18 @@ body {
 }
 .card_cr_details p {
     padding-left: 5px;
-    margin: 3px 0px;
+    margin: 3px 0;
+}
+.card_c_details {
+    background-color: var(--secondary-light);
+    width: 100%;
+    border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
+    border-top: 1px solid #eee;
+}
+.card_c_details p {
+    padding-left: 5px;
+    margin: 3px 0;
 }
 .cr_details_info {
     display: flex;
@@ -590,4 +607,10 @@ body {
     .card_cr {
         width: 100%;
     }
+}
+.input-fix {
+    height: 33px;
+}
+.current-page-input-fix {
+    height: inherit;
 }

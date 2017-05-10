@@ -102,6 +102,7 @@ public class SaveBookServiceImpl implements SaveBookService {
                 String imgTemp = imageLinksObj.optString("thumbnail");
                 imgTemp = imgTemp.replace("&edge=curl", "");
                 imgTemp = imgTemp.replace("zoom=1", "zoom=2");
+                imgTemp = imgTemp.replace("http://", "//");
                 res.setImageUrl(imgTemp);
             } else {
                 res.setImageUrl(null);

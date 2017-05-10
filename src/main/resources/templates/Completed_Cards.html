@@ -45,7 +45,7 @@
                     <hr/>
                     <div class="card-author limit-2">
                         <p th:each="author :${book.authors}">
-                            <a th:href="@{'/author/'+${author.id}}" th:text="${author.lastName} +', '+ ${author.firstName}"
+                            <a th:href="@{/list/author(id=${author.id})}" th:text="${author.lastName} +', '+ ${author.firstName}"
                                th:title="${author.lastName} +', '+ ${author.firstName}"></a>
                         </p>
                     </div>

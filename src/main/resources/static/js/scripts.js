@@ -1,10 +1,11 @@
 $(document).ready(function () {
     let x930 = window.matchMedia("(max-width: 930px)");
-    widowSize930(x930);
-    x930.addListener(widowSize930);
+    widow_size_930(x930);
+    x930.addListener(widow_size_930);
 
-    document.getElementById('submit-btn').addEventListener('click', booksearch, false);
-    document.getElementById('submit-btn-nav').addEventListener('click', booksearchNav, false);
+    document.getElementById('overlay').addEventListener('click', show_hide, false);
+    document.getElementById('submit-btn').addEventListener('click', book_search, false);
+    document.getElementById('submit-btn-nav').addEventListener('click', book_search_nav, false);
 
     $('#newShelfInput').blur(function () {
         $(this).closest('div').removeClass('has-error');
@@ -20,14 +21,6 @@ $(document).ready(function () {
         $('#renameShelfInput').closest('div').removeClass('has-error');
     });
 
-    document.getElementById('overlay').addEventListener('click', showHide, false);
-
-    if(document.getElementById('bu-id') != null) {
-        document.getElementById('to-read-submit').addEventListener('click', toRead, false);
-        document.getElementById('start-date-submit').addEventListener('click', startDate, false);
-        document.getElementById('date-finished-submit').addEventListener('click', dateFinished, false);
-    }
-
     if(document.getElementById('des-container') != null){
         let id = document.getElementById('api-id').value;
         let url = 'https://www.googleapis.com/books/v1/volumes/'+id;
@@ -40,11 +33,6 @@ $(document).ready(function () {
             });
         });
     }
-
-    $('#delete-book').click(function () {
-        let id = $('#book-id').val();
-        window.location.href = '/delete/' + id;
-    });
 
     $('[name="readingState"]:radio').on('click', function (e) {
         e.preventDefault();
@@ -83,7 +71,7 @@ $(document).ready(function () {
         $('#err4-group').removeClass('has-error');
         $('#update-input-btn').off('click');
         $('#update-input').val('');
-    })
+    });
 });
 
 function remove_err_1() {
@@ -96,7 +84,7 @@ function remove_err_2() {
     $('#err2-message').addClass('hidden');
 }
 
-function widowSize930() {
+function widow_size_930() {
     if ($(window).width() < 930) {
         $('.sidebar-nav').addClass('sidebar-close-nav');
         $('.sidebar').addClass('sidebar-close');
@@ -106,7 +94,7 @@ function widowSize930() {
     $('#overlay').addClass('hidden');
 }
 
-function showHide() {
+function show_hide() {
     $('.sidebar-nav').toggleClass('sidebar-close-nav');
     $('.sidebar').toggleClass('sidebar-close');
     $('.sidebar-open-icon').toggleClass('sidebar-open-click');
@@ -117,53 +105,109 @@ function showHide() {
     }
 }
 
-function saveShelf() {
+function save_shelf() {
     let selector = $('#newShelfInput');
     let val = selector.val();
     if ($.trim(val) == '') {
         selector.closest('div').addClass('has-error');
     } else {
-        $.get('/createShelf/' + val, function (event) {
-            location.reload();
+        let token = $("meta[name='_csrf']").attr("content");
+        let header = $("meta[name='_csrf_header']").attr("content");
+        $.ajax({
+            url: '/shelf/create',
+            data: {shelfName: val},
+            type: 'POST',
+            beforeSend: function(request) {
+                request.setRequestHeader(header, token);
+            },
+            success: function () {
+                location.reload();
+            }
         });
     }
 }
 
-function renameShelf() {
+function rename_shelf() {
     let selector = $('#renameShelfInput');
     let name = $('#page-name').text();
     let val = selector.val();
     if ($.trim(val) == '') {
         selector.closest('div').addClass('has-error');
     } else {
-        window.location.href = '/renameShelf/' + name + '/' + val;
+        let token = $("meta[name='_csrf']").attr("content");
+        let header = $("meta[name='_csrf_header']").attr("content");
+        $.ajax({
+            url: '/shelf/rename',
+            type: 'POST',
+            data: {name:name, new:val},
+            beforeSend: function(request) {
+                request.setRequestHeader(header, token);
+            },
+            success: function () {
+                window.location.href = '/list/shelf?name='+val;
+            }
+        });
     }
 }
 
-function shelfChange(shelf) {
+function shelf_change(shelf) {
     let checkboxSelector = $('#checkbox' + shelf);
     let checked = checkboxSelector.is(':checked');
+
     let id = $('#book-id').val();
     let name = checkboxSelector.val();
+
+    let token = $("meta[name='_csrf']").attr("content");
+    let header = $("meta[name='_csrf_header']").attr("content");
+
     if (checked) {
-        $.get('/addToShelf/' + id + '/' + name, function (response) {
-            let obj = response[shelf];
-            $('#sidebar' + shelf).text(obj[1] - 1);
+        $.ajax({
+            url: '/shelf/add',
+            data: {shelfName: name, id: id},
+            type: 'POST',
+            beforeSend: function(request) {
+                request.setRequestHeader(header, token);
+            },
+            success: function (response) {
+                let obj = response[shelf];
+                $('#sidebar' + shelf).text(obj[1] - 1);
+            }
         });
     } else if (!checked) {
-        $.get('/removeFromShelf/' + id + '/' + name, function (response) {
-            let obj = response[shelf];
-            $('#sidebar' + shelf).text(obj[1] - 1);
+        $.ajax({
+            url: '/shelf/remove',
+            data: {shelfName: name, id: id},
+            type: 'POST',
+            beforeSend: function(request) {
+                request.setRequestHeader(header, token);
+            },
+            success: function (response) {
+                let obj = response[shelf];
+                $('#sidebar' + shelf).text(obj[1] - 1);
+            }
         });
     }
 }
 
-function deleteShelf() {
+function delete_shelf() {
     let shelf = $('#page-name').text();
-    window.location.href = '/deleteShelf/' + shelf;
+
+    let token = $("meta[name='_csrf']").attr("content");
+    let header = $("meta[name='_csrf_header']").attr("content");
+    $.ajax({
+        url: '/shelf/delete',
+        data: {name: shelf},
+        type: 'POST',
+        beforeSend: function(request) {
+            request.setRequestHeader(header, token);
+        },
+        success: function (response) {
+            window.location.href = '/';
+        }
+    });
 }
 
-function startDate() {
+function start_date() {
     let has_errors = false;
 
     let user_input = $('#start-date-input').val();
@@ -216,11 +260,21 @@ function startDate() {
         let arr = $('#start-date-form :input[type=date], input[type=number]').serializeArray();
         arr.push({name: 'id', value: $('#bu-id').val()}, {name: 'state', value: 'CR'});
 
-        $.get('/state', arr, function (data) {
-            $('#all-badge').text(data["ALL"]);
-            $('#tr-badge').text(data["TR"]);
-            $('#cr-badge').text(data["CR"]);
-            $('#r-badge').text(data["R"]);
+        let token = $("meta[name='_csrf']").attr("content");
+        let header = $("meta[name='_csrf_header']").attr("content");
+        $.ajax({
+            url: '/shelf/state',
+            data: arr,
+            type: 'POST',
+            beforeSend: function(request) {
+                request.setRequestHeader(header, token);
+            },
+            success: function (data) {
+                $('#all-badge').text(data["ALL"]);
+                $('#tr-badge').text(data["TR"]);
+                $('#cr-badge').text(data["CR"]);
+                $('#r-badge').text(data["R"]);
+            }
         });
 
         let radio = document.getElementById('CR');
@@ -232,7 +286,7 @@ function startDate() {
     }
 }
 
-function dateFinished() {
+function date_finished() {
     let has_errors = false;
 
     let user_input = $.trim($('#date-finished-input').val());
@@ -260,11 +314,21 @@ function dateFinished() {
         let arr = $('#date-finished-form :input[type=date]').serializeArray();
         arr.push({name: 'id', value: $('#bu-id').val()}, {name: 'state', value: 'R'});
 
-        $.get('/state', arr, function (data) {
-            $('#all-badge').text(data["ALL"]);
-            $('#tr-badge').text(data["TR"]);
-            $('#cr-badge').text(data["CR"]);
-            $('#r-badge').text(data["R"]);
+        let token = $("meta[name='_csrf']").attr("content");
+        let header = $("meta[name='_csrf_header']").attr("content");
+        $.ajax({
+            url: '/shelf/state',
+            data: arr,
+            type: 'POST',
+            beforeSend: function(request) {
+                request.setRequestHeader(header, token);
+            },
+            success: function (data) {
+                $('#all-badge').text(data["ALL"]);
+                $('#tr-badge').text(data["TR"]);
+                $('#cr-badge').text(data["CR"]);
+                $('#r-badge').text(data["R"]);
+            }
         });
 
         let radio = document.getElementById('R');
@@ -276,14 +340,24 @@ function dateFinished() {
     }
 }
 
-function toRead(){
+function to_read(){
     let arr = [{name: 'id', value: $('#bu-id').val()},{name: 'state', value: 'TR'}];
 
-    $.get('/state', arr, function (data) {
-        $('#all-badge').text(data["ALL"]);
-        $('#tr-badge').text(data["TR"]);
-        $('#cr-badge').text(data["CR"]);
-        $('#r-badge').text(data["R"]);
+    let token = $("meta[name='_csrf']").attr("content");
+    let header = $("meta[name='_csrf_header']").attr("content");
+    $.ajax({
+        url: '/shelf/state',
+        data: arr,
+        type: 'POST',
+        beforeSend: function(request) {
+            request.setRequestHeader(header, token);
+        },
+        success: function (data) {
+            $('#all-badge').text(data["ALL"]);
+            $('#tr-badge').text(data["TR"]);
+            $('#cr-badge').text(data["CR"]);
+            $('#r-badge').text(data["R"]);
+        }
     });
 
     let radio = document.getElementById('TR');
@@ -308,6 +382,23 @@ function update(index) {
     $('#updateModal').modal('show');
 }
 
+function delete_book() {
+    let id = $('#book-id').val();
+    let token = $("meta[name='_csrf']").attr("content");
+    let header = $("meta[name='_csrf_header']").attr("content");
+    $.ajax({
+        url: '/book/delete',
+        type: 'POST',
+        data: {id:id},
+        beforeSend: function(request) {
+            request.setRequestHeader(header, token);
+        },
+        success: function () {
+            window.location.href = '/';
+        }
+    });
+}
+
 function update_page(event) {
     let currentPage = Number($('#update-page').val());
     let page_count = Number($('#update-pageCount_'+event.data.index).val());
@@ -324,17 +415,28 @@ function update_page(event) {
     if(!has_errors) {
         let buid = event.data.buid;
         let bu_arr = {'id': buid, 'state': 'CRU', 'currentPage': currentPage};
-        $.get('/updatecr', bu_arr, function (data) {
-            $('#updateModal').modal('hide');
-            let progress = Math.round((Number(currentPage) / event.data.pageCount) * 100);
-            $('#progress-bar_' + event.data.index)
-                .text(progress + '%')
-                .attr({
-                    'aria-valuenow': progress
-                })
-                .css('width', progress + '%');
-            $('#update-current_' + event.data.index).text('  ' + currentPage);
-            $('#update-currentPage_' + event.data.index).val(currentPage);
+
+        let token = $("meta[name='_csrf']").attr("content");
+        let header = $("meta[name='_csrf_header']").attr("content");
+        $.ajax({
+            url: '/shelf/progress',
+            type: 'POST',
+            data: bu_arr,
+            beforeSend: function(request) {
+                request.setRequestHeader(header, token);
+            },
+            success: function (data) {
+                $('#updateModal').modal('hide');
+                let progress = Math.round((Number(currentPage) / event.data.pageCount) * 100);
+                $('#progress-bar_' + event.data.index)
+                    .text(progress + '%')
+                    .attr({
+                        'aria-valuenow': progress
+                    })
+                    .css('width', progress + '%');
+                $('#update-current_' + event.data.index).text('  ' + currentPage);
+                $('#update-currentPage_' + event.data.index).val(currentPage);
+            }
         });
         $('#updateModal').modal('hide');
     }
@@ -367,13 +469,24 @@ function update_finished(event) {
 
     if(!has_errors){
         let bu_arr = {'id':event.data.buid,'state':'R', 'dateFinished':user_input};
-        $.get('/state', bu_arr, function () {
-            window.location.href = '/perm/R/10';
-        })
+
+        let token = $("meta[name='_csrf']").attr("content");
+        let header = $("meta[name='_csrf_header']").attr("content");
+        $.ajax({
+            url: '/shelf/state',
+            data: bu_arr,
+            type: 'POST',
+            beforeSend: function(request) {
+                request.setRequestHeader(header, token);
+            },
+            success: function (data) {
+                window.location.href = '/list/completed';
+            }
+        });
     }
 }
 
-function booksearch() {
+function book_search() {
     let search = document.getElementById('search-input').value;
 
     $.ajax({
@@ -381,12 +494,12 @@ function booksearch() {
         dataType: 'json',
         type: 'GET',
         success: function (data) {
-            parseData(data);
+            parse_data(data);
         }
     });
 }
 
-function booksearchNav() {
+function book_search_nav() {
     let search = document.getElementById('search-input-nav').value;
 
     $.ajax({
@@ -394,13 +507,13 @@ function booksearchNav() {
         dataType: 'json',
         type: 'GET',
         success: function (data) {
-            parseData(data);
-            showHide();
+            parse_data(data);
+            show_hide();
         }
     });
 }
 
-function parseData(data) {
+function parse_data(data) {
     let results = document.getElementById('con');
 
     let table = document.createElement('table');
@@ -431,7 +544,6 @@ function parseData(data) {
 
         let title = document.createElement('td');
         let title_a = document.createElement('a');
-        // title_a.href = data.items[i].volumeInfo.infoLink;
         title_a.href = 'https://books.google.com/books?id='+ data.items[i].id +'&hl=&source=gbs_api'
         title_a.setAttribute('target', '_blank');
         title_a.textContent = data.items[i].volumeInfo.title;
@@ -472,21 +584,17 @@ function parseData(data) {
                 tr.appendChild(isbn13);
 
                 let save = document.createElement('td');
-
                 let button = document.createElement('button');
                 button.type = 'submit';
                 button.className = 'btn btn-default';
                 button.textContent = 'Save';
 
-                let form = document.createElement('form');
+                let book_id = data.items[i].id;
+                button.addEventListener('click', function () {
+                    save_book(book_id);
+                }, false);
 
-                form.action = '/save/' + data.items[i].id;
-                form.method = 'GET';
-
-                form.appendChild(button);
-
-                save.appendChild(form);
-
+                save.appendChild(button);
                 tr.appendChild(save);
 
                 tableBody.appendChild(tr);
@@ -505,4 +613,20 @@ function parseData(data) {
     results.innerHTML = '';
     results.appendChild(heading);
     results.appendChild(tableWrapper);
+}
+
+function save_book(data) {
+    let token = $("meta[name='_csrf']").attr("content");
+    let header = $("meta[name='_csrf_header']").attr("content");
+    $.ajax({
+        url: '/book/save',
+        type: 'POST',
+        data: {id:data},
+        beforeSend: function(request) {
+            request.setRequestHeader(header, token);
+        },
+        success: function (res) {
+            window.location.href = '/book/info/'+res;
+        }
+    });
 }

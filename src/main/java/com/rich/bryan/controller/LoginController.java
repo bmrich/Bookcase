@@ -1,7 +1,7 @@
 package com.rich.bryan.controller;
 
 import com.rich.bryan.dto.RegisterForm;
-import com.rich.bryan.services.NewUserService;
+import com.rich.bryan.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,11 +15,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class LoginController {
 
-    private NewUserService newUserService;
+    private UserService userService;
 
     @Autowired
-    public LoginController(NewUserService newUserService) {
-        this.newUserService = newUserService;
+    public LoginController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping("/login")
@@ -38,12 +38,12 @@ public class LoginController {
 
         if(bindingResult.hasErrors()){
             return "Register";
-        } else if(!newUserService.newUser(rf)){
+        } else if(!userService.newUser(rf)){
             bindingResult.rejectValue("unique","uniqueEmail", "This Email is already in use");
             return "Register";
         }
 
-        redirectAttributes.addAttribute("r", new String("registered"));
+        redirectAttributes.addAttribute("r", "registered");
         return "redirect:/login";
     }
 }

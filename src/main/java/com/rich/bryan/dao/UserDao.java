@@ -1,9 +1,8 @@
 package com.rich.bryan.dao;
 
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import com.rich.bryan.dto.RegisterForm;
 
-public interface UserDao extends UserDetailsService {
-    UserDetails loadUserByUsername(String s) throws UsernameNotFoundException;
+public interface UserDao {
+    void newUser(RegisterForm registerForm);
+    void deleteUser(String username);
 }

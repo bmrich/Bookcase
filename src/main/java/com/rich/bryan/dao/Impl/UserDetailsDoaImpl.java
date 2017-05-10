@@ -1,6 +1,6 @@
 package com.rich.bryan.dao.Impl;
 
-import com.rich.bryan.dao.UserDao;
+import com.rich.bryan.dao.UserDetailsDao;
 import com.rich.bryan.entity.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -12,12 +12,12 @@ import org.springframework.stereotype.Repository;
 import javax.transaction.Transactional;
 
 @Repository
-public class UserDoaImpl implements UserDao {
+public class UserDetailsDoaImpl implements UserDetailsDao {
 
     private SessionFactory sessionFactory;
 
     @Autowired
-    public UserDoaImpl(SessionFactory sessionFactory) {
+    public UserDetailsDoaImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 

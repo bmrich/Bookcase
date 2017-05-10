@@ -16,16 +16,16 @@
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                    <li><a th:href="@{/list/reading(sort=1)}">Date Added: New to Old</a></li>
-                    <li><a th:href="@{/list/reading(sort=2)}">Date Added: Old to New</a></li>
-                    <li><a th:href="@{/list/reading(sort=3)}">Title: A to Z</a></li>
-                    <li><a th:href="@{/list/reading(sort=4)}">Title: Z to A</a></li>
-                    <li><a th:href="@{/list/reading(sort=11)}">Page Count: Low to High</a></li>
-                    <li><a th:href="@{/list/reading(sort=12)}">Page Count: High to Low</a></li>
-                    <li><a th:href="@{/list/reading(sort=5)}">Author: A to Z</a></li>
-                    <li><a th:href="@{/list/reading(sort=6)}">Author: Z to A</a></li>
-                    <li><a th:href="@{/list/reading(sort=7)}">Date Started: New to Old</a></li>
-                    <li><a th:href="@{/list/reading(sort=8)}">Date Started: Old to New</a></li>
+                    <li><a th:href="@{/list/completed(sort=1)}">Date Added: New to Old</a></li>
+                    <li><a th:href="@{/list/completed(sort=2)}">Date Added: Old to New</a></li>
+                    <li><a th:href="@{/list/completed(sort=3)}">Title: A to Z</a></li>
+                    <li><a th:href="@{/list/completed(sort=4)}">Title: Z to A</a></li>
+                    <li><a th:href="@{/list/completed(sort=11)}">Page Count: Low to High</a></li>
+                    <li><a th:href="@{/list/completed(sort=12)}">Page Count: High to Low</a></li>
+                    <li><a th:href="@{/list/completed(sort=5)}">Author: A to Z</a></li>
+                    <li><a th:href="@{/list/completed(sort=6)}">Author: Z to A</a></li>
+                    <li><a th:href="@{/list/completed(sort=9)}">Date Finished: New to Old</a></li>
+                    <li><a th:href="@{/list/completed(sort=10)}">Date Finished: Old to New</a></li>
                     <li><a th:href="@{/list/reading(sort=15)}">Progress</a></li>
                 </ul>
             </div>
@@ -55,21 +55,11 @@
                     <small class="page-count" th:text="${book.pageCount}"></small>
                 </div>
             </div>
-            <div class="card_cr_details">
+            <div class="card_c_details">
                 <div class="cr_details_info">
                     <div>
-                        <p><label>Date Started:</label><span th:text="'  '+${#dates.format(book.dateStarted, 'MMM dd yyyy')}"></span></p>
-                        <p><label>Current Page:</label><span th:id="'update-current_'+${iter.index}" th:text="'  '+${book.currentPage}"></span></p>
-                    </div>
-                    <div class="cr_details_info-btn-div">
-                        <button type="button" class="btn btn_cr btn-info" th:onclick="'update('+${iter.index}+')'">Update</button>
-                    </div>
-                </div>
-                <div class="progress">
-                    <div th:id="'progress-bar_'+${iter.index}" class="progress-bar progress-bar-info" role="progressbar"
-                         th:attr="aria-valuenow=${book.progress}" aria-valuemin="0" aria-valuemax="100"
-                         th:style="'width:'+${book.progress}+'%;'"
-                         th:text="${book.progress}+'%'">
+                        <p><label>Date Started:</label><span th:text="${book.dateStarted} ? '  '+${#dates.format(book.dateStarted, 'MMM dd yyyy')}:' null'"></span></p>
+                        <p><label>Date Finished:</label><span th:text="'  '+${#dates.format(book.dateFinished, 'MMM dd yyyy')}"></span></p>
                     </div>
                 </div>
             </div>

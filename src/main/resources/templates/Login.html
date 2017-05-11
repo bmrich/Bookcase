@@ -67,6 +67,12 @@
                         <input type="password" name="password" placeholder="Password..."
                                th:class="${param.error}? 'form-control input-error':'form-control'"/>
                     </div>
+                    <div>
+                        <label>
+                            <input type="checkbox" name="remember-me"/>
+                            Remember Me
+                        </label>
+                    </div>
                     <button type="submit" class="btn">Sign in!</button>
                 </form>
                 <div  style="margin-top: 20px"><a class="show-forms" style="padding-top: 0px;" th:href="@{/register}">Register New User</a></div>

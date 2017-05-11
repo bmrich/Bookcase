@@ -34,9 +34,9 @@ public class ShelfController {
         return shelvesService.getShelves(principal.getName());
     }
 
-    @PostMapping("/remove")
-    public List<Object[]> remove(@RequestParam("id") Long id,
-                                 @RequestParam("shelfName") String shelfName,
+    @DeleteMapping("/remove/{shelfName}/{id}")
+    public List<Object[]> remove(@PathVariable("id") Long id,
+                                 @PathVariable("shelfName") String shelfName,
                                  Principal principal){
 
         shelvesService.removeFromShelf(principal.getName(), shelfName, id);
@@ -51,8 +51,8 @@ public class ShelfController {
         shelvesService.renameShelf(principal.getName(), shelfName, newShelfName);
     }
 
-    @PostMapping("/delete")
-    public void deleteShelf(@RequestParam("name") String shelfName, Principal principal){
+    @DeleteMapping("/{name}")
+    public void deleteShelf(@PathVariable("name") String shelfName, Principal principal){
         shelvesService.deleteShelf(principal.getName(), shelfName);
     }
 

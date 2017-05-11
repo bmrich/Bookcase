@@ -226,9 +226,10 @@ public class Book {
                 ", isbn13='" + isbn13 + '\'' +
                 ", pageCount=" + pageCount +
                 ", datePublished='" + datePublished + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
                 ", publisher=" + publisher +
-                ", authors=" + authors +
-                ", dateCreated=" + dateCreated +
+                ", googleApiId='" + googleApiId + '\'' +
+                ", currentPage=" + currentPage +
                 '}';
     }
 }

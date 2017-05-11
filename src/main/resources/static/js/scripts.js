@@ -4,8 +4,20 @@ $(document).ready(function () {
     x930.addListener(widow_size_930);
 
     document.getElementById('overlay').addEventListener('click', show_hide, false);
+
     document.getElementById('submit-btn').addEventListener('click', book_search, false);
+    document.getElementById('search-input').onkeypress = function (e) {
+        if(e.keyCode == 13){
+            book_search();
+        }
+    };
+
     document.getElementById('submit-btn-nav').addEventListener('click', book_search_nav, false);
+    document.getElementById('search-input-nav').onkeypress = function (e) {
+        if(e.keyCode == 13){
+            book_search_nav();
+        }
+    };
 
     $('#newShelfInput').blur(function () {
         $(this).closest('div').removeClass('has-error');
@@ -175,9 +187,8 @@ function shelf_change(shelf) {
         });
     } else if (!checked) {
         $.ajax({
-            url: '/shelf/remove',
-            data: {shelfName: name, id: id},
-            type: 'POST',
+            url: '/shelf/remove/' + name + '/' + id,
+            type: 'DELETE',
             beforeSend: function(request) {
                 request.setRequestHeader(header, token);
             },
@@ -195,9 +206,8 @@ function delete_shelf() {
     let token = $("meta[name='_csrf']").attr("content");
     let header = $("meta[name='_csrf_header']").attr("content");
     $.ajax({
-        url: '/shelf/delete',
-        data: {name: shelf},
-        type: 'POST',
+        url: '/shelf/' + shelf,
+        type: 'DELETE',
         beforeSend: function(request) {
             request.setRequestHeader(header, token);
         },
@@ -383,13 +393,12 @@ function update(index) {
 }
 
 function delete_book() {
-    let id = $('#book-id').val();
+    let id = Number($('#book-id').val());
     let token = $("meta[name='_csrf']").attr("content");
     let header = $("meta[name='_csrf_header']").attr("content");
     $.ajax({
-        url: '/book/delete',
-        type: 'POST',
-        data: {id:id},
+        url: '/book/'+id,
+        type: 'DELETE',
         beforeSend: function(request) {
             request.setRequestHeader(header, token);
         },
@@ -538,13 +547,14 @@ function parse_data(data) {
         let img = document.createElement('img');
         img.className = 'cover';
         if (typeof data.items[i].volumeInfo.imageLinks != 'undefined') {
-            img.src = data.items[i].volumeInfo.imageLinks.smallThumbnail;
+            let str = data.items[i].volumeInfo.imageLinks.smallThumbnail;
+            img.src = str.substring(5);
         }
         cover.appendChild(img);
 
         let title = document.createElement('td');
         let title_a = document.createElement('a');
-        title_a.href = 'https://books.google.com/books?id='+ data.items[i].id +'&hl=&source=gbs_api'
+        title_a.href = 'https://books.google.com/books?id='+ data.items[i].id +'&hl=&source=gbs_api';
         title_a.setAttribute('target', '_blank');
         title_a.textContent = data.items[i].volumeInfo.title;
         title.appendChild(title_a);

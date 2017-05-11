@@ -10,16 +10,22 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+
+import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
     private UserDetailsDao userDetailsDao;
+    private DataSource dataSource;
 
     @Autowired
-    public SecurityConfig(UserDetailsDao userDetailsDao) {
+    public SecurityConfig(UserDetailsDao userDetailsDao, @SuppressWarnings("SpringJavaAutowiringInspection") DataSource dataSource) {
         this.userDetailsDao = userDetailsDao;
+        this.dataSource = dataSource;
     }
 
     @Autowired
@@ -40,7 +46,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                     .and()
                 .formLogin().loginPage("/login")
                     .and()
-                .httpBasic();
+                .rememberMe()
+                    .key("c22b3fde-acee-42b7-bc5f-2823545eafa1")
+                    .tokenValiditySeconds(604800)
+                    .tokenRepository(persistentTokenRepository());
+    }
+
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository() {
+        JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
+        tokenRepository.setDataSource(dataSource);
+        return tokenRepository;
     }
 
     @Bean

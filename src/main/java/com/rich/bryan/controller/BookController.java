@@ -31,9 +31,9 @@ public class BookController {
         return saveBookService.saveBook(id, principal.getName());
     }
 
-    @PostMapping("/delete")
+    @DeleteMapping("/{id}")
     @ResponseBody
-    public void deleteBook(@RequestParam("id") Long id, Principal principal){
+    public void deleteBook(@PathVariable("id") Long id, Principal principal){
         bookService.deleteBook(id, principal.getName());
     }
 

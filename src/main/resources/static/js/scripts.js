@@ -6,7 +6,6 @@ $(document).ready(function () {
     document.getElementById('overlay').addEventListener('click', show_hide, false);
 
     let search = document.getElementById('search-input');
-    search.tname = '#res';
     search.addEventListener('input', suggestion, false);
     document.getElementById('submit-btn').addEventListener('click', book_search, false);
     document.getElementById('search-input').onkeypress = function (e) {
@@ -90,7 +89,7 @@ $(document).ready(function () {
     });
 });
 
-function suggestion (e){
+function suggestion (){
     let query = this.value;
     let url = "https://suggestqueries.google.com/complete/search?client=books&ds=bo&q="
     if(query != ''){
@@ -98,7 +97,7 @@ function suggestion (e){
             url: url + query,
             dataType: "jsonp",
             success: function (response) {
-                let con = $(e.target.tname);
+                let con = $('#res');
                 con.empty();
                 response[1].forEach(function(e){
                     let p = document.createElement('option');

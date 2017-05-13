@@ -5,9 +5,13 @@ $(document).ready(function () {
 
     document.getElementById('overlay').addEventListener('click', show_hide, false);
 
+    let search = document.getElementById('search-input');
+    search.tname = '#res';
+    search.addEventListener('input', suggestion, false);
     document.getElementById('submit-btn').addEventListener('click', book_search, false);
     document.getElementById('search-input').onkeypress = function (e) {
         if(e.keyCode == 13){
+            $('#res').empty();
             book_search();
         }
     };
@@ -85,6 +89,26 @@ $(document).ready(function () {
         $('#update-input').val('');
     });
 });
+
+function suggestion (e){
+    let query = this.value;
+    let url = "https://suggestqueries.google.com/complete/search?client=books&ds=bo&q="
+    if(query != ''){
+        $.ajax({
+            url: url + query,
+            dataType: "jsonp",
+            success: function (response) {
+                let con = $(e.target.tname);
+                con.empty();
+                response[1].forEach(function(e){
+                    let p = document.createElement('option');
+                    p.value = e[0];
+                    con.append(p);
+                });
+            }
+        });
+    }
+}
 
 function remove_err_1() {
     $('#err1-group').removeClass('has-error');

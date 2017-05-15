@@ -3,6 +3,7 @@ package com.rich.bryan.dao.Impl;
 import com.rich.bryan.dao.BookDao;
 import com.rich.bryan.entity.Book;
 import com.rich.bryan.entity.BooksUsers;
+import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -76,5 +77,15 @@ public class BookDaoImpl implements BookDao {
                 .setParameter("isbn13", isbn13);
 
         return query.list();
+    }
+
+    @Override
+    public BooksUsers getBooksUsersById(Long buid) {
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("select bu from BooksUsers bu join fetch bu.book b " +
+                "join fetch b.authors join fetch b.publisher where bu.id=:buid")
+                .setParameter("buid", buid);
+
+        return (BooksUsers) query.list().get(0);
     }
 }

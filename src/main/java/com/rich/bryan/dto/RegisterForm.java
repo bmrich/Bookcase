@@ -1,12 +1,13 @@
 package com.rich.bryan.dto;
 
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.AssertTrue;
 
 public class RegisterForm {
 
-//    @Email(message = "Must be a valid Email Address")
+    @Email(message = "Must be a valid Email Address")
     @NotBlank(message = "Cannot be blank")
     private String email;
 
@@ -22,12 +23,7 @@ public class RegisterForm {
 
     @AssertTrue(message="Passwords Must Match")
     public boolean isValid() {
-
-        if (this.password == null || this.confirm == null){
-            return false;
-        } else {
-            return this.password.equals(this.confirm);
-        }
+        return !(this.password == null || this.confirm == null) && this.password.equals(this.confirm);
     }
 
     public boolean getValid(){

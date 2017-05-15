@@ -32,14 +32,11 @@
         </div>
 
         <div class="card_cr" th:each="book,iter :${results}">
-            <input th:id="'update-buid_'+${iter.index}" type="hidden" th:value="${book.buid}"/>
-            <input th:id="'update-pageCount_'+${iter.index}" type="hidden" th:value="${book.pageCount}"/>
-            <input th:id="'update-currentPage_'+${iter.index}" type="hidden" th:value="${book.currentPage}"/>
             <div class="card-img-container_cr"><img class="card-img" th:src="${book.imageUrl}"/></div>
             <div class="card-content_cr">
                 <div class="card-details-container">
-                    <div class="card-title limit-2">
-                        <h4><a th:id="'update-author_'+${iter.index}" th:href="@{'/book/info/'+${book.isbn13}}"
+                    <div class="card-title">
+                        <h4><a class="limit-2" th:href="@{'/book/info/'+${book.isbn13}}"
                                th:text="${book.title}" th:title="${book.title}"></a></h4>
                     </div>
                     <hr/>
@@ -59,15 +56,17 @@
                 <div class="cr_details_info">
                     <div>
                         <p><label>Date Started:</label><span th:text="'  '+${#dates.format(book.dateStarted, 'MMM dd yyyy')}"></span></p>
-                        <p><label>Current Page:</label><span th:id="'update-current_'+${iter.index}" th:text="'  '+${book.currentPage}"></span></p>
+                        <p><label>Current Page:</label><span th:attr="data-current-page=${iter.index}"
+                                                             th:text="'  '+${book.currentPage}"></span></p>
                     </div>
                     <div class="cr_details_info-btn-div">
-                        <button type="button" class="btn btn_cr btn-info" th:onclick="'update('+${iter.index}+')'">Update</button>
+                        <button type="button" class="btn btn_cr btn-info update-btn"
+                                th:attr="data-buid=${book.buid}, data-index=${iter.index}">Update</button>
                     </div>
                 </div>
                 <div class="progress">
-                    <div th:id="'progress-bar_'+${iter.index}" class="progress-bar progress-bar-info" role="progressbar"
-                         th:attr="aria-valuenow=${book.progress}" aria-valuemin="0" aria-valuemax="100"
+                    <div class="progress-bar progress-bar-info" role="progressbar"
+                         th:attr="aria-valuenow=${book.progress}, data-progress=${iter.index}" aria-valuemin="0" aria-valuemax="100"
                          th:style="'width:'+${book.progress}+'%;'"
                          th:text="${book.progress}+'%'">
                     </div>

@@ -5,8 +5,7 @@ $(document).ready(function () {
 
     document.getElementById('overlay').addEventListener('click', show_hide, false);
 
-    let search = document.getElementById('search-input');
-    search.addEventListener('input', suggestion, false);
+    document.getElementById('search-input').addEventListener('input', suggestion, false);
     document.getElementById('submit-btn').addEventListener('click', book_search, false);
     document.getElementById('search-input').onkeypress = function (e) {
         if(e.keyCode == 13){
@@ -22,6 +21,14 @@ $(document).ready(function () {
         }
     };
 
+    if (document.querySelectorAll('.update-btn').length){
+        let update_btns = document.querySelectorAll('.update-btn');
+        update_btns.forEach(function (btn) {
+            btn.addEventListener('click', update);
+        });
+    }
+
+
     $('#newShelfInput').blur(function () {
         $(this).closest('div').removeClass('has-error');
     });
@@ -32,20 +39,22 @@ $(document).ready(function () {
     $('#renameShelfInput').blur(function () {
         $(this).closest('div').removeClass('has-error');
     });
-    $('#renameShelf').on('hide.bs.modal', function (e) {
+    $('#renameShelf').on('hide.bs.modal', function () {
         $('#renameShelfInput').closest('div').removeClass('has-error');
     });
 
     if(document.getElementById('des-container') != null){
-        let id = document.getElementById('api-id').value;
-        let url = 'https://www.googleapis.com/books/v1/volumes/'+id;
-        $.get(url, function(data){
-            let des = data.volumeInfo.description;
-            let res = document.getElementById('des-container');
+        let des_con = document.getElementById('des-container');
 
-            $.parseHTML(des).forEach(function (elem) {
-                res.appendChild(elem);
-            });
+        $.ajax({
+            url: 'https://www.googleapis.com/books/v1/volumes/' + des_con.dataset.bookId,
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                $.parseHTML(data.volumeInfo.description).forEach(function (elem) {
+                    des_con.appendChild(elem);
+                });
+            }
         });
     }
 
@@ -63,7 +72,7 @@ $(document).ready(function () {
         }
     });
 
-    $('#startDateModal').on('hide.bs.modal', function (e) {
+    $('#startDateModal').on('hide.bs.modal', function () {
         remove_err_1();
         $('#start-date-input').val('');
 
@@ -71,7 +80,7 @@ $(document).ready(function () {
         $('#currentPage').val('');
     });
 
-    $('#finishDateModal').on('hide.bs.modal', function (e) {
+    $('#finishDateModal').on('hide.bs.modal', function () {
         $('#err3-group').removeClass('has-error');
         $('#err3-message').addClass('hidden');
         $('#date-finished-input').val('');
@@ -89,15 +98,15 @@ $(document).ready(function () {
     });
 });
 
-function suggestion (){
+function suggestion (event){
     let query = this.value;
-    let url = "https://suggestqueries.google.com/complete/search?client=books&ds=bo&q="
+    let url = "https://suggestqueries.google.com/complete/search?client=books&ds=bo&q=";
     if(query != ''){
         $.ajax({
             url: url + query,
             dataType: "jsonp",
             success: function (response) {
-                let con = $('#res');
+                let con = $('#' + event.target.list.id);
                 con.empty();
                 response[1].forEach(function(e){
                     let p = document.createElement('option');
@@ -234,7 +243,7 @@ function delete_shelf() {
         beforeSend: function(request) {
             request.setRequestHeader(header, token);
         },
-        success: function (response) {
+        success: function () {
             window.location.href = '/';
         }
     });
@@ -401,18 +410,28 @@ function to_read(){
     $('#toReadModal').modal('hide');
 }
 
-function update(index) {
-    let buid = $('#update-buid_'+index).val();
-    let author = $('#update-author_'+index).text();
-    let page_count = Number($('#update-pageCount_'+index).val());
-    let currentPage = Number($('#update-currentPage_'+index).val());
-    $('#updateModalLabel').text('Update ' + author);
-    $('#update-page')
-        .val(currentPage)
-        .attr({"max":page_count-1});
-    $('#update-page-btn').click({buid:buid, index:index, pageCount:page_count},update_page);
-    $('#update-input-btn').click({buid:buid},update_finished);
-    $('#updateModal').modal('show');
+function update(e) {
+    $.ajax({
+        url: '/progress',
+        data: {buid:e.target.dataset.buid},
+        type: 'GET',
+        success: function (data) {
+            $('#updateModalLabel').text('Update ' + data['title']);
+            $('#update-page')
+                .val(data['currentPage'])
+                .attr({"max":data['pageCount']-1});
+
+            $('#update-page-btn')
+                .click({
+                    buid:e.target.dataset.buid,
+                    index:e.target.dataset.index,
+                    pageCount:data['pageCount']
+                }, update_page);
+
+            $('#update-input-btn').click({buid:e.target.dataset.buid},update_finished);
+            $('#updateModal').modal('show');
+        }
+    });
 }
 
 function delete_book() {
@@ -433,7 +452,7 @@ function delete_book() {
 
 function update_page(event) {
     let currentPage = Number($('#update-page').val());
-    let page_count = Number($('#update-pageCount_'+event.data.index).val());
+    let page_count = event.data.pageCount;
     let has_errors = false;
 
     if(currentPage < 1 || currentPage > (page_count-1)){
@@ -460,14 +479,13 @@ function update_page(event) {
             success: function (data) {
                 $('#updateModal').modal('hide');
                 let progress = Math.round((Number(currentPage) / event.data.pageCount) * 100);
-                $('#progress-bar_' + event.data.index)
+                $('[data-progress=\''+ event.data.index +'\']')
                     .text(progress + '%')
                     .attr({
                         'aria-valuenow': progress
                     })
                     .css('width', progress + '%');
-                $('#update-current_' + event.data.index).text('  ' + currentPage);
-                $('#update-currentPage_' + event.data.index).val(currentPage);
+                $('[data-current-page=\''+ event.data.index +'\']').text('  ' + currentPage);
             }
         });
         $('#updateModal').modal('hide');
@@ -511,7 +529,7 @@ function update_finished(event) {
             beforeSend: function(request) {
                 request.setRequestHeader(header, token);
             },
-            success: function (data) {
+            success: function () {
                 window.location.href = '/list/completed';
             }
         });
@@ -526,7 +544,7 @@ function book_search() {
         dataType: 'json',
         type: 'GET',
         success: function (data) {
-            parse_data(data);
+             parse_data(data);
         }
     });
 }
@@ -540,12 +558,17 @@ function book_search_nav() {
         type: 'GET',
         success: function (data) {
             parse_data(data);
-            show_hide();
+            show_hide()
         }
     });
 }
 
 function parse_data(data) {
+    if (data.totalItems == 0) {
+        $('#con').html('<p>No Results</p>');
+        return;
+    }
+
     let results = document.getElementById('con');
 
     let table = document.createElement('table');
@@ -564,40 +587,10 @@ function parse_data(data) {
 
     tableBody.appendChild(tr);
     for (i = 0; i < data.items.length; i++) {
-        let tr = document.createElement('tr');
-
-        let cover = document.createElement('td');
-        let img = document.createElement('img');
-        img.className = 'cover';
-        if (typeof data.items[i].volumeInfo.imageLinks != 'undefined') {
-            let str = data.items[i].volumeInfo.imageLinks.smallThumbnail;
-            img.src = str.substring(5);
-        }
-        cover.appendChild(img);
-
-        let title = document.createElement('td');
-        let title_a = document.createElement('a');
-        title_a.href = 'https://books.google.com/books?id='+ data.items[i].id +'&hl=&source=gbs_api';
-        title_a.setAttribute('target', '_blank');
-        title_a.textContent = data.items[i].volumeInfo.title;
-        title.appendChild(title_a);
-
-        let author = document.createElement('td');
-        author.textContent = data.items[i].volumeInfo.authors;
-
-        let pageCount = document.createElement('td');
-        pageCount.textContent = data.items[i].volumeInfo.pageCount;
-
-        let publisher = document.createElement('td');
-        publisher.textContent = data.items[i].volumeInfo.publisher;
-
-        let datePublished = document.createElement('td');
-        datePublished.textContent = data.items[i].volumeInfo.publishedDate;
-
-        let isbn10 = document.createElement('td');
-        let isbn13 = document.createElement('td');
         let ind = data.items[i].volumeInfo.industryIdentifiers;
         if (typeof ind != 'undefined') {
+            let isbn10 = document.createElement('td');
+            let isbn13 = document.createElement('td');
             if (ind[0]['type'] == 'ISBN_13' || ind[0]['type'] == 'ISBN_10') {
                 for (j = 0; j < ind.length; j++) {
                     if (ind[j]['type'] == 'ISBN_13') {
@@ -606,6 +599,36 @@ function parse_data(data) {
                         isbn10.textContent = ind[j]['identifier'];
                     }
                 }
+
+                let tr = document.createElement('tr');
+
+                let cover = document.createElement('td');
+                let img = document.createElement('img');
+                img.className = 'cover';
+                if (typeof data.items[i].volumeInfo.imageLinks != 'undefined') {
+                    let str = data.items[i].volumeInfo.imageLinks.smallThumbnail;
+                    img.src = str.substring(5);
+                }
+                cover.appendChild(img);
+
+                let title = document.createElement('td');
+                let title_a = document.createElement('a');
+                title_a.href = 'https://books.google.com/books?id=' + data.items[i].id + '&hl=&source=gbs_api';
+                title_a.setAttribute('target', '_blank');
+                title_a.textContent = data.items[i].volumeInfo.title;
+                title.appendChild(title_a);
+
+                let author = document.createElement('td');
+                author.textContent = data.items[i].volumeInfo.authors;
+
+                let pageCount = document.createElement('td');
+                pageCount.textContent = data.items[i].volumeInfo.pageCount;
+
+                let publisher = document.createElement('td');
+                publisher.textContent = data.items[i].volumeInfo.publisher;
+
+                let datePublished = document.createElement('td');
+                datePublished.textContent = data.items[i].volumeInfo.publishedDate;
 
                 tr.appendChild(cover);
                 tr.appendChild(title);
@@ -621,11 +644,8 @@ function parse_data(data) {
                 button.type = 'submit';
                 button.className = 'btn btn-default';
                 button.textContent = 'Save';
-
-                let book_id = data.items[i].id;
-                button.addEventListener('click', function () {
-                    save_book(book_id);
-                }, false);
+                button.dataset.bookId = data.items[i].id;
+                button.addEventListener('click', save_book);
 
                 save.appendChild(button);
                 tr.appendChild(save);
@@ -648,13 +668,13 @@ function parse_data(data) {
     results.appendChild(tableWrapper);
 }
 
-function save_book(data) {
+function save_book(e) {
     let token = $("meta[name='_csrf']").attr("content");
     let header = $("meta[name='_csrf_header']").attr("content");
     $.ajax({
         url: '/book/save',
         type: 'POST',
-        data: {id:data},
+        data: {id:e.target.dataset.bookId},
         beforeSend: function(request) {
             request.setRequestHeader(header, token);
         },

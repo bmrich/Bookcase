@@ -398,16 +398,17 @@ body {
     float: right;
     line-height: 22px;
 }
-.card-author {
-    display: inline !important;
-}
+/*.card-author {*/
+    /*display: inline !important;*/
+/*}*/
 .limit-2{
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    line-height: 22px;
-    max-height: 48px;
-    -webkit-line-clamp: 2;
+    line-height: 22px;     /* fallback */
+    max-height: 48px;      /* fallback */
+    -webkit-line-clamp: 2; /* number of lines to show */
+    -webkit-box-orient: vertical;
 }
 .options-dropdown {
     cursor: pointer;
@@ -613,4 +614,7 @@ body {
 }
 .current-page-input-fix {
     height: inherit;
+}
+#no-results {
+    text-align: center;
 }

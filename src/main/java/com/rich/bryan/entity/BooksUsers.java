@@ -1,5 +1,6 @@
 package com.rich.bryan.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -108,6 +109,14 @@ public class BooksUsers {
 
     public void setCurrentPage(Integer currentPage) {
         this.currentPage = currentPage;
+    }
+
+    public Set<Shelf> getShelves() {
+        return shelves;
+    }
+
+    public void setShelves(Set<Shelf> shelves) {
+        this.shelves = shelves;
     }
 
     @Override

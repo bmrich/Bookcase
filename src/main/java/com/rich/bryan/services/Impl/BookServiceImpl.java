@@ -1,8 +1,10 @@
 package com.rich.bryan.services.Impl;
 
 import com.rich.bryan.dao.BookDao;
+import com.rich.bryan.dto.Progress;
 import com.rich.bryan.entity.Author;
 import com.rich.bryan.entity.Book;
+import com.rich.bryan.entity.BooksUsers;
 import com.rich.bryan.services.BookService;
 import com.rich.bryan.services.Utils.Sort;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,5 +87,12 @@ public class BookServiceImpl implements BookService {
     public Book getSingleBook(String isbn13) throws NullPointerException {
         List<Book> book = bookDao.getSingleBook(isbn13);
         return book.get(0);
+    }
+
+    @Override
+    @Transactional
+    public Progress getProgress(Long buid) {
+        BooksUsers booksUsers = bookDao.getBooksUsersById(buid);
+        return new Progress(booksUsers.getBook().getPageCount(), booksUsers.getCurrentPage(), booksUsers.getBook().getTitle());
     }
 }

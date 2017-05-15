@@ -1,6 +1,7 @@
 package com.rich.bryan.dao;
 
 import com.rich.bryan.entity.Book;
+import com.rich.bryan.entity.BooksUsers;
 
 import javax.persistence.NoResultException;
 import java.util.List;
@@ -11,4 +12,5 @@ public interface BookDao {
     List<Object[]> getAuthor(Long id, String username, String sort);
     Object[] getSingleBook(String isbn13, String username) throws NoResultException;
     List<Book> getSingleBook(String isbn13);
+    BooksUsers getBooksUsersById(Long buid);
 }

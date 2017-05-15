@@ -1,5 +1,7 @@
 package com.rich.bryan.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.sql.*;
 import java.text.SimpleDateFormat;
@@ -9,6 +11,9 @@ import java.util.Date;
 @Entity
 @Table(name = "books")
 public class Book {
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -225,11 +230,10 @@ public class Book {
                 ", isbn10='" + isbn10 + '\'' +
                 ", isbn13='" + isbn13 + '\'' +
                 ", pageCount=" + pageCount +
-                ", datePublished='" + datePublished + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
                 ", publisher=" + publisher +
+                ", authors=" + authors +
                 ", googleApiId='" + googleApiId + '\'' +
-                ", currentPage=" + currentPage +
                 '}';
     }
 }

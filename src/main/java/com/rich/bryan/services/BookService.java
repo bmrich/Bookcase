@@ -1,6 +1,8 @@
 package com.rich.bryan.services;
 
+import com.rich.bryan.dto.Progress;
 import com.rich.bryan.entity.Book;
+import com.rich.bryan.entity.BooksUsers;
 import com.rich.bryan.services.Utils.Sort;
 
 import javax.persistence.NoResultException;
@@ -12,4 +14,5 @@ public interface BookService {
     Object[] getAuthor(Long id, String username, Sort sort);
     Book getSingleBook(String isbn13, String username) throws NoResultException;
     Book getSingleBook(String isbn13) throws NoResultException;
+    Progress getProgress(Long buid);
 }

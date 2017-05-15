@@ -62,10 +62,7 @@
                         <div class="col-sm-12">
                             <br/>
                             <br/>
-                            <div class="w3-conatiner">
-                                <input id="api-id" type="hidden" th:value="${results.googleApiId}"/>
-                                <p id="des-container"></p>
-                            </div>
+                            <div id="des-container" th:attr="data-book-id=${results.googleApiId}"></div>
                         </div>
                     </div>
 

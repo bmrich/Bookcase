@@ -38,8 +38,8 @@
             <div class="card-img-container_cr"><img class="card-img" th:src="${book.imageUrl}"/></div>
             <div class="card-content_cr">
                 <div class="card-details-container">
-                    <div class="card-title limit-2">
-                        <h4><a th:id="'update-author_'+${iter.index}" th:href="@{'/book/info/'+${book.isbn13}}"
+                    <div class="card-title">
+                        <h4><a class="limit-2" th:id="'update-author_'+${iter.index}" th:href="@{'/book/info/'+${book.isbn13}}"
                                th:text="${book.title}" th:title="${book.title}"></a></h4>
                     </div>
                     <hr/>

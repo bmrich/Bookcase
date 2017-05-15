@@ -565,7 +565,7 @@ function book_search_nav() {
 
 function parse_data(data) {
     if (data.totalItems == 0) {
-        $('#con').html('<p>No Results</p>');
+        $('#con').html('<h2 style="text-align: center">No Results</h2>');
         return;
     }
 

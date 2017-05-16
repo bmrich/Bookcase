@@ -9,10 +9,10 @@
 <div layout:fragment="content">
     <div class="card-holder">
         <div class="card-page-header">
-            <h2 id="page-name" th:text="${pageName}"></h2>
+            <h1><span id="page-name" th:text="${pageName}"></span></h1>
             <div class="dropdown">
                 <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                    Sorting
+                    <span th:text="${sortName}"></span>
                     <span class="caret"></span>
                 </button>
                 <ul th:if="${dropdown} == 'books'" class="dropdown-menu" aria-labelledby="dropdownMenu1">

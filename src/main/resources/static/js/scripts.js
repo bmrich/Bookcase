@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    let x930 = window.matchMedia("(max-width: 930px)");
+    let x930 = window.matchMedia("(min-width: 930px)");
     widow_size_930(x930);
     x930.addListener(widow_size_930);
 
@@ -130,22 +130,21 @@ function remove_err_2() {
 
 function widow_size_930() {
     if ($(window).width() < 930) {
-        $('.sidebar-nav').addClass('sidebar-close-nav');
-        $('.sidebar').addClass('sidebar-close');
-        $('.main-content').addClass('main-content-close');
-        $('.sidebar-open-icon').addClass('sidebar-open-click');
+        $('#overlay').addClass('hidden');
     }
-    $('#overlay').addClass('hidden');
+    $('.main-content').addClass('main-content-close');
+    $('.sidebar-open-icon').addClass('sidebar-open-click');
 }
 
 function show_hide() {
-    $('.sidebar-nav').toggleClass('sidebar-close-nav');
-    $('.sidebar').toggleClass('sidebar-close');
-    $('.sidebar-open-icon').toggleClass('sidebar-open-click');
-    $('.main-content').toggleClass('main-content-close');
     if ($(window).width() < 930) {
         $('#overlay').toggleClass('hidden');
-        $('.sidebar').removeClass('yt-scrollbar')
+        $('.sidebar').removeClass('yt-scrollbar');
+        $('.sidebar').toggleClass('sidebar-open');
+    } else {
+        $('.sidebar').toggleClass('sidebar-close');
+        $('.sidebar-open-icon').toggleClass('sidebar-open-click');
+        $('.main-content').toggleClass('main-content-close');
     }
 }
 

@@ -47,7 +47,7 @@ html,body {
 }
 body {
     padding-top: 50px;
-    background: #ffffff;
+    background-color: var(--secondary-color);
 }
 
 .main {
@@ -73,7 +73,7 @@ body {
     top: 0;
     z-index: 1000;
     background-color: var(--secondary-light);
-    box-shadow: var(--elevation--z4);
+    box-shadow: var(--elevation--z2);
 }
 .navigation-item {
     line-height: 50px;
@@ -117,18 +117,21 @@ body {
 .navbar-nav li a {
     color: var(--primary-color);
 }
+
+
+
 .main-content {
-    margin-left: 250px;
+    margin-left: 0px;
     margin-right: 0;
     min-height: calc(100vh - 50px);
-    background-color: var(--secondary-color);
     padding: 10px;
-    -webkit-transition: var(--trasition__bezier);
-    transition: var(--trasition__bezier);
 }
 .main-content-close {
-    margin-left: 0;
+    margin-left: 250px;
 }
+
+
+
 .sidebar-open-icon {
     float: left;
     margin-right: 11px;
@@ -138,6 +141,7 @@ body {
     cursor: pointer;
 }
 .sidebar {
+    z-index:1000;
     width: 250px;
     height: calc(100vh - 50px);
     background-color: var(--primary-color);
@@ -147,11 +151,11 @@ body {
     position: fixed;
     right: 0;
     left: 0;
-    box-shadow: var(--elevation--z8);
+    box-shadow: var(--elevation--z2);
 }
 @media (max-width: 930px) {
     .sidebar {
-        width: 250px;
+        width: 0;
         height: 100vh;
         background-color: var(--primary-color);
         overflow-x: hidden;
@@ -182,6 +186,9 @@ body {
 .sidebar-close {
     width: 0;
     box-shadow: none;
+}
+.sidebar-open {
+    width: 250px;
 }
 #search-input{
     background: white url(https://developers.google.com/books/images/google_watermark.gif) no-repeat;
@@ -244,13 +251,13 @@ body {
 .sidebar-inner {
     margin-bottom: 50px;
     height: calc(100% - 50px);
-    overflow-y: hidden;
+    overflow-y: auto;
 }
-@media (max-width: 930px) {
+@media (min-width: 930px) {
     .sidebar-inner {
         margin-bottom: 50px;
         height: calc(100% - 50px);
-        overflow-y: auto;
+        overflow-y: hidden;
     }
 }
 .sidebar-inner:hover {
@@ -317,9 +324,9 @@ body {
 }
 .card {
     display: inherit;
-    border-radius: 4px;
+    border-radius: 2px;
     margin: 10px;
-    box-shadow: var(--elevation--z4);
+    box-shadow: var(--elevation--z2);
     width: 300px;
     box-sizing: border-box;
 }
@@ -348,6 +355,7 @@ body {
 @media (max-width: 676px) {
     .card {
         width: 100%;
+        margin: 5px 0;
     }
 }
 .card-content h4 a {
@@ -369,11 +377,20 @@ body {
     max-width: 945px;
     width: 100%;
 }
-.card-page-header h2 {
-    color: var(--primary-dark);
+.card-page-header h1 {
+    color: var(--primary-color);
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    height: 44px;
+}
+.card-page-header h1 span {
+    font-family: Roboto,sans-serif;
+    font-weight: 600;
+    border-bottom: 2px var(--accent-color) solid;
+    padding-bottom: 1px;
 }
 .btn-link {
     color: var(--primary-dark);
@@ -398,9 +415,6 @@ body {
     float: right;
     line-height: 22px;
 }
-/*.card-author {*/
-    /*display: inline !important;*/
-/*}*/
 .limit-2{
     overflow: hidden;
     text-overflow: ellipsis;
@@ -506,9 +520,9 @@ body {
 .card_cr {
     display: inherit;
     flex-wrap: wrap;
-    border-radius: 4px;
+    border-radius: 2px;
     margin: 10px;
-    box-shadow: var(--elevation--z4);
+    box-shadow: var(--elevation--z2);
     width: 300px;
     box-sizing: border-box;
 }
@@ -607,6 +621,7 @@ body {
 @media (max-width: 676px) {
     .card_cr {
         width: 100%;
+        margin: 5px 0;
     }
 }
 .input-fix {

@@ -34,6 +34,7 @@ public class ListController {
         model.addAttribute("numMap", shelvesService.numBooksOnShelf(principal.getName()));
         model.addAttribute("pageName", "My Books");
         model.addAttribute("dropdown", "books");
+        model.addAttribute("sortName", Sort.valueOf(sort).toString());
         return "Cards";
     }
 
@@ -50,6 +51,8 @@ public class ListController {
         model.addAttribute("pageName", objects[0]);
         model.addAttribute("authorId", id);
         model.addAttribute("dropdown", "author");
+        model.addAttribute("sortName", Sort.valueOf(sort).toString());
+
         return "Cards";
     }
 
@@ -64,6 +67,8 @@ public class ListController {
         model.addAttribute("pageName", shelfName);
         model.addAttribute("showOptions", true);
         model.addAttribute("dropdown", "shelf");
+        model.addAttribute("sortName", Sort.valueOf(sort).toString());
+
         return "Cards";
     }
 
@@ -75,6 +80,7 @@ public class ListController {
         model.addAttribute("shelves", shelvesService.getShelves(principal.getName()));
         model.addAttribute("numMap", shelvesService.numBooksOnShelf(principal.getName()));
         model.addAttribute("pageName", "Currently Reading");
+        model.addAttribute("sortName", Sort.valueOf(sort).toString());
 
         return "Currently_Reading_Cards";
     }
@@ -88,6 +94,7 @@ public class ListController {
         model.addAttribute("numMap", shelvesService.numBooksOnShelf(principal.getName()));
         model.addAttribute("pageName", "To Read");
         model.addAttribute("dropdown", "toRead");
+        model.addAttribute("sortName", Sort.valueOf(sort).toString());
 
         return "Cards";
     }
@@ -101,6 +108,7 @@ public class ListController {
         model.addAttribute("numMap", shelvesService.numBooksOnShelf(principal.getName()));
         model.addAttribute("pageName", "Completed");
         model.addAttribute("dropdown", "completed");
+        model.addAttribute("sortName", Sort.valueOf(sort).toString());
 
         return "Completed_Cards";
     }

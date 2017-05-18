@@ -557,114 +557,9 @@ function book_search_nav() {
         type: 'GET',
         success: function (data) {
             parse_data(data);
-            show_hide()
+            show_hide();
         }
     });
-}
-
-function parse_data(data) {
-    if (data.totalItems == 0) {
-        $('#con').html('<h2 style="text-align: center">No Results</h2>');
-        return;
-    }
-
-    let results = document.getElementById('con');
-
-    let table = document.createElement('table');
-    table.className = 'table table-striped';
-    let tableBody = document.createElement('tbody');
-    let tr = document.createElement('tr');
-    tr.innerHTML = '<th>Cover</th>' +
-        '<th>Title</th>' +
-        '<th>Author</th>' +
-        '<th>Page Count</th>' +
-        '<th>Publisher</th>' +
-        '<th>Date Published</th>' +
-        '<th>ISBN 10</th>' +
-        '<th>ISBN 13</th>' +
-        '<th>Save</th>';
-
-    tableBody.appendChild(tr);
-    for (i = 0; i < data.items.length; i++) {
-        let ind = data.items[i].volumeInfo.industryIdentifiers;
-        if (typeof ind != 'undefined') {
-            let isbn10 = document.createElement('td');
-            let isbn13 = document.createElement('td');
-            if (ind[0]['type'] == 'ISBN_13' || ind[0]['type'] == 'ISBN_10') {
-                for (j = 0; j < ind.length; j++) {
-                    if (ind[j]['type'] == 'ISBN_13') {
-                        isbn13.textContent = ind[j]['identifier'];
-                    } else if (ind[j]['type'] == 'ISBN_10') {
-                        isbn10.textContent = ind[j]['identifier'];
-                    }
-                }
-
-                let tr = document.createElement('tr');
-
-                let cover = document.createElement('td');
-                let img = document.createElement('img');
-                img.className = 'cover';
-                if (typeof data.items[i].volumeInfo.imageLinks != 'undefined') {
-                    let str = data.items[i].volumeInfo.imageLinks.smallThumbnail;
-                    img.src = str.substring(5);
-                }
-                cover.appendChild(img);
-
-                let title = document.createElement('td');
-                let title_a = document.createElement('a');
-                title_a.href = 'https://books.google.com/books?id=' + data.items[i].id + '&hl=&source=gbs_api';
-                title_a.setAttribute('target', '_blank');
-                title_a.textContent = data.items[i].volumeInfo.title;
-                title.appendChild(title_a);
-
-                let author = document.createElement('td');
-                author.textContent = data.items[i].volumeInfo.authors;
-
-                let pageCount = document.createElement('td');
-                pageCount.textContent = data.items[i].volumeInfo.pageCount;
-
-                let publisher = document.createElement('td');
-                publisher.textContent = data.items[i].volumeInfo.publisher;
-
-                let datePublished = document.createElement('td');
-                datePublished.textContent = data.items[i].volumeInfo.publishedDate;
-
-                tr.appendChild(cover);
-                tr.appendChild(title);
-                tr.appendChild(author);
-                tr.appendChild(pageCount);
-                tr.appendChild(publisher);
-                tr.appendChild(datePublished);
-                tr.appendChild(isbn10);
-                tr.appendChild(isbn13);
-
-                let save = document.createElement('td');
-                let button = document.createElement('button');
-                button.type = 'submit';
-                button.className = 'btn btn-default';
-                button.textContent = 'Save';
-                button.dataset.bookId = data.items[i].id;
-                button.addEventListener('click', save_book);
-
-                save.appendChild(button);
-                tr.appendChild(save);
-
-                tableBody.appendChild(tr);
-            }
-        }
-    }
-
-    let tableWrapper = document.createElement('div');
-    tableWrapper.className = 'table-responsive';
-    table.appendChild(tableBody);
-    tableWrapper.appendChild(table);
-
-    let heading = document.createElement('h2');
-    heading.textContent = 'Google Books search results';
-
-    results.innerHTML = '';
-    results.appendChild(heading);
-    results.appendChild(tableWrapper);
 }
 
 function save_book(e) {
@@ -681,4 +576,76 @@ function save_book(e) {
             window.location.href = '/book/info/'+res;
         }
     });
+}
+
+function parse_data(data) {
+    if (data.totalItems == 0) {
+        $('#con').html('<h2 style="text-align: center">No Results</h2>');
+        return;
+    }
+
+    $('#con').empty();
+    let page_name = $('<h2 id="page-name"></h2>');
+    let page_name_span = $('<span></span>').text('Google Books Search Results');
+    page_name.append(page_name_span);
+    $('#con').append(page_name);
+    for (i = 0; i < data.items.length; i++) {
+        let ind = data.items[i].volumeInfo.industryIdentifiers;
+        if (typeof ind != 'undefined') {
+            let isbn10;
+            let isbn13;
+            if (ind[0]['type'] == 'ISBN_13' || ind[0]['type'] == 'ISBN_10') {
+                for (j = 0; j < ind.length; j++) {
+                    if (ind[j]['type'] == 'ISBN_13') {
+                        isbn13 = ind[j]['identifier'];
+                    } else if (ind[j]['type'] == 'ISBN_10') {
+                        isbn10 = ind[j]['identifier'];
+                    }
+                }
+                let str;
+                if (typeof data.items[i].volumeInfo.imageLinks != 'undefined') {
+                    let temp = (data.items[i].volumeInfo.imageLinks.smallThumbnail).substring(5);
+                    str = temp.replace('&edge=curl', '');
+                }
+
+                let itemDiv = $('<div class="item"></div>');
+                let block = $('<div class="block"></div>');
+                let var1 = '<img class="img" src="' + str + '">';
+                block.append(var1);
+                itemDiv.append(block);
+
+                let book_details = $('<div class="details"></div>');
+                let title_shell = $('<h4><b></b></h4>');
+                let title = $('<a></a>')
+                    .text(data.items[i].volumeInfo.title)
+                    .attr({
+                        href: 'https://books.google.com/books?id=' + data.items[i].id + '&hl=&source=gbs_api',
+                        target: '_blank'
+                    });
+                book_details.append(title_shell.append(title));
+                let var2 = '<h5>' + data.items[i].volumeInfo.authors + '</h5>' +
+                    '<p class="details-hide-sm"><span> ' + data.items[i].volumeInfo.publisher + ' (' + moment(data.items[i].volumeInfo.publishedDate, ["YYYY-MM-DD", "YYYY"]).format("MMM DD YYYY") + ')</span></p>' +
+                    '<p class="details-hide-sm"><span class="line">Isbn-13: ' + isbn13 + '</span>, <span class="line">Isbn: ' + isbn10 + '</span></p>' +
+                    '<p class="details-hide-sm">' + data.items[i].volumeInfo.pageCount + ' pages</p>';
+                book_details.append($(var2));
+
+                let button = $('<button class="btn btn-info btn-xs save-btn" type="submit">Save Book</button>')
+                    .attr({
+                        'data-book-id': data.items[i].id
+                    })
+                    .click(save_book);
+                book_details.append(button);
+                itemDiv.append(book_details);
+
+                let var3 = '<div class="details-show-sm">' +
+                    '<p><span> ' + data.items[i].volumeInfo.publisher + ' (' + moment(data.items[i].volumeInfo.publishedDate, ["YYYY-MM-DD", "YYYY"]).format("MMM DD YYYY") + ')</span></p>' +
+                    '<p><span class="line">Isbn-13: ' + isbn13 + '</span>, <span class="line">Isbn: ' + isbn10 + '</span></p>' +
+                    '<p>' + data.items[i].volumeInfo.pageCount + ' pages</p>' +
+                    '</div>';
+                itemDiv.append($(var3));
+
+                $('#con').append(itemDiv);
+            }
+        }
+    }
 }
